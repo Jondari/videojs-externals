@@ -1,5 +1,7 @@
 # External Player Playback Technology<br />for [Video.js](https://github.com/videojs/video.js)
 
+[![Build Status](https://travis-ci.org/LoveIsGrief/videojs-externals.svg?branch=videojs-externals-7)](https://travis-ci.org/LoveIsGrief/videojs-externals)
+
 ![Alt text](https://cloud.githubusercontent.com/assets/3854951/19686244/92827b54-9ac0-11e6-8b6c-95f361cd2f3a.png "Soundcloud sample")
 ## Supports
 
