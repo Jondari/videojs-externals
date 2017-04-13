@@ -57,11 +57,9 @@
     ]
   },
   "browserify-shim": {
-    "qunit": "global:QUnit",
     "video.js": "global:videojs"
   },
   "devDependencies": {
-    "babel": "^6.23.0",
     "babel-cli": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
     "babelify": "^7.3.0",
