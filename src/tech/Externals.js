@@ -251,13 +251,17 @@ class Externals extends Tech {
    * Set video
    *
    * @param {Object=} src Source object
-   * @method setSrc
    */
   src (src) {
-    if (typeof src !== 'undefined') {
-      this.src_ = this.parseSrc(src);
+    if (typeof src !== 'undefined' && this.src_ !== src) {
+      this.src_ = src;
+      this.setSrc(src);
     }
-    return this.src_;
+    return this.currentSrc();
+  }
+
+  setSrc(src){
+    throw `Not yet implemented but called with ${src}`;
   }
 
   currentSrc () {

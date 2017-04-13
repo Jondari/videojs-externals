@@ -35,10 +35,10 @@ class Soundcloud extends Externals {
   createEl () {
     let soundcloudSource = null;
     if ('string' === typeof this.options_.source) {
-      soundcloudSource = this.options_.source;
+      this.src_ = soundcloudSource = this.options_.source;
     }
     else if ('object' === typeof this.options_.source) {
-      soundcloudSource = this.options_.source.src;
+      this.src_ = soundcloudSource = this.options_.source.src;
     }
 
     const el_ = super.createEl('iframe', {
@@ -71,10 +71,10 @@ class Soundcloud extends Externals {
         break;
 
       case SC.Widget.Events.READY:
+        this.onReady();
         this.trigger('loadedmetadata');
         this.trigger('durationchange');
         this.trigger('canplay');
-        this.onReady();
         break;
 
       case SC.Widget.Events.FINISH:
@@ -116,7 +116,7 @@ class Soundcloud extends Externals {
 
   parseSrc (src) {
     if (src) {
-      // Regex that parse the video ID for any Dailymotion URL
+      // Regex that parse the video ID for any Soundcloud URL
       var regExp = /^(https?:\/\/)?(www.|api.)?soundcloud.com\//i;
       var match = src.match(regExp);
 
@@ -209,9 +209,12 @@ class Soundcloud extends Externals {
     this.infosEl_.innerHTML = sound.title;
   }
 
-  src (src) {
+  setSrc (src) {
     this.widgetPlayer.load(src, {
-        'auto_play': this.options_.autoplay
+        'auto_play': this.options_.autoplay,
+        callback: ()=>{
+          this.onStateChange({type: SC.Widget.Events.READY});
+        }
       }
     );
   }
