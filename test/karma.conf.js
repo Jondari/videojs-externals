@@ -11,6 +11,7 @@ module.exports = function (config) {
     files: [
       "node_modules/video.js/dist/video.js",
       "src/videojs-externals.js",
+      "test/ressources/*.html",
       "test/**/*.specs.js"
     ],
 
@@ -31,7 +32,8 @@ module.exports = function (config) {
 
     preprocessors: {
       'src/**/*.js': ['browserify'],
-      'test/**/*.js': ['browserify']
+      'test/**/*.js': ['browserify'],
+      "test/**/*.html": ["html2js"]
     },
 
     reporters: ['mocha'],
