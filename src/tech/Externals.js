@@ -20,6 +20,7 @@ const Tech = videojs.getComponent('Tech');
 class Externals extends Tech {
   constructor (options, ready) {
     super(options, ready);
+    let url = options.source ? options.source.src : null;
     this.params = {
       id: this.options_.techId,
       autoplay: parseInt(options.autoplay),
@@ -30,7 +31,7 @@ class Externals extends Tech {
       controls: 'html',
       wmode: 'opaque',
       format: 'json',
-      url: options.source.src
+      url: url
     };
 
     // If we are not on a server, don't specify the origin (it will crash)
@@ -38,7 +39,7 @@ class Externals extends Tech {
       this.params.origin = window.location.protocol + '//' + window.location.hostname;
     }
 
-    this.videoId = this.parseSrc(options.source.src);
+    this.videoId = this.parseSrc(url);
     // Set the vjs-youtube class to the player
     // Parent is not set yet so we have to wait a tick
     setTimeout(function () {
@@ -348,7 +349,7 @@ class Externals extends Tech {
   }
 
   onPlayerError (e) {
-    this.errorNumber = e.data;
+    this.errorNumber = e ? e.data : null;
     this.trigger('error');
   }
 
