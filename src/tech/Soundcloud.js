@@ -318,6 +318,8 @@ Soundcloud.nativeSourceHandler.canHandleSource = function (source) {
     return Soundcloud.nativeSourceHandler.canPlayType(source.type);
   } else if (source.src) {
     return Soundcloud.nativeSourceHandler.canPlayType(source.src);
+  } else if (typeof source === 'string'){
+    return Soundcloud.nativeSourceHandler.canPlayType(source);
   }
 
   return '';
