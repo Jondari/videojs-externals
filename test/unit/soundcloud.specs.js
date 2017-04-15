@@ -95,6 +95,8 @@ var changeSourceTest = function (newSource) {
   };
 };
 
+// TODO add test for track without artwork
+
 describe('videojs-soundcloud plugin', function () {
 
   beforeEach(function () {
