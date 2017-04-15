@@ -196,8 +196,14 @@ class Soundcloud extends Externals {
         if (!sound) {
           return;
         }
-        this.setPoster(sound['artwork_url'].replace('large.jpg', 't500x500.jpg'));
-        this.subPosterImage.update(sound['waveform_url'].replace('wis', 'w1').replace('json', 'png'));
+        let artworkUrl = sound['artwork_url'];
+        if (artworkUrl) {
+          this.setPoster(artworkUrl.replace('large.jpg', 't500x500.jpg'));
+        }
+        let waveformUrl = sound['waveform_url'];
+        if (waveformUrl) {
+          this.subPosterImage.update(waveformUrl.replace('wis', 'w1').replace('json', 'png'));
+        }
         this.update(sound);
       });
     } catch (e) {
