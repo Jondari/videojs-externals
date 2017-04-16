@@ -21,5 +21,5 @@ detected:
     - browserify
     - jasmine
     - detectBrowsers
-  detectedBrowsers:
-    usePhantomJs: false
+  detectBrowsers:
+    usePhantomJS: false
