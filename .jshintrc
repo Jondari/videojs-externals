@@ -28,6 +28,9 @@
     "setTimeout",
     "toString",
     "isNaN",
+    // nodejs
+    "module",
+    "require",
     // mocha
     "describe",
     "it",

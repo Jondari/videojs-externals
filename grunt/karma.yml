@@ -1,0 +1,25 @@
+options:
+  configFile: "test/karma.conf.js"
+
+chrome:
+  browsers:
+    - Chrome
+chromium:
+  browsers:
+    - Chromium
+firefox:
+  browsers:
+    - Firefox
+ie:
+  browsers:
+    - IE
+safari:
+  browsers:
+    - Safari
+detected:
+  frameworks:
+    - browserify
+    - jasmine
+    - detectBrowsers
+  detectBrowsers:
+    usePhantomJS: false
