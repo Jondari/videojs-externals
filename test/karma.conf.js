@@ -25,7 +25,8 @@ module.exports = function (config) {
       "karma-detect-browsers",
       "karma-firefox-launcher",
       "karma-ie-launcher",
-      "karma-safari-launcher"
+      "karma-safari-launcher",
+      "karma-mocha-reporter"
     ],
 
     preprocessors: {
@@ -33,7 +34,7 @@ module.exports = function (config) {
       'test/**/*.js': ['browserify']
     },
 
-    reporters: ['dots'],
+    reporters: ['mocha'],
     port: 9876,
     colors: true,
     autoWatch: false,
