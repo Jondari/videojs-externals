@@ -41,6 +41,22 @@ module.exports = function (config) {
     singleRun: true,
     concurrency: Infinity,
 
+    detectBrowsers: {
+      /**
+       * For https://github.com/litixsoft/karma-detect-browsers
+       * @param availableBrowsers {Array}
+       */
+      postDetection: function (availableBrowsers) {
+
+        // Manualy insert Chromium
+        // Until https://github.com/litixsoft/karma-detect-browsers/issues/22 is resolved
+        if (process.env.TRAVIS && !availableBrowsers.includes("Chromium")) {
+          availableBrowsers.push("Chromium")
+        }
+        return availableBrowsers
+      },
+    },
+
     browserify: {
       transform: [
         [
