@@ -88,8 +88,9 @@ var changeSourceTest = function (newSource) {
 
 import {MainTestFactory} from './base/base'
 import BaseTestConfiguration from './base/BaseTestConfiguration'
-import StringSourceTestSuiteGenerator from './base/generators/StringSourceTestSuiteGenerator'
+import HtmlSourceTestSuiteGenerator from './base/generators/HtmlSourceTestSuiteGenerator'
 import ObjectSourceTestSuiteGenerator from './base/generators/ObjectSourceTestSuiteGenerator'
+import StringSourceTestSuiteGenerator from './base/generators/StringSourceTestSuiteGenerator'
 
 var basicConfiguration = new BaseTestConfiguration(
   "Soundcloud",
@@ -103,6 +104,11 @@ var basicConfiguration = new BaseTestConfiguration(
 var testFactory = new MainTestFactory(basicConfiguration)
 
 const MIME_TYPE = "audio/soundcloud";
+testFactory.addTestSuiteFactory(new HtmlSourceTestSuiteGenerator(
+  basicConfiguration,
+  {src: 'https://soundcloud.com/vaughan-1-1/this-is-what-crazy-looks-like', type: MIME_TYPE},
+  {src: 'https://soundcloud.com/user504272/teki-latex-dinosaurs-with-guns-cyberoptix-remix', type: MIME_TYPE}
+))
 testFactory.addTestSuiteFactory(new StringSourceTestSuiteGenerator(
   basicConfiguration,
   {src: 'https://soundcloud.com/hipster-online/04-sweet-home-alabama', type: MIME_TYPE},
@@ -119,50 +125,6 @@ testFactory.addTestSuiteFactory(new ObjectSourceTestSuiteGenerator(
 testFactory.generate()
 
 // describe('videojs-soundcloud plugin', function () {
-//
-//   beforeEach(function () {
-//     this.plugin = videojs.getComponent('Soundcloud');
-//     this.pluginPrototype = this.plugin.prototype;
-//     spyOnAllClassFunctions(this.plugin);
-//     this.videoTagId = 'myStuff';
-//     this.source = 'https://soundcloud.com/vaughan-1-1/this-is-what-crazy-looks-like';
-//   });
-//   afterEach(function (done) {
-//     setTimeout(() => {
-//       var player = videojs.players[this.videoTagId];
-//       if (player) {
-//         player.dispose();
-//       }
-//       expect(document.getElementsByTagName('iframe').length).toEqual(0);
-//       expect(videojs.players[this.videoTagId]).toBeFalsy();
-//       return done();
-//     }, 1);
-//   });
-//
-//
-//   describe('created with html video>source', function () {
-//     beforeEach(function () {
-//       console.debug('before each', this.player);
-//       expect(this.player).toBeUndefined();
-//       this.vFromTag = window.__html__['test/resources/videojs_from_tag.html'];
-//       document.body.innerHTML = this.vFromTag;
-//       expect(document.getElementById(this.videoTagId)).not.toBeNull();
-//       this.player = videojs(this.videoTagId);
-//     });
-//
-//     it('should create soundcloud iframe', widgetPlayerTest);
-//     it('should play the song', playTest);
-//     it('should half the volume', changeVolumeTest);
-//
-//     /* To use with @see changeSourceTest */
-//     var secondSource = {
-//       src: 'https://soundcloud.com/user504272/teki-latex-dinosaurs-with-guns-cyberoptix-remix',
-//       type: 'audio/soundcloud'
-//     };
-//     it('should change object sources', changeSourceTest(secondSource));
-//     it('should change string sources', changeSourceTest(secondSource.src));
-//   });
-//
 //
 //   describe('created with no source', function () {
 //     beforeEach(function () {
