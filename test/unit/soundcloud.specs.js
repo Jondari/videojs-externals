@@ -4,16 +4,6 @@
  @param o {Object} object to invade
  */
 
-var spyOnAllClassFunctions = function (o) {
-  return Object.keys(o.prototype).filter((item) => {
-    return o.prototype[item] instanceof Function;
-  }).forEach(function (funcName) {
-    return spyOn(o.prototype, funcName).and.callThrough();
-  });
-};
-
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 5000;
-
 var sourceObjectTest = function (done) {
   this.player.ready(() => {
     var iframe = document.getElementsByTagName('iframe')[0];
@@ -95,151 +85,135 @@ var changeSourceTest = function (newSource) {
   };
 };
 
-// TODO add test for track without artwork
+import {MainTestFactory} from './base/base'
+import BaseTestConfiguration from './base/BaseTestConfiguration'
+import StringSourceTestSuiteGenerator from './base/generators/StringSourceTestSuiteGenerator'
 
-describe('videojs-soundcloud plugin', function () {
+var basicConfiguration = new BaseTestConfiguration(
+  "Soundcloud",
+  sourceObjectTest,
+  playTest,
+  seekTo30Test,
+  changeVolumeTest,
+  changeSourceTest
+)
 
-  beforeEach(function () {
-    this.plugin = videojs.getComponent('Soundcloud');
-    this.pluginPrototype = this.plugin.prototype;
-    spyOnAllClassFunctions(this.plugin);
-    this.videoTagId = 'myStuff';
-    this.source = 'https://soundcloud.com/vaughan-1-1/this-is-what-crazy-looks-like';
-  });
-  afterEach(function (done) {
-    setTimeout(() => {
-      var player = videojs.players[this.videoTagId];
-      if (player) {
-        player.dispose();
-      }
-      expect(document.getElementsByTagName('iframe').length).toEqual(0);
-      expect(videojs.players[this.videoTagId]).toBeFalsy();
-      return done();
-    }, 1);
-  });
+var testFactory = new MainTestFactory(basicConfiguration)
 
+const MIME_TYPE = "audio/soundcloud";
+testFactory.addTestSuiteFactory(new StringSourceTestSuiteGenerator(
+  basicConfiguration,
+  {src: 'https://soundcloud.com/hipster-online/04-sweet-home-alabama', type: MIME_TYPE},
+  {src: 'https://soundcloud.com/nordemusic/missing-you-ft-lucas-nord', type: MIME_TYPE},
+  'test/resources/videojs_from_script.html'
+))
 
-  describe('created with html video>source', function () {
-    beforeEach(function () {
-      console.debug('before each', this.player);
-      expect(this.player).toBeUndefined();
-      this.vFromTag = window.__html__['test/resources/videojs_from_tag.html'];
-      document.body.innerHTML = this.vFromTag;
-      expect(document.getElementById(this.videoTagId)).not.toBeNull();
-      this.player = videojs(this.videoTagId);
-    });
+testFactory.generate()
 
-    it('should create soundcloud iframe', sourceObjectTest);
-    it('should play the song', playTest);
-    it('should half the volume', changeVolumeTest);
-
-    /* To use with @see changeSourceTest */
-    var secondSource = {
-      src: 'https://soundcloud.com/user504272/teki-latex-dinosaurs-with-guns-cyberoptix-remix',
-      type: 'audio/soundcloud'
-    };
-    it('should change object sources', changeSourceTest(secondSource));
-    it('should change string sources', changeSourceTest(secondSource.src));
-  });
-
-
-  describe('created with javascript string source', function () {
-
-    beforeEach(function () {
-      console.debug('beforeEach with video and source tag');
-      this.source = 'https://soundcloud.com/hipster-online/04-sweet-home-alabama';
-      this.vFromScript = window.__html__['test/resources/videojs_from_script.html'];
-      document.body.innerHTML = this.vFromScript;
-      expect(document.getElementById(this.videoTagId)).not.toBeNull();
-      this.player = videojs(this.videoTagId, {
-        'techOrder': ['Soundcloud'],
-        'sources': [this.source]
-      });
-    });
-
-    it('should create soundcloud iframe', function (done) {
-      this.player.ready(() => {
-        var iframe;
-        iframe = document.getElementsByTagName('iframe')[0];
-        expect(iframe).toBeTruthy();
-        expect(iframe.src).toMatch(new RegExp('w.soundcloud.com/player/\\?url=' + this.source + '.*'));
-        done();
-      });
-    });
-
-
-    it('should play the song', playTest);
-    it('should seek to 30 seconds', seekTo30Test);
-    it('should half the volume', changeVolumeTest);
-
-    /* To use with @see changeSourceTest */
-    var secondSource = {
-      src: 'https://soundcloud.com/nordemusic/missing-you-ft-lucas-nord',
-      type: 'audio/soundcloud'
-    };
-    it('should change object sources', changeSourceTest(secondSource));
-    it('should change string sources', changeSourceTest(secondSource.src));
-  });
-
-
-  describe('created with javascript object source', function () {
-    beforeEach(function () {
-      console.debug('beforeEach with video and source tag');
-      this.source = 'https://soundcloud.com/oshi/kali-uchi';
-      this.vFromScript = window.__html__['test/resources/videojs_from_script.html'];
-      document.body.innerHTML = this.vFromScript;
-      expect(document.getElementById(this.videoTagId)).not.toBeNull();
-      this.player = videojs(this.videoTagId, {
-        'techOrder': ['soundcloud'],
-        'sources': [
-          {
-            src: this.source,
-            type: 'audio/soundcloud'
-          }
-        ]
-      });
-    });
-
-    it('should create soundcloud iframe', sourceObjectTest);
-    it('should play the song', playTest);
-    it('should seek to 30 seconds', seekTo30Test);
-    it('should half the volume', changeVolumeTest);
-
-    /* To use with @see changeSourceTest */
-    var secondSource = {
-      src: 'https://soundcloud.com/apexrise/or-nah',
-      type: 'audio/soundcloud'
-    };
-    it('should change sources', changeSourceTest(secondSource));
-  });
-
-
-  describe('created with no source', function () {
-    beforeEach(function () {
-      console.debug('beforeEach with no source tag');
-      this.source = 'https://soundcloud.com/monstercat/pegboard-nerds-self-destruct';
-      this.vFromScript = window.__html__['test/resources/videojs_from_script.html'];
-      document.body.innerHTML = this.vFromScript;
-      expect(document.getElementById(this.videoTagId)).not.toBeNull();
-      this.player = videojs(this.videoTagId, {
-        'techOrder': ['soundcloud']
-      });
-    });
-
-    /* To use with @see changeSourceTest */
-    var secondSource = {
-      src: 'https://soundcloud.com/pegboardnerds/pegboard-nerds-here-it-comes',
-      type: 'audio/soundcloud'
-    };
-    var apiSource = {
-      src: 'https://api.soundcloud.com/tracks/216846955&amp;auto_play=false&amp;hide_related=false&amp;' +
-      'show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=true',
-      type: 'audio/soundcloud'
-    };
-    it('should change object sources', changeSourceTest(secondSource));
-    it('should change string sources', changeSourceTest(secondSource.src));
-    it('should take api object sources', changeSourceTest(apiSource));
-    it('should take api string sources', changeSourceTest(apiSource.src));
-  });
-});
-
+// describe('videojs-soundcloud plugin', function () {
+//
+//   beforeEach(function () {
+//     this.plugin = videojs.getComponent('Soundcloud');
+//     this.pluginPrototype = this.plugin.prototype;
+//     spyOnAllClassFunctions(this.plugin);
+//     this.videoTagId = 'myStuff';
+//     this.source = 'https://soundcloud.com/vaughan-1-1/this-is-what-crazy-looks-like';
+//   });
+//   afterEach(function (done) {
+//     setTimeout(() => {
+//       var player = videojs.players[this.videoTagId];
+//       if (player) {
+//         player.dispose();
+//       }
+//       expect(document.getElementsByTagName('iframe').length).toEqual(0);
+//       expect(videojs.players[this.videoTagId]).toBeFalsy();
+//       return done();
+//     }, 1);
+//   });
+//
+//
+//   describe('created with html video>source', function () {
+//     beforeEach(function () {
+//       console.debug('before each', this.player);
+//       expect(this.player).toBeUndefined();
+//       this.vFromTag = window.__html__['test/resources/videojs_from_tag.html'];
+//       document.body.innerHTML = this.vFromTag;
+//       expect(document.getElementById(this.videoTagId)).not.toBeNull();
+//       this.player = videojs(this.videoTagId);
+//     });
+//
+//     it('should create soundcloud iframe', sourceObjectTest);
+//     it('should play the song', playTest);
+//     it('should half the volume', changeVolumeTest);
+//
+//     /* To use with @see changeSourceTest */
+//     var secondSource = {
+//       src: 'https://soundcloud.com/user504272/teki-latex-dinosaurs-with-guns-cyberoptix-remix',
+//       type: 'audio/soundcloud'
+//     };
+//     it('should change object sources', changeSourceTest(secondSource));
+//     it('should change string sources', changeSourceTest(secondSource.src));
+//   });
+//
+//
+//   describe('created with javascript object source', function () {
+//     beforeEach(function () {
+//       console.debug('beforeEach with video and source tag');
+//       this.source = 'https://soundcloud.com/oshi/kali-uchi';
+//       this.vFromScript = window.__html__['test/resources/videojs_from_script.html'];
+//       document.body.innerHTML = this.vFromScript;
+//       expect(document.getElementById(this.videoTagId)).not.toBeNull();
+//       this.player = videojs(this.videoTagId, {
+//         'techOrder': ['soundcloud'],
+//         'sources': [
+//           {
+//             src: this.source,
+//             type: 'audio/soundcloud'
+//           }
+//         ]
+//       });
+//     });
+//
+//     it('should create soundcloud iframe', sourceObjectTest);
+//     it('should play the song', playTest);
+//     it('should seek to 30 seconds', seekTo30Test);
+//     it('should half the volume', changeVolumeTest);
+//
+//     /* To use with @see changeSourceTest */
+//     var secondSource = {
+//       src: 'https://soundcloud.com/apexrise/or-nah',
+//       type: 'audio/soundcloud'
+//     };
+//     it('should change sources', changeSourceTest(secondSource));
+//   });
+//
+//
+//   describe('created with no source', function () {
+//     beforeEach(function () {
+//       console.debug('beforeEach with no source tag');
+//       this.source = 'https://soundcloud.com/monstercat/pegboard-nerds-self-destruct';
+//       this.vFromScript = window.__html__['test/resources/videojs_from_script.html'];
+//       document.body.innerHTML = this.vFromScript;
+//       expect(document.getElementById(this.videoTagId)).not.toBeNull();
+//       this.player = videojs(this.videoTagId, {
+//         'techOrder': ['soundcloud']
+//       });
+//     });
+//
+//     /* To use with @see changeSourceTest */
+//     var secondSource = {
+//       src: 'https://soundcloud.com/pegboardnerds/pegboard-nerds-here-it-comes',
+//       type: 'audio/soundcloud'
+//     };
+//     var apiSource = {
+//       src: 'https://api.soundcloud.com/tracks/216846955&amp;auto_play=false&amp;hide_related=false&amp;' +
+//       'show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=true',
+//       type: 'audio/soundcloud'
+//     };
+//     it('should change object sources', changeSourceTest(secondSource));
+//     it('should change string sources', changeSourceTest(secondSource.src));
+//     it('should take api object sources', changeSourceTest(apiSource));
+//     it('should take api string sources', changeSourceTest(apiSource.src));
+//   });
+// });
+//

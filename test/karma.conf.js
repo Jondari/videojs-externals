@@ -54,10 +54,14 @@ module.exports = function (config) {
       transform: [
         [
           'babelify',
-          {'presets': ['es2015']}
+          {
+            'presets': ['es2015'],
+            'plugins': ['transform-class-properties']
+          }
         ],
         'browserify-shim'
-      ]
+      ],
+
     }
   });
 };
