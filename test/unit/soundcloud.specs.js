@@ -6,7 +6,10 @@
 
 var widgetPlayerTest = function (done) {
   this.player.ready(() => {
-    var source = ( typeof this.source) === "string" ? this.source : this.source.src;
+    var source = null;
+    if (this.source) {
+      source = ( typeof this.source) === "string" ? this.source : this.source.src;
+    }
     var iframe = document.getElementsByTagName('iframe')[0];
     expect(iframe).toBeTruthy();
     expect(iframe.src).toMatch(new RegExp(`w.soundcloud.com/player/\\?url=${source}.*`));
@@ -89,10 +92,12 @@ var changeSourceTest = function (newSource) {
 import {MainTestFactory} from './base/base'
 import BaseTestConfiguration from './base/BaseTestConfiguration'
 import HtmlSourceTestSuiteGenerator from './base/generators/HtmlSourceTestSuiteGenerator'
+import NoSourceTestSuiteGenerator from './base/generators/NoSourceTestSuiteGenerator'
 import ObjectSourceTestSuiteGenerator from './base/generators/ObjectSourceTestSuiteGenerator'
 import StringSourceTestSuiteGenerator from './base/generators/StringSourceTestSuiteGenerator'
 
-var basicConfiguration = new BaseTestConfiguration(
+const MIME_TYPE = "audio/soundcloud";
+const basicConfiguration = new BaseTestConfiguration(
   "Soundcloud",
   widgetPlayerTest,
   playTest,
@@ -101,57 +106,37 @@ var basicConfiguration = new BaseTestConfiguration(
   changeSourceTest
 )
 
-var testFactory = new MainTestFactory(basicConfiguration)
-
-const MIME_TYPE = "audio/soundcloud";
-testFactory.addTestSuiteFactory(new HtmlSourceTestSuiteGenerator(
+const htmlSourceTestSuiteGenerator = new HtmlSourceTestSuiteGenerator(
   basicConfiguration,
   {src: 'https://soundcloud.com/vaughan-1-1/this-is-what-crazy-looks-like', type: MIME_TYPE},
   {src: 'https://soundcloud.com/user504272/teki-latex-dinosaurs-with-guns-cyberoptix-remix', type: MIME_TYPE}
-))
-testFactory.addTestSuiteFactory(new StringSourceTestSuiteGenerator(
+);
+const noSourceTestSuiteGenerator = new NoSourceTestSuiteGenerator(
   basicConfiguration,
-  {src: 'https://soundcloud.com/hipster-online/04-sweet-home-alabama', type: MIME_TYPE},
-  {src: 'https://soundcloud.com/nordemusic/missing-you-ft-lucas-nord', type: MIME_TYPE},
+  null,
+  {src: 'https://soundcloud.com/pegboardnerds/pegboard-nerds-here-it-comes', type: MIME_TYPE},
   'test/resources/videojs_from_script.html'
-))
-testFactory.addTestSuiteFactory(new ObjectSourceTestSuiteGenerator(
+);
+const objectSourceTestSuiteGenerator = new ObjectSourceTestSuiteGenerator(
   basicConfiguration,
   {src: 'https://soundcloud.com/oshi/kali-uchi', type: MIME_TYPE},
   {src: 'https://soundcloud.com/apexrise/or-nah', type: MIME_TYPE},
   'test/resources/videojs_from_script.html'
-))
+);
+const stringSourceTestSuiteGenerator = new StringSourceTestSuiteGenerator(
+  basicConfiguration,
+  {src: 'https://soundcloud.com/hipster-online/04-sweet-home-alabama', type: MIME_TYPE},
+  {src: 'https://soundcloud.com/nordemusic/missing-you-ft-lucas-nord', type: MIME_TYPE},
+  'test/resources/videojs_from_script.html'
+);
+
+
+var testFactory = new MainTestFactory(basicConfiguration)
+
+testFactory.addTestSuiteFactory(htmlSourceTestSuiteGenerator)
+testFactory.addTestSuiteFactory(noSourceTestSuiteGenerator)
+testFactory.addTestSuiteFactory(objectSourceTestSuiteGenerator)
+testFactory.addTestSuiteFactory(stringSourceTestSuiteGenerator)
 
 testFactory.generate()
 
-// describe('videojs-soundcloud plugin', function () {
-//
-//   describe('created with no source', function () {
-//     beforeEach(function () {
-//       console.debug('beforeEach with no source tag');
-//       this.source = 'https://soundcloud.com/monstercat/pegboard-nerds-self-destruct';
-//       this.vFromScript = window.__html__['test/resources/videojs_from_script.html'];
-//       document.body.innerHTML = this.vFromScript;
-//       expect(document.getElementById(this.videoTagId)).not.toBeNull();
-//       this.player = videojs(this.videoTagId, {
-//         'techOrder': ['soundcloud']
-//       });
-//     });
-//
-//     /* To use with @see changeSourceTest */
-//     var secondSource = {
-//       src: 'https://soundcloud.com/pegboardnerds/pegboard-nerds-here-it-comes',
-//       type: 'audio/soundcloud'
-//     };
-//     var apiSource = {
-//       src: 'https://api.soundcloud.com/tracks/216846955&amp;auto_play=false&amp;hide_related=false&amp;' +
-//       'show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=true',
-//       type: 'audio/soundcloud'
-//     };
-//     it('should change object sources', changeSourceTest(secondSource));
-//     it('should change string sources', changeSourceTest(secondSource.src));
-//     it('should take api object sources', changeSourceTest(apiSource));
-//     it('should take api string sources', changeSourceTest(apiSource.src));
-//   });
-// });
-//
