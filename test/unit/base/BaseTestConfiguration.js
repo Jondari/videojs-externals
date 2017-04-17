@@ -17,7 +17,7 @@ export default class BaseTestConfiguration {
               changeVolumeTest,
               changeSourceTest) {
     this.techName = techName;
-    this.sourceObjectTest = sourceObjectTest
+    this.widgetObjectTest = sourceObjectTest
     this.playTest = playTest
     this.seekTo30Test = seekTo30Test
     this.changeVolumeTest = changeVolumeTest

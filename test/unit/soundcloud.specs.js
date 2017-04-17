@@ -4,11 +4,12 @@
  @param o {Object} object to invade
  */
 
-var sourceObjectTest = function (done) {
+var widgetPlayerTest = function (done) {
   this.player.ready(() => {
+    var source = ( typeof this.source) === "string" ? this.source : this.source.src;
     var iframe = document.getElementsByTagName('iframe')[0];
     expect(iframe).toBeTruthy();
-    expect(iframe.src).toMatch(new RegExp('w.soundcloud.com/player/\\?url=' + this.source + '.*'));
+    expect(iframe.src).toMatch(new RegExp(`w.soundcloud.com/player/\\?url=${source}.*`));
     done();
   });
 };
@@ -88,10 +89,11 @@ var changeSourceTest = function (newSource) {
 import {MainTestFactory} from './base/base'
 import BaseTestConfiguration from './base/BaseTestConfiguration'
 import StringSourceTestSuiteGenerator from './base/generators/StringSourceTestSuiteGenerator'
+import ObjectSourceTestSuiteGenerator from './base/generators/ObjectSourceTestSuiteGenerator'
 
 var basicConfiguration = new BaseTestConfiguration(
   "Soundcloud",
-  sourceObjectTest,
+  widgetPlayerTest,
   playTest,
   seekTo30Test,
   changeVolumeTest,
@@ -105,6 +107,12 @@ testFactory.addTestSuiteFactory(new StringSourceTestSuiteGenerator(
   basicConfiguration,
   {src: 'https://soundcloud.com/hipster-online/04-sweet-home-alabama', type: MIME_TYPE},
   {src: 'https://soundcloud.com/nordemusic/missing-you-ft-lucas-nord', type: MIME_TYPE},
+  'test/resources/videojs_from_script.html'
+))
+testFactory.addTestSuiteFactory(new ObjectSourceTestSuiteGenerator(
+  basicConfiguration,
+  {src: 'https://soundcloud.com/oshi/kali-uchi', type: MIME_TYPE},
+  {src: 'https://soundcloud.com/apexrise/or-nah', type: MIME_TYPE},
   'test/resources/videojs_from_script.html'
 ))
 
@@ -142,7 +150,7 @@ testFactory.generate()
 //       this.player = videojs(this.videoTagId);
 //     });
 //
-//     it('should create soundcloud iframe', sourceObjectTest);
+//     it('should create soundcloud iframe', widgetPlayerTest);
 //     it('should play the song', playTest);
 //     it('should half the volume', changeVolumeTest);
 //
@@ -153,38 +161,6 @@ testFactory.generate()
 //     };
 //     it('should change object sources', changeSourceTest(secondSource));
 //     it('should change string sources', changeSourceTest(secondSource.src));
-//   });
-//
-//
-//   describe('created with javascript object source', function () {
-//     beforeEach(function () {
-//       console.debug('beforeEach with video and source tag');
-//       this.source = 'https://soundcloud.com/oshi/kali-uchi';
-//       this.vFromScript = window.__html__['test/resources/videojs_from_script.html'];
-//       document.body.innerHTML = this.vFromScript;
-//       expect(document.getElementById(this.videoTagId)).not.toBeNull();
-//       this.player = videojs(this.videoTagId, {
-//         'techOrder': ['soundcloud'],
-//         'sources': [
-//           {
-//             src: this.source,
-//             type: 'audio/soundcloud'
-//           }
-//         ]
-//       });
-//     });
-//
-//     it('should create soundcloud iframe', sourceObjectTest);
-//     it('should play the song', playTest);
-//     it('should seek to 30 seconds', seekTo30Test);
-//     it('should half the volume', changeVolumeTest);
-//
-//     /* To use with @see changeSourceTest */
-//     var secondSource = {
-//       src: 'https://soundcloud.com/apexrise/or-nah',
-//       type: 'audio/soundcloud'
-//     };
-//     it('should change sources', changeSourceTest(secondSource));
 //   });
 //
 //
