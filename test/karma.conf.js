@@ -32,6 +32,7 @@ module.exports = function (config) {
       "karma-chrome-launcher",
       "karma-detect-browsers",
       "karma-firefox-launcher",
+      "karma-html2js-preprocessor",
       "karma-ie-launcher",
       "karma-safari-launcher",
       "karma-mocha-reporter"
