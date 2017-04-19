@@ -64,6 +64,7 @@ class Soundcloud extends Externals {
 
   onStateChange (event) {
     let state = event.type;
+    console.debug("event: ", event)
     switch (state) {
       case -1:
         this.trigger('loadstart');
@@ -89,9 +90,9 @@ class Soundcloud extends Externals {
         break;
 
       case SC.Widget.Events.PLAY_PROGRESS:
+        this.currentTime_ = ((this.duration_ * 1000) * event.relativePosition ) / 1000;
         this.trigger('canplay');
         this.trigger('playing');
-        this.currentTime_ = ((this.duration_ * 1000) * event.relativePosition ) / 1000;
         //this.trigger('timeupdate');
         break;
 
@@ -101,6 +102,7 @@ class Soundcloud extends Externals {
         break;
 
       case SC.Widget.Events.SEEK:
+        this.currentTime_ = event.currentPosition / 1000
         this.trigger('seeked');
         break;
 
@@ -125,11 +127,11 @@ class Soundcloud extends Externals {
   }
 
   onReady () {
-    super.onReady();
     this.updatePause();
     this.updateDuration();
     this.updateVolume();
     this.updatePoster();
+    this.triggerReady();
   }
 
   initTech () {
@@ -234,8 +236,10 @@ class Soundcloud extends Externals {
   }
 
   setCurrentTime (position) {
+    const newPosition = position * 1000;
+    console.debug("seekTo: ", newPosition)
+    this.widgetPlayer.seekTo(newPosition);
     this.trigger('seeking');
-    this.widgetPlayer.seekTo(position * 1000);
   }
 
   play () {

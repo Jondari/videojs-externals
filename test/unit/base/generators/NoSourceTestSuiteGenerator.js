@@ -17,7 +17,6 @@ export default class NoSourceTestSuiteGenerator extends TestSuiteGenerator {
     var self = this;
 
     beforeEach(function () {
-      console.debug('beforeEach with no source tag');
       this.source = null;
       this.vFromScript = window.__html__[self.htmlResourcePath];
       document.body.innerHTML = this.vFromScript;

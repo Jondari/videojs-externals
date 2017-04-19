@@ -4,6 +4,10 @@
  @param o {Object} object to invade
  */
 
+function getSourceString(stringOrSourceObject) {
+  return 'object' === typeof stringOrSourceObject ? stringOrSourceObject.src : stringOrSourceObject
+}
+
 var widgetPlayerTest = function (done) {
   this.player.ready(() => {
     var source = null;
@@ -40,7 +44,6 @@ var seekTo30Test = function (done) {
   player.ready(() => {
     var seconds = 30;
     player.on('play', () => {
-      player.pause();
       player.currentTime(seconds);
     });
     player.on('seeked', () => {
@@ -74,13 +77,15 @@ var changeVolumeTest = function (done) {
  */
 var changeSourceTest = function (newSource) {
   var newSourceString;
-  newSourceString = 'object' === typeof newSource ? newSource.src : newSource;
+  newSourceString = getSourceString(newSource);
   return function (done) {
     let player = this.player;
-    player.one('canplay', () => {
+    player.one('ready', () => {
       player.one('canplay', () => {
-        console.debug('changed source for to', newSource);
-        expect(player.src()).toEqual(newSourceString);
+        var playerSrc = getSourceString(player.src());
+        console.debug('changed source to', playerSrc);
+        console.debug('expecting', newSourceString);
+        expect(playerSrc).toEqual(newSourceString);
         done();
       });
       console.debug('changing source to ', newSource);
