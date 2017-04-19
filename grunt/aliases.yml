@@ -1,2 +1,2 @@
 test:
-  - "karma:detected"
+  - "karma:single"

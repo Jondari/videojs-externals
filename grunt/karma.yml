@@ -16,6 +16,7 @@ ie:
 safari:
   browsers:
     - Safari
+single: {}
 detected:
   frameworks:
     - browserify
