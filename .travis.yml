@@ -8,7 +8,25 @@ addons:
   firefox: "latest"
 
 before_install:
-  - export CHROME_BIN=chromium-browser
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  - npm install -g grunt-cli
+    - sudo apt-get update -qq
+    # Install the requirements for adding repos
+    # apt-add-repository is in there
+    - sudo apt-get install -qy python-software-properties
+    # Add repos
+    - echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+    # Add apt-keys for checking the packages
+    - wget -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+    - sudo apt-get update -qq
+    # Install the browsers
+    - sudo apt-get install -qy chromium-browser google-chrome-stable
+    # Install what's needed to play mp4s and audio with firefox
+    - sudo apt-get install -qy ubuntu-restricted-addons pulseaudio libpulse0
+
+before_script:
+    # Setup xvfb for browsers
+    - export DISPLAY=:99.0
+    - sh -e /etc/init.d/xvfb start
+    # Configure pulseaudio to run properly
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1214809
+    - pulseaudio --start --daemonize --fail
+    - pactl load-module module-null-sink

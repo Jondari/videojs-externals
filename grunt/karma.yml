@@ -16,6 +16,7 @@ ie:
 safari:
   browsers:
     - Safari
+single: {}
 detected:
   frameworks:
     - browserify
@@ -23,3 +24,6 @@ detected:
     - detectBrowsers
   detectBrowsers:
     usePhantomJS: false
+watch:
+  autoWatch: true
+  singleRun: false

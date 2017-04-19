@@ -1,7 +1,15 @@
 module.exports = function (config) {
+  var karmaBrowsers = process.env['BROWSERS'] ?
+    process.env['BROWSERS'].split(':') :
+    [
+      'Chromium'
+    ];
+
   config.set({
     // base path, that will be used to resolve files and exclude
     basePath: '..',
+
+    browsers: karmaBrowsers,
 
     frameworks: [
       'browserify',
@@ -9,13 +17,13 @@ module.exports = function (config) {
     ],
 
     files: [
-      "node_modules/video.js/dist/video.js",
-      "src/videojs-externals.js",
-      "test/**/*.specs.js"
+      'node_modules/video.js/dist/video.js',
+      'src/videojs-externals.js',
+      'test/resources/*.html',
+      'test/**/*.specs.js'
     ],
 
     exclude: [
-      'test/bundle.js'
     ],
 
     plugins: [
@@ -24,6 +32,7 @@ module.exports = function (config) {
       "karma-chrome-launcher",
       "karma-detect-browsers",
       "karma-firefox-launcher",
+      "karma-html2js-preprocessor",
       "karma-ie-launcher",
       "karma-safari-launcher",
       "karma-mocha-reporter"
@@ -31,7 +40,8 @@ module.exports = function (config) {
 
     preprocessors: {
       'src/**/*.js': ['browserify'],
-      'test/**/*.js': ['browserify']
+      'test/**/*.js': ['browserify'],
+      'test/**/*.html': ['html2js']
     },
 
     reporters: ['mocha'],
@@ -61,10 +71,14 @@ module.exports = function (config) {
       transform: [
         [
           'babelify',
-          {"presets": ["es2015"]}
+          {
+            'presets': ['es2015'],
+            'plugins': ['transform-class-properties']
+          }
         ],
         'browserify-shim'
-      ]
+      ],
+
     }
-  })
-}
+  });
+};

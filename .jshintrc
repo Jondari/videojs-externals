@@ -31,7 +31,11 @@
     // nodejs
     "module",
     "require",
-    // mocha
+    "process",
+    // jasmine
+    "jasmine",
+    "expect",
+    "spyOn",
     "describe",
     "it",
     "before",
