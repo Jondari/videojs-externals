@@ -24,7 +24,7 @@ var widgetPlayerTest = function (done) {
 
 var playTest = function (done) {
   this.player.ready(() => {
-    // Register for when soundcloud will actually start playing
+    // Register for when dailymotion will actually start playing
     let player = this.player;
     player.on('play', () => {
       expect(this.player.paused()).toBeFalsy();
