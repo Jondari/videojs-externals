@@ -23,17 +23,6 @@ class Dailymotion extends Externals {
     }
 
     createEl () {
-
-        let dailymotionSource = null;
-        if ('string' === typeof this.options_.source) {
-            dailymotionSource = this.options_.source;
-        }
-        else if ('object' === typeof this.options_.source) {
-            dailymotionSource = this.options_.source.src;
-        }
-
-        dailymotionSource = this.parseSrc(dailymotionSource);
-
         const el_ = super.createEl('iframe', {
             id: this.options_.techId,
             src: `about:blank`,
@@ -58,7 +47,7 @@ class Dailymotion extends Externals {
     isApiReady () {
         return window['DM'] && window['DM']['player'];
     }
-    
+
     injectCss (overrideStyle) {
         if(!overrideStyle) {
             overrideStyle = '';
@@ -86,7 +75,7 @@ class Dailymotion extends Externals {
             height: this.options_.height,
             params: videojs.mergeOptions(this.player_.options_, {
                 controls: false, // disable DM controls & buttons for better integration
-                'endscreen-enable': false, 
+                'endscreen-enable': false,
                 'sharing-enable': false
             })
         });
@@ -304,8 +293,8 @@ Dailymotion.nativeSourceHandler = {};
  * @param  {String} type    The mimetype to check
  * @return {String}         'probably', 'maybe', or '' (empty string)
  */
-Dailymotion.nativeSourceHandler.canPlayType = function (source) {
-    return (source.indexOf('dailymotion') !== -1);
+Dailymotion.nativeSourceHandler.canPlayType = function (type) {
+    return (type.indexOf('dailymotion') !== -1);
 };
 
 /*
