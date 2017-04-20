@@ -11,7 +11,7 @@ function getSourceString(stringOrSourceObject) {
 function getDailymotionVideoId(source){
   return videojs.getComponent("Dailymotion").prototype.parseSrc(getSourceString(source))
 }
-
+// TODO generalize these
 var widgetPlayerTest = function (done) {
   this.player.ready(() => {
     var iframe = document.getElementsByTagName('iframe')[0];
