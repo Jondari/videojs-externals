@@ -261,8 +261,24 @@ class Externals extends Tech {
     return this.currentSrc();
   }
 
+  /**
+   * Should call the external API to change the source
+   *
+   * @param src {SourceObject|String}
+   * @abstract
+   */
   setSrc(src){
     throw `Not yet implemented but called with ${src}`;
+  }
+
+  /**
+   * Helper to get the simple source string
+   *
+   * @param source {SourceObject|String}
+   * @returns {String}
+   */
+  sourceToString(source){
+    return 'object' === typeof source ? source.src : source
   }
 
   currentSrc () {

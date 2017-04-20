@@ -38,10 +38,15 @@ class Dailymotion extends Externals {
         if (src) {
             // Regex that parse the video ID for any Dailymotion URL
             var regExp = /^.+dailymotion.com\/((video|hub)\/([^_]+))?[^#]*(#video=([^_&]+))?/;
-            var match = src.match(regExp);
+            var srcString = this.sourceToString(src);
+            var match = srcString.match(regExp);
 
             return match ? match[5] || match[3] : null;
         }
+    }
+
+    setSrc(src){
+      this.widgetPlayer.load(this.parseSrc(src))
     }
 
     isApiReady () {
@@ -130,6 +135,7 @@ class Dailymotion extends Externals {
     }
 
     onStateChange (event) {
+        console.debug("event: ", event)
         let state = event.type;
         this.lastState = state;
         super.onStateChange(event);
@@ -146,6 +152,7 @@ class Dailymotion extends Externals {
                 this.trigger('ended');
                 break;
             case 'start':
+            case 'video_start':
                 this.trigger('loadedmetadata');
                 this.trigger('durationchange');
                 this.trigger('canplay');
