@@ -138,7 +138,6 @@ class Dailymotion extends Externals {
         console.debug("event: ", event)
         let state = event.type;
         this.lastState = state;
-        super.onStateChange(event);
         switch (state) {
             case -1:
                 if(this.options_.autoplay) {
@@ -182,6 +181,8 @@ class Dailymotion extends Externals {
                 this.trigger('loadedmetadata');
                 this.trigger('canplay');
                 break;
+          default:
+            super.onStateChange(event);
         }
     }
 
