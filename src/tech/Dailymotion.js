@@ -255,6 +255,11 @@ class Dailymotion extends Externals {
 
     setVolume (percentAsDecimal) {
         if (percentAsDecimal !== this.volume_) {
+            var isInitialState = this.widgetPlayer.bufferedTime === 0 && this.widgetPlayer.currentTime === 0;
+            // Trigger a load before setting the volume otherwise it won't work
+            if(isInitialState){
+              this.widgetPlayer.seek(0);
+            }
             this.widgetPlayer.setVolume(percentAsDecimal);
             this.updateVolume();
         }
