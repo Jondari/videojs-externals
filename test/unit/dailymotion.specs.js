@@ -1,3 +1,5 @@
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+
 /*
  Create a spy for all functions of a given object
  by spying on the object's prototype
@@ -120,19 +122,19 @@ const htmlSourceTestSuiteGenerator = new HtmlSourceTestSuiteGenerator(
 const noSourceTestSuiteGenerator = new NoSourceTestSuiteGenerator(
   basicConfiguration,
   null,
-  {src: 'https://soundcloud.com/pegboardnerds/pegboard-nerds-here-it-comes', type: MIME_TYPE},
+  {src: 'http://www.dailymotion.com/video/x5j2t3s_la-terrible-blessure-d-ibrahimovic_sport', type: MIME_TYPE},
   'test/resources/videojs_from_script.html'
 );
 const objectSourceTestSuiteGenerator = new ObjectSourceTestSuiteGenerator(
   basicConfiguration,
-  {src: 'https://soundcloud.com/oshi/kali-uchi', type: MIME_TYPE},
-  {src: 'https://soundcloud.com/apexrise/or-nah', type: MIME_TYPE},
+  {src: 'http://www.dailymotion.com/video/x5fi0zc_kali-uchis-ridin-round-oshi-remix_music', type: MIME_TYPE},
+  {src: 'http://www.dailymotion.com/video/x2rv1p5_the-weeknd-or-nah-ft-ty-dolla-igns-wiz-khalifa-apex-rise-trap-remix_music', type: MIME_TYPE},
   'test/resources/videojs_from_script.html'
 );
 const stringSourceTestSuiteGenerator = new StringSourceTestSuiteGenerator(
   basicConfiguration,
-  {src: 'https://soundcloud.com/hipster-online/04-sweet-home-alabama', type: MIME_TYPE},
-  {src: 'https://soundcloud.com/nordemusic/missing-you-ft-lucas-nord', type: MIME_TYPE},
+  {src: 'http://www.dailymotion.com/video/x3fk5bw', type: MIME_TYPE},
+  {src: 'http://www.dailymotion.com/video/x5j4u37_vitaa-interprete-confessions-nocturnes_music', type: MIME_TYPE},
   'test/resources/videojs_from_script.html'
 );
 
@@ -140,9 +142,9 @@ const stringSourceTestSuiteGenerator = new StringSourceTestSuiteGenerator(
 var testFactory = new MainTestFactory(basicConfiguration)
 
 testFactory.addTestSuiteFactory(htmlSourceTestSuiteGenerator)
-// testFactory.addTestSuiteFactory(noSourceTestSuiteGenerator)
-// testFactory.addTestSuiteFactory(objectSourceTestSuiteGenerator)
-// testFactory.addTestSuiteFactory(stringSourceTestSuiteGenerator)
+testFactory.addTestSuiteFactory(noSourceTestSuiteGenerator)
+testFactory.addTestSuiteFactory(objectSourceTestSuiteGenerator)
+testFactory.addTestSuiteFactory(stringSourceTestSuiteGenerator)
 
 testFactory.generate()
 
