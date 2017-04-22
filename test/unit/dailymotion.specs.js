@@ -1,3 +1,5 @@
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+
 /*
  Create a spy for all functions of a given object
  by spying on the object's prototype
@@ -8,22 +10,23 @@ function getSourceString(stringOrSourceObject) {
   return 'object' === typeof stringOrSourceObject ? stringOrSourceObject.src : stringOrSourceObject
 }
 
+function getDailymotionVideoId(source){
+  return videojs.getComponent("Dailymotion").prototype.parseSrc(getSourceString(source))
+}
+// TODO generalize these
 var widgetPlayerTest = function (done) {
   this.player.ready(() => {
-    var source = null;
-    if (this.source) {
-      source = ( typeof this.source) === "string" ? this.source : this.source.src;
-    }
     var iframe = document.getElementsByTagName('iframe')[0];
     expect(iframe).toBeTruthy();
-    expect(iframe.src).toMatch(new RegExp(`w.soundcloud.com/player/\\?url=${source}.*`));
+    var sourceId = getDailymotionVideoId(this.source);
+    expect(iframe.src).toMatch(new RegExp(`^https?://www.dailymotion.com/embed/video/${sourceId}`));
     done();
   });
 };
 
 var playTest = function (done) {
   this.player.ready(() => {
-    // Register for when soundcloud will actually start playing
+    // Register for when dailymotion will actually start playing
     let player = this.player;
     player.on('play', () => {
       expect(this.player.paused()).toBeFalsy();
@@ -64,17 +67,6 @@ var changeVolumeTest = function (done) {
 
   });
 };
-/*
- Try changing the source with a string
- It should trigger the 'newSource' event
-
- The input is the same as vjs.Player.src (that's what's called)
- Which calls @see Soundcloud::src
-
- @param newSource [Object] { type: <String>, src: <String>}
- @param newSource [String] The URL
- @return [Function] To pass to karma for testing a source change
- */
 var changeSourceTest = function (newSource) {
   var newSourceString;
   newSourceString = getSourceString(newSource);
@@ -101,9 +93,9 @@ import NoSourceTestSuiteGenerator from './base/generators/NoSourceTestSuiteGener
 import ObjectSourceTestSuiteGenerator from './base/generators/ObjectSourceTestSuiteGenerator'
 import StringSourceTestSuiteGenerator from './base/generators/StringSourceTestSuiteGenerator'
 
-const MIME_TYPE = "audio/soundcloud";
+const MIME_TYPE = "video/dailymotion";
 const basicConfiguration = new BaseTestConfiguration(
-  "Soundcloud",
+  "Dailymotion",
   widgetPlayerTest,
   playTest,
   seekTo30Test,
@@ -111,46 +103,28 @@ const basicConfiguration = new BaseTestConfiguration(
   changeSourceTest
 )
 
-var apiSource = {
-  src: 'https://api.soundcloud.com/tracks/216846955&amp;auto_play=false&amp;hide_related=false&amp;' +
-  'show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=true',
-  type: 'audio/soundcloud'
-};
-var extraTests = [
-  function () {
-    it('should take api object sources', basicConfiguration.changeSourceTest(apiSource));
-  },
-  function () {
-    it('should take api string sources', basicConfiguration.changeSourceTest(apiSource.src));
-  }
-]
-
 const htmlSourceTestSuiteGenerator = new HtmlSourceTestSuiteGenerator(
   basicConfiguration,
-  {src: 'https://soundcloud.com/vaughan-1-1/this-is-what-crazy-looks-like', type: MIME_TYPE},
-  {src: 'https://soundcloud.com/user504272/teki-latex-dinosaurs-with-guns-cyberoptix-remix', type: MIME_TYPE},
-  extraTests
+  {src: 'http://www.dailymotion.com/video/x5j0y0q_les-candidats-les-plus-badass-de-la-presidentielle-2017_fun', type: MIME_TYPE},
+  {src: 'http://www.dailymotion.com/video/x51h80y_emilija-veljkovic-u-seniorskoj-rukometnoj-reprezentaciji-srbije-10-novembar-2016-rtv-bor_news', type: MIME_TYPE}
 );
 const noSourceTestSuiteGenerator = new NoSourceTestSuiteGenerator(
   basicConfiguration,
   null,
-  {src: 'https://soundcloud.com/pegboardnerds/pegboard-nerds-here-it-comes', type: MIME_TYPE},
-  'test/resources/videojs_from_script.html',
-  extraTests
+  {src: 'http://www.dailymotion.com/video/x5j2t3s_la-terrible-blessure-d-ibrahimovic_sport', type: MIME_TYPE},
+  'test/resources/videojs_from_script.html'
 );
 const objectSourceTestSuiteGenerator = new ObjectSourceTestSuiteGenerator(
   basicConfiguration,
-  {src: 'https://soundcloud.com/oshi/kali-uchi', type: MIME_TYPE},
-  {src: 'https://soundcloud.com/apexrise/or-nah', type: MIME_TYPE},
-  'test/resources/videojs_from_script.html',
-  extraTests
+  {src: 'http://www.dailymotion.com/video/x5fi0zc_kali-uchis-ridin-round-oshi-remix_music', type: MIME_TYPE},
+  {src: 'http://www.dailymotion.com/video/x2rv1p5_the-weeknd-or-nah-ft-ty-dolla-igns-wiz-khalifa-apex-rise-trap-remix_music', type: MIME_TYPE},
+  'test/resources/videojs_from_script.html'
 );
 const stringSourceTestSuiteGenerator = new StringSourceTestSuiteGenerator(
   basicConfiguration,
-  {src: 'https://soundcloud.com/hipster-online/04-sweet-home-alabama', type: MIME_TYPE},
-  {src: 'https://soundcloud.com/nordemusic/missing-you-ft-lucas-nord', type: MIME_TYPE},
-  'test/resources/videojs_from_script.html',
-  extraTests
+  {src: 'http://www.dailymotion.com/video/x3fk5bw', type: MIME_TYPE},
+  {src: 'http://www.dailymotion.com/video/x5j4u37_vitaa-interprete-confessions-nocturnes_music', type: MIME_TYPE},
+  'test/resources/videojs_from_script.html'
 );
 
 
