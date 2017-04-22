@@ -18,270 +18,270 @@ const Tech = videojs.getComponent('Tech');
  */
 
 class Dailymotion extends Externals {
-    constructor (options, ready) {
-        super(options, ready);
-        this.xhrs_ = {}
-    }
+  constructor(options, ready) {
+    super(options, ready);
+    this.xhrs_ = {};
+  }
 
-    dispose() {
-        // Don't leave any survivors
-        for (let date in this.xhrs_) {
-            //noinspection JSUnfilteredForInLoop
-            this.xhrs_[date].abort()
+  dispose() {
+    // Don't leave any survivors
+    for (let date in this.xhrs_) { // jshint ignore:line
+      //noinspection JSUnfilteredForInLoop
+      this.xhrs_[date].abort();
+    }
+  }
+
+  createEl() {
+    const el_ = super.createEl('iframe', {
+      id: this.options_.techId,
+      src: `about:blank`,
+    });
+    el_.className += ' vjs-dailymotion-loading';
+
+    return el_;
+  }
+
+
+  parseSrc(src) {
+    if (src) {
+      // Regex that parse the video ID for any Dailymotion URL
+      var regExp = /^.+dailymotion.com\/((video|hub)\/([^_]+))?[^#]*(#video=([^_&]+))?/;
+      var srcString = Externals.sourceToString(src);
+      var match = srcString.match(regExp);
+
+      return match ? match[5] || match[3] : null;
+    }
+  }
+
+  setSrc(src) {
+    this.widgetPlayer.load(this.parseSrc(src));
+  }
+
+  isApiReady() {
+    return window['DM'] && window['DM']['player'];
+  }
+
+  injectCss(overrideStyle) {
+    if (!overrideStyle) {
+      overrideStyle = '';
+    }
+    overrideStyle += '.vjs-dailymotion.vjs-dailymotion-loading {padding-top: 52.6%;background: transparent;}';
+    super.injectCss(overrideStyle);
+  }
+
+  initTech() {
+    if (!this.isApiReady()) {
+      return;
+    }
+    let source = Externals.sourceToString(this.options_.source);
+    let videoId = this.parseSrc(source);
+
+    const dmOpts = videojs.mergeOptions(this.options_, {
+      video: videoId,
+      width: this.options_.width,
+      height: this.options_.height,
+      params: videojs.mergeOptions(this.player_.options_, {
+        controls: false, // disable DM controls & buttons for better integration
+        'endscreen-enable': false,
+        'sharing-enable': false
+      })
+    });
+
+    this.widgetPlayer = new window.DM.player(this.el_, dmOpts);
+    this.setupTriggers();
+    this.onStateChange({type: -1});
+  }
+
+  onReady() {
+    this.updateDuration();
+    this.updateVolume();
+    this.updatePoster();
+    this.el_.className.replace(' vjs-dailymotion-loading', ''); // remove loading class
+    this.triggerReady();
+    this.trigger('loadedmetadata');
+    this.trigger('canplay');
+  }
+
+  updatePoster() {
+    /*jshint camelcase: false */
+    try {
+      //const track = this.widgetPlayer.getCurrentTrack();
+      let videoId = null;
+      if ('string' === typeof this.options_.source) {
+        videoId = this.options_.source;
+      } else if ('object' === typeof this.options_.source) {
+        videoId = this.options_.source.src;
+      }
+      videoId = this.parseSrc(videoId);
+      var apiUrl = 'https://api.dailymotion.com/video/' + videoId + '?fields=thumbnail_large_url';
+      var date = Date.now();
+      this.xhrs_[date] = videojs.xhr(apiUrl, {responseType: 'json'}, (err, data) => {
+        delete this.xhrs_[date];
+        if (data.body.thumbnail_large_url) {
+          this.setPoster(data.body.thumbnail_large_url);
         }
+      });
+
+    } catch (e) {
+      console.log('unable to set poster', e);
     }
+  }
 
-    createEl () {
-        const el_ = super.createEl('iframe', {
-            id: this.options_.techId,
-            src: `about:blank`,
-        });
-        el_.className += ' vjs-dailymotion-loading';
-
-        return el_;
+  setupTriggers() {
+    this.widgetPlayer.vjsTech = this;
+    for (var i = Dailymotion.Events.length - 1; i >= 0; i--) {
+      const eventName = Dailymotion.Events[i];
+      /*jshint loopfunc: true */
+      this.widgetPlayer.addEventListener(eventName, (data) => {
+        this.eventHandler(videojs.mergeOptions({type: eventName}, data));
+      });
     }
+  }
 
-
-    parseSrc (src) {
-        if (src) {
-            // Regex that parse the video ID for any Dailymotion URL
-            var regExp = /^.+dailymotion.com\/((video|hub)\/([^_]+))?[^#]*(#video=([^_&]+))?/;
-            var srcString = Externals.sourceToString(src);
-            var match = srcString.match(regExp);
-
-            return match ? match[5] || match[3] : null;
+  onStateChange(event) {
+    console.debug('event: ', event);
+    let state = event.type;
+    this.lastState = state;
+    switch (state) {
+      case -1:
+        if (this.options_.autoplay) {
+          this.trigger('loadstart');
+          this.trigger('waiting');
         }
-    }
-
-    setSrc(src){
-      this.widgetPlayer.load(this.parseSrc(src))
-    }
-
-    isApiReady () {
-        return window['DM'] && window['DM']['player'];
-    }
-
-    injectCss (overrideStyle) {
-        if(!overrideStyle) {
-            overrideStyle = '';
-        }
-        overrideStyle += '.vjs-dailymotion.vjs-dailymotion-loading {padding-top: 52.6%;background: transparent;}';
-        super.injectCss(overrideStyle);
-    }
-
-    initTech () {
-        if (!this.isApiReady()) {
-            return;
-        }
-        let source = Externals.sourceToString(this.options_.source);
-        let videoId = this.parseSrc(source);
-
-        const dmOpts = videojs.mergeOptions(this.options_, {
-            video: videoId,
-            width: this.options_.width,
-            height: this.options_.height,
-            params: videojs.mergeOptions(this.player_.options_, {
-                controls: false, // disable DM controls & buttons for better integration
-                'endscreen-enable': false,
-                'sharing-enable': false
-            })
-        });
-
-        this.widgetPlayer = new window.DM.player(this.el_, dmOpts);
-        this.setupTriggers();
-        this.onStateChange({type: -1});
-    }
-
-    onReady () {
-        this.updateDuration();
-        this.updateVolume();
-        this.updatePoster();
-        this.el_.className.replace(' vjs-dailymotion-loading', ''); // remove loading class
-        this.triggerReady();
+        break;
+      case 'apiready':
+        this.onReady();
+        break;
+      case 'video_end':
+        this.updateEnded();
+        this.updatePaused();
+        this.trigger('ended');
+        break;
+      case 'start':
+      case 'video_start':
         this.trigger('loadedmetadata');
+        this.trigger('durationchange');
         this.trigger('canplay');
+        this.updatePaused();
+        break;
+      case 'durationchange':
+        this.updateDuration();
+        break;
+      case 'volumechange':
+        this.updateVolume();
+        break;
+      case 'timeupdate':
+        this.currentTime_ = this.widgetPlayer.currentTime;
+        break;
+      case 'progress':
+        this.buffered_ = this.widgetPlayer.bufferedTime;
+        break;
+      case 'pause':
+        this.updatePaused();
+        this.trigger('pause');
+        break;
+      case 'play':
+        this.updatePaused();
+        this.trigger('play');
+        break;
+      default:
+        super.onStateChange(event);
     }
+  }
 
-    updatePoster () {
-        /*jshint camelcase: false */
-        try {
-            //const track = this.widgetPlayer.getCurrentTrack();
-            let videoId = null;
-            if ('string' === typeof this.options_.source) {
-                videoId = this.options_.source;
-            } else if ('object' === typeof this.options_.source) {
-                videoId = this.options_.source.src;
-            }
-            videoId = this.parseSrc(videoId);
-            var apiUrl = 'https://api.dailymotion.com/video/'+ videoId +'?fields=thumbnail_large_url';
-            var date = Date.now();
-            this.xhrs_[date] = videojs.xhr(apiUrl, {responseType: 'json'}, (err, data) => {
-                delete this.xhrs_[date];
-                if(data.body.thumbnail_large_url) {
-                    this.setPoster(data.body.thumbnail_large_url);
-                }
-            });
-
-        } catch (e) {
-            console.log('unable to set poster', e);
-        }
+  updateVolume() {
+    let vol = this.widgetPlayer.volume;
+    if (typeof this.volumeBefore_ === 'undefined') {
+      this.volumeBefore_ = vol;
     }
-
-    setupTriggers () {
-        this.widgetPlayer.vjsTech = this;
-        for (var i = Dailymotion.Events.length - 1; i >= 0; i--) {
-            const eventName = Dailymotion.Events[i];
-            /*jshint loopfunc: true */
-            this.widgetPlayer.addEventListener(eventName, (data) => {
-                this.eventHandler(videojs.mergeOptions({type: eventName}, data));
-            });
-        }
+    if (this.volume_ !== vol) {
+      this.volume_ = vol;
+      this.trigger('volumechange');
     }
+  }
 
-    onStateChange (event) {
-        console.debug("event: ", event)
-        let state = event.type;
-        this.lastState = state;
-        switch (state) {
-            case -1:
-                if(this.options_.autoplay) {
-                    this.trigger('loadstart');
-                    this.trigger('waiting');
-                }
-                break;
-            case 'apiready':
-                this.onReady();
-            break;
-            case 'video_end':
-                this.updateEnded();
-                this.updatePaused();
-                this.trigger('ended');
-                break;
-            case 'start':
-            case 'video_start':
-                this.trigger('loadedmetadata');
-                this.trigger('durationchange');
-                this.trigger('canplay');
-                this.updatePaused();
-                break;
-            case 'durationchange':
-                this.updateDuration();
-                break;
-            case 'volumechange':
-                this.updateVolume();
-                break;
-            case 'timeupdate':
-                this.currentTime_ = this.widgetPlayer.currentTime;
-                break;
-            case 'progress':
-                this.buffered_ = this.widgetPlayer.bufferedTime;
-                break;
-            case 'pause':
-                this.updatePaused();
-                this.trigger('pause');
-                break;
-            case 'play':
-                this.updatePaused();
-                this.trigger('play');
-                break;
-            default:
-              super.onStateChange(event);
-        }
-    }
+  updateEnded() {
+    this.ended_ = this.widgetPlayer.ended;
+  }
 
-    updateVolume () {
-        let vol = this.widgetPlayer.volume;
-        if(typeof this.volumeBefore_ === 'undefined') {
-            this.volumeBefore_ = vol;
-        }
-        if(this.volume_ !== vol) {
-            this.volume_ = vol;
-            this.trigger('volumechange');
-        }
-    }
+  updatePaused() {
+    this.paused_ = this.widgetPlayer.paused;
+  }
 
-    updateEnded () {
-        this.ended_ = this.widgetPlayer.ended;
-    }
+  updateDuration() {
+    this.duration_ = this.widgetPlayer.duration;
+  }
 
-    updatePaused () {
-        this.paused_ = this.widgetPlayer.paused;
-    }
+  buffered() {
+    return videojs.createTimeRange(0, this.buffered_ || 0);
+  }
 
-    updateDuration () {
-        this.duration_ = this.widgetPlayer.duration;
-    }
+  ended() {
+    return this.ended_;
+  }
 
-    buffered () {
-        return videojs.createTimeRange(0, this.buffered_ || 0);
-    }
+  duration() {
+    return this.duration_;
+  }
 
-    ended () {
-        return this.ended_;
-    }
+  currentTime() {
+    return this.currentTime_;
+  }
 
-    duration () {
-        return this.duration_;
-    }
+  setCurrentTime(seconds) {
+    this.widgetPlayer.seek(seconds);
+    this.currentTime_ = seconds;
+  }
 
-    currentTime () {
-        return this.currentTime_;
-    }
+  play() {
+    this.widgetPlayer.play();
+  }
 
-    setCurrentTime (seconds) {
-        this.widgetPlayer.seek(seconds);
-        this.currentTime_ = seconds;
-    }
+  pause() {
+    this.widgetPlayer.pause();
+  }
 
-    play () {
-        this.widgetPlayer.play();
-    }
+  seek(time) {
+    this.widgetPlayer.seek(time);
+  }
 
-    pause () {
-        this.widgetPlayer.pause();
-    }
+  paused() {
+    return this.paused_;
+  }
 
-    seek (time) {
-        this.widgetPlayer.seek(time);
-    }
+  muted() {
+    return this.muted_;
+  }
 
-    paused () {
-        return this.paused_;
-    }
+  volume() {
+    return this.volume_;
+  }
 
-    muted () {
-        return this.muted_;
+  setVolume(percentAsDecimal) {
+    if (percentAsDecimal !== this.volume_) {
+      var isInitialState = this.widgetPlayer.bufferedTime === 0 && this.widgetPlayer.currentTime === 0;
+      // Trigger a load before setting the volume otherwise it won't work
+      if (isInitialState) {
+        this.widgetPlayer.seek(0);
+      }
+      this.widgetPlayer.setVolume(percentAsDecimal);
+      this.updateVolume();
     }
+  }
 
-    volume () {
-        return this.volume_;
+  setMuted(muted) {
+    this.muted_ = muted;
+    if (muted) {
+      this.volumeBefore_ = this.volume_;
     }
-
-    setVolume (percentAsDecimal) {
-        if (percentAsDecimal !== this.volume_) {
-            var isInitialState = this.widgetPlayer.bufferedTime === 0 && this.widgetPlayer.currentTime === 0;
-            // Trigger a load before setting the volume otherwise it won't work
-            if(isInitialState){
-              this.widgetPlayer.seek(0);
-            }
-            this.widgetPlayer.setVolume(percentAsDecimal);
-            this.updateVolume();
-        }
-    }
-
-    setMuted (muted) {
-        this.muted_ = muted;
-        if (muted) {
-            this.volumeBefore_ = this.volume_;
-        }
-        this.setVolume(muted ? 0 : this.volumeBefore_);
-    }
+    this.setVolume(muted ? 0 : this.volumeBefore_);
+  }
 }
 
 Dailymotion.prototype.options_ = {
-    api: '//api.dmcdn.net/all.js',
-    embed: '//www.dailymotion.com/embed/video/',
-    visibility: 'visible'
+  api: '//api.dmcdn.net/all.js',
+  embed: '//www.dailymotion.com/embed/video/',
+  visibility: 'visible'
 };
 
 Dailymotion.prototype.className_ = 'dailymotion';
@@ -289,7 +289,7 @@ Dailymotion.prototype.className_ = 'dailymotion';
 /* Dailymotion Support Testing -------------------------------------------------------- */
 
 Dailymotion.isSupported = function () {
-    return true;
+  return true;
 };
 
 // Add Source Handler pattern functions to this tech
@@ -310,7 +310,7 @@ Dailymotion.nativeSourceHandler = {};
  * @return {String}         'probably', 'maybe', or '' (empty string)
  */
 Dailymotion.nativeSourceHandler.canPlayType = function (type) {
-    return (type.indexOf('dailymotion') !== -1);
+  return (type.indexOf('dailymotion') !== -1);
 };
 
 /*
@@ -321,18 +321,18 @@ Dailymotion.nativeSourceHandler.canPlayType = function (type) {
  */
 Dailymotion.nativeSourceHandler.canHandleSource = function (source) {
 
-    // If a type was provided we should rely on that
-    if (source.type) {
-        return Dailymotion.nativeSourceHandler.canPlayType(source.type);
-    } else if (source.src) {
-        return Dailymotion.nativeSourceHandler.canPlayType(source.src);
-    }
+  // If a type was provided we should rely on that
+  if (source.type) {
+    return Dailymotion.nativeSourceHandler.canPlayType(source.type);
+  } else if (source.src) {
+    return Dailymotion.nativeSourceHandler.canPlayType(source.src);
+  }
 
-    return '';
+  return '';
 };
 
 Dailymotion.nativeSourceHandler.handleSource = function (source, tech) {
-    tech.src(source.src);
+  tech.src(source.src);
 };
 
 /*
@@ -364,7 +364,7 @@ Dailymotion.Events = [
   'video_start',
   'video_end',
   'waiting'
-]
+];
 
 Component.registerComponent('Dailymotion', Dailymotion);
 
