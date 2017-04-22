@@ -38,7 +38,6 @@ class Dailymotion extends Externals {
         });
         el_.className += ' vjs-dailymotion-loading';
 
-        videojs(this.options_.playerId);
         return el_;
     }
 
@@ -88,19 +87,19 @@ class Dailymotion extends Externals {
             })
         });
 
-        this.widgetPlayer = new window.DM.player(this.options_.techId, dmOpts);
-        this.widgetPlayer.addEventListener('apiready', videojs.bind(this, this.onReady));
+        this.widgetPlayer = new window.DM.player(this.el_, dmOpts);
         this.setupTriggers();
         this.onStateChange({type: -1});
     }
 
     onReady () {
-        super.onReady();
         this.updateDuration();
         this.updateVolume();
         this.updatePoster();
-        this.onStateChange({type: 'ready'});
         this.el_.className.replace(' vjs-dailymotion-loading', ''); // remove loading class
+        this.triggerReady();
+        this.trigger('loadedmetadata');
+        this.trigger('canplay');
     }
 
     updatePoster () {
@@ -150,6 +149,9 @@ class Dailymotion extends Externals {
                     this.trigger('waiting');
                 }
                 break;
+            case 'apiready':
+                this.onReady();
+            break;
             case 'video_end':
                 this.updateEnded();
                 this.updatePaused();
@@ -182,12 +184,8 @@ class Dailymotion extends Externals {
                 this.updatePaused();
                 this.trigger('play');
                 break;
-            case 'ready':
-                this.trigger('loadedmetadata');
-                this.trigger('canplay');
-                break;
-          default:
-            super.onStateChange(event);
+            default:
+              super.onStateChange(event);
         }
     }
 
@@ -347,9 +345,26 @@ Dailymotion.nativeSourceHandler.dispose = function () {
 // Register the native source handler
 Dailymotion.registerSourceHandler(Dailymotion.nativeSourceHandler);
 
-Dailymotion.Events = ('loaded,play,playing,pause,loadedmetadata,durationchange,ended,'+
-    'timeupdate,progress,seeking,seeked,subtitlechange,'+
-    'volumechange,error,video_start,video_end,waiting').split(',');
+Dailymotion.Events = [
+  'apiready',
+  'loaded',
+  'play',
+  'playing',
+  'pause',
+  'loadedmetadata',
+  'durationchange',
+  'ended',
+  'timeupdate',
+  'progress',
+  'seeking',
+  'seeked',
+  'subtitlechange',
+  'volumechange',
+  'error',
+  'video_start',
+  'video_end',
+  'waiting'
+]
 
 Component.registerComponent('Dailymotion', Dailymotion);
 

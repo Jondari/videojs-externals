@@ -42,9 +42,9 @@ class Externals extends Tech {
     this.videoId = this.parseSrc(url);
     // Set the vjs-youtube class to the player
     // Parent is not set yet so we have to wait a tick
-    setTimeout(function () {
+    setTimeout(()=> {
       this.loadApi();
-    }.bind(this));
+    });
   }
 
   injectCss (overrideStyle) {
@@ -163,11 +163,11 @@ class Externals extends Tech {
 
   loadApi () {
     if (!this.isApiReady()) {
+      //Add to the queue because the Externals API is not ready
       Externals.apiReadyQueue.push(this);
       this.addScriptTag();
       this.injectCss();
     } else {
-      //Add to the queue because the Externals API is not ready
       this.initTech();
     }
   }
@@ -194,7 +194,6 @@ class Externals extends Tech {
       return;
     }
     this.onStateChange(e);
-    this.trigger(e);
   }
 
   onStateChange (event) {
@@ -232,6 +231,9 @@ class Externals extends Tech {
       case 'error':
         this.onPlayerError();
         break;
+      default:
+        console.debug("Unknown event ", e);
+        this.trigger(e);
     }
   }
 
