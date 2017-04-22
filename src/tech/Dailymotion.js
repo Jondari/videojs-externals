@@ -87,7 +87,7 @@ class Dailymotion extends Externals {
 
         this.widgetPlayer = new window.DM.player(this.options_.techId, dmOpts);
         this.widgetPlayer.addEventListener('apiready', videojs.bind(this, this.onReady));
-        super.initTech();
+        this.setupTriggers();
         this.onStateChange({type: -1});
     }
 
