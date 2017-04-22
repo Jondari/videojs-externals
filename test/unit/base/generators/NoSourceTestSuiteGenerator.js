@@ -25,14 +25,6 @@ export default class NoSourceTestSuiteGenerator extends TestSuiteGenerator {
         'techOrder': [self.techNameForVjs]
       });
     });
-
-    var apiSource = {
-      src: 'https://api.soundcloud.com/tracks/216846955&amp;auto_play=false&amp;hide_related=false&amp;' +
-      'show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=true',
-      type: 'audio/soundcloud'
-    };
-    it('should take api object sources', this.basicConfiguration.changeSourceTest(apiSource));
-    it('should take api string sources', this.basicConfiguration.changeSourceTest(apiSource.src));
   }
 
   /**

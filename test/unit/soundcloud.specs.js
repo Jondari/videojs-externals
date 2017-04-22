@@ -111,28 +111,46 @@ const basicConfiguration = new BaseTestConfiguration(
   changeSourceTest
 )
 
+var apiSource = {
+  src: 'https://api.soundcloud.com/tracks/216846955&amp;auto_play=false&amp;hide_related=false&amp;' +
+  'show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=true',
+  type: 'audio/soundcloud'
+};
+var extraTests = [
+  function () {
+    it('should take api object sources', basicConfiguration.changeSourceTest(apiSource));
+  },
+  function () {
+    it('should take api string sources', basicConfiguration.changeSourceTest(apiSource.src));
+  }
+]
+
 const htmlSourceTestSuiteGenerator = new HtmlSourceTestSuiteGenerator(
   basicConfiguration,
   {src: 'https://soundcloud.com/vaughan-1-1/this-is-what-crazy-looks-like', type: MIME_TYPE},
-  {src: 'https://soundcloud.com/user504272/teki-latex-dinosaurs-with-guns-cyberoptix-remix', type: MIME_TYPE}
+  {src: 'https://soundcloud.com/user504272/teki-latex-dinosaurs-with-guns-cyberoptix-remix', type: MIME_TYPE},
+  extraTests
 );
 const noSourceTestSuiteGenerator = new NoSourceTestSuiteGenerator(
   basicConfiguration,
   null,
   {src: 'https://soundcloud.com/pegboardnerds/pegboard-nerds-here-it-comes', type: MIME_TYPE},
-  'test/resources/videojs_from_script.html'
+  'test/resources/videojs_from_script.html',
+  extraTests
 );
 const objectSourceTestSuiteGenerator = new ObjectSourceTestSuiteGenerator(
   basicConfiguration,
   {src: 'https://soundcloud.com/oshi/kali-uchi', type: MIME_TYPE},
   {src: 'https://soundcloud.com/apexrise/or-nah', type: MIME_TYPE},
-  'test/resources/videojs_from_script.html'
+  'test/resources/videojs_from_script.html',
+  extraTests
 );
 const stringSourceTestSuiteGenerator = new StringSourceTestSuiteGenerator(
   basicConfiguration,
   {src: 'https://soundcloud.com/hipster-online/04-sweet-home-alabama', type: MIME_TYPE},
   {src: 'https://soundcloud.com/nordemusic/missing-you-ft-lucas-nord', type: MIME_TYPE},
-  'test/resources/videojs_from_script.html'
+  'test/resources/videojs_from_script.html',
+  extraTests
 );
 
 
