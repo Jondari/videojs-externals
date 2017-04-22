@@ -232,8 +232,8 @@ class Externals extends Tech {
         this.onPlayerError();
         break;
       default:
-        console.debug("Unknown event ", e);
-        this.trigger(e);
+        console.debug("Unknown event ", event);
+        this.trigger(event);
     }
   }
 
