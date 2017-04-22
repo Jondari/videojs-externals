@@ -20,6 +20,15 @@ const Tech = videojs.getComponent('Tech');
 class Dailymotion extends Externals {
     constructor (options, ready) {
         super(options, ready);
+        this.xhrs_ = {}
+    }
+
+    dispose() {
+        // Don't leave any survivors
+        for (let date in this.xhrs_) {
+            //noinspection JSUnfilteredForInLoop
+            this.xhrs_[date].abort()
+        }
     }
 
     createEl () {
@@ -106,11 +115,13 @@ class Dailymotion extends Externals {
             }
             videoId = this.parseSrc(videoId);
             var apiUrl = 'https://api.dailymotion.com/video/'+ videoId +'?fields=thumbnail_large_url';
-            videojs.xhr(apiUrl, {responseType: 'json'}, function(err, data) {
+            var date = Date.now();
+            this.xhrs_[date] = videojs.xhr(apiUrl, {responseType: 'json'}, (err, data) => {
+                delete this.xhrs_[date];
                 if(data.body.thumbnail_large_url) {
                     this.setPoster(data.body.thumbnail_large_url);
                 }
-            }.bind(this));
+            });
 
         } catch (e) {
             console.log('unable to set poster', e);
