@@ -67,17 +67,6 @@ var changeVolumeTest = function (done) {
 
   });
 };
-/*
- Try changing the source with a string
- It should trigger the 'newSource' event
-
- The input is the same as vjs.Player.src (that's what's called)
- Which calls @see Soundcloud::src
-
- @param newSource [Object] { type: <String>, src: <String>}
- @param newSource [String] The URL
- @return [Function] To pass to karma for testing a source change
- */
 var changeSourceTest = function (newSource) {
   var newSourceString;
   newSourceString = getSourceString(newSource);
