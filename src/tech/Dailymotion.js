@@ -38,7 +38,7 @@ class Dailymotion extends Externals {
         if (src) {
             // Regex that parse the video ID for any Dailymotion URL
             var regExp = /^.+dailymotion.com\/((video|hub)\/([^_]+))?[^#]*(#video=([^_&]+))?/;
-            var srcString = this.sourceToString(src);
+            var srcString = Externals.sourceToString(src);
             var match = srcString.match(regExp);
 
             return match ? match[5] || match[3] : null;
@@ -65,13 +65,7 @@ class Dailymotion extends Externals {
         if (!this.isApiReady()) {
             return;
         }
-        let source = null;
-        if ('string' === typeof this.options_.source) {
-            source = this.options_.source;
-        } else if ('object' === typeof this.options_.source) {
-            source = this.options_.source.src;
-        }
-
+        let source = Externals.sourceToString(this.options_.source);
         let videoId = this.parseSrc(source);
 
         const dmOpts = videojs.mergeOptions(this.options_, {

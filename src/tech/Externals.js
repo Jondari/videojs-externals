@@ -277,7 +277,7 @@ class Externals extends Tech {
    * @param source {SourceObject|String}
    * @returns {String}
    */
-  sourceToString(source){
+  static sourceToString(source){
     return 'object' === typeof source ? source.src : source
   }
 
