@@ -17,10 +17,10 @@ export default class BaseTestConfiguration {
               changeVolumeTest,
               changeSourceTest) {
     this.techName = techName;
-    this.widgetObjectTest = sourceObjectTest
-    this.playTest = playTest
-    this.seekTo30Test = seekTo30Test
-    this.changeVolumeTest = changeVolumeTest
-    this.changeSourceTest = changeSourceTest
+    this.widgetObjectTest = sourceObjectTest;
+    this.playTest = playTest;
+    this.seekTo30Test = seekTo30Test;
+    this.changeVolumeTest = changeVolumeTest;
+    this.changeSourceTest = changeSourceTest;
   }
 }

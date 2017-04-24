@@ -5,14 +5,14 @@
  */
 
 function getSourceString(stringOrSourceObject) {
-  return 'object' === typeof stringOrSourceObject ? stringOrSourceObject.src : stringOrSourceObject
+  return 'object' === typeof stringOrSourceObject ? stringOrSourceObject.src : stringOrSourceObject;
 }
 
 var widgetPlayerTest = function (done) {
   this.player.ready(() => {
     var source = null;
     if (this.source) {
-      source = ( typeof this.source) === "string" ? this.source : this.source.src;
+      source = ( typeof this.source) === 'string' ? this.source : this.source.src;
     }
     var iframe = document.getElementsByTagName('iframe')[0];
     expect(iframe).toBeTruthy();
@@ -94,22 +94,22 @@ var changeSourceTest = function (newSource) {
   };
 };
 
-import {MainTestFactory} from './base/base'
-import BaseTestConfiguration from './base/BaseTestConfiguration'
-import HtmlSourceTestSuiteGenerator from './base/generators/HtmlSourceTestSuiteGenerator'
-import NoSourceTestSuiteGenerator from './base/generators/NoSourceTestSuiteGenerator'
-import ObjectSourceTestSuiteGenerator from './base/generators/ObjectSourceTestSuiteGenerator'
-import StringSourceTestSuiteGenerator from './base/generators/StringSourceTestSuiteGenerator'
+import {MainTestFactory} from './base/base';
+import BaseTestConfiguration from './base/BaseTestConfiguration';
+import HtmlSourceTestSuiteGenerator from './base/generators/HtmlSourceTestSuiteGenerator';
+import NoSourceTestSuiteGenerator from './base/generators/NoSourceTestSuiteGenerator';
+import ObjectSourceTestSuiteGenerator from './base/generators/ObjectSourceTestSuiteGenerator';
+import StringSourceTestSuiteGenerator from './base/generators/StringSourceTestSuiteGenerator';
 
-const MIME_TYPE = "audio/soundcloud";
+const MIME_TYPE = 'audio/soundcloud';
 const basicConfiguration = new BaseTestConfiguration(
-  "Soundcloud",
+  'Soundcloud',
   widgetPlayerTest,
   playTest,
   seekTo30Test,
   changeVolumeTest,
   changeSourceTest
-)
+);
 
 var apiSource = {
   src: 'https://api.soundcloud.com/tracks/216846955&amp;auto_play=false&amp;hide_related=false&amp;' +
@@ -123,7 +123,7 @@ var extraTests = [
   function () {
     it('should take api string sources', basicConfiguration.changeSourceTest(apiSource.src));
   }
-]
+];
 
 const htmlSourceTestSuiteGenerator = new HtmlSourceTestSuiteGenerator(
   basicConfiguration,
@@ -154,12 +154,12 @@ const stringSourceTestSuiteGenerator = new StringSourceTestSuiteGenerator(
 );
 
 
-var testFactory = new MainTestFactory(basicConfiguration)
+var testFactory = new MainTestFactory(basicConfiguration);
 
-testFactory.addTestSuiteFactory(htmlSourceTestSuiteGenerator)
-testFactory.addTestSuiteFactory(noSourceTestSuiteGenerator)
-testFactory.addTestSuiteFactory(objectSourceTestSuiteGenerator)
-testFactory.addTestSuiteFactory(stringSourceTestSuiteGenerator)
+testFactory.addTestSuiteFactory(htmlSourceTestSuiteGenerator);
+testFactory.addTestSuiteFactory(noSourceTestSuiteGenerator);
+testFactory.addTestSuiteFactory(objectSourceTestSuiteGenerator);
+testFactory.addTestSuiteFactory(stringSourceTestSuiteGenerator);
 
-testFactory.generate()
+testFactory.generate();
 

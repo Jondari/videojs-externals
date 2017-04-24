@@ -1,4 +1,4 @@
-import TestSuiteGenerator from './TestSuiteGenerator'
+import TestSuiteGenerator from './TestSuiteGenerator';
 
 export default class ObjectSourceTestSuiteGenerator extends TestSuiteGenerator {
   htmlResourcePath;
@@ -9,7 +9,7 @@ export default class ObjectSourceTestSuiteGenerator extends TestSuiteGenerator {
               htmlResourcePath,
               extraTestGenerators) {
     super(basicConfiguration, firstSourceObject, secondSourceObject, extraTestGenerators);
-    this.description = 'created with javascript object source'
+    this.description = 'created with javascript object source';
     this.htmlResourcePath = htmlResourcePath;
   }
 

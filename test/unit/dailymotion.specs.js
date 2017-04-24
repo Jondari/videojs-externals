@@ -7,11 +7,11 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
  */
 
 function getSourceString(stringOrSourceObject) {
-  return 'object' === typeof stringOrSourceObject ? stringOrSourceObject.src : stringOrSourceObject
+  return 'object' === typeof stringOrSourceObject ? stringOrSourceObject.src : stringOrSourceObject;
 }
 
 function getDailymotionVideoId(source){
-  return videojs.getComponent("Dailymotion").prototype.parseSrc(getSourceString(source))
+  return videojs.getComponent('Dailymotion').prototype.parseSrc(getSourceString(source));
 }
 // TODO generalize these
 var widgetPlayerTest = function (done) {
@@ -86,22 +86,22 @@ var changeSourceTest = function (newSource) {
   };
 };
 
-import {MainTestFactory} from './base/base'
-import BaseTestConfiguration from './base/BaseTestConfiguration'
-import HtmlSourceTestSuiteGenerator from './base/generators/HtmlSourceTestSuiteGenerator'
-import NoSourceTestSuiteGenerator from './base/generators/NoSourceTestSuiteGenerator'
-import ObjectSourceTestSuiteGenerator from './base/generators/ObjectSourceTestSuiteGenerator'
-import StringSourceTestSuiteGenerator from './base/generators/StringSourceTestSuiteGenerator'
+import {MainTestFactory} from './base/base';
+import BaseTestConfiguration from './base/BaseTestConfiguration';
+import HtmlSourceTestSuiteGenerator from './base/generators/HtmlSourceTestSuiteGenerator';
+import NoSourceTestSuiteGenerator from './base/generators/NoSourceTestSuiteGenerator';
+import ObjectSourceTestSuiteGenerator from './base/generators/ObjectSourceTestSuiteGenerator';
+import StringSourceTestSuiteGenerator from './base/generators/StringSourceTestSuiteGenerator';
 
-const MIME_TYPE = "video/dailymotion";
+const MIME_TYPE = 'video/dailymotion';
 const basicConfiguration = new BaseTestConfiguration(
-  "Dailymotion",
+  'Dailymotion',
   widgetPlayerTest,
   playTest,
   seekTo30Test,
   changeVolumeTest,
   changeSourceTest
-)
+);
 
 const htmlSourceTestSuiteGenerator = new HtmlSourceTestSuiteGenerator(
   basicConfiguration,
@@ -128,12 +128,12 @@ const stringSourceTestSuiteGenerator = new StringSourceTestSuiteGenerator(
 );
 
 
-var testFactory = new MainTestFactory(basicConfiguration)
+var testFactory = new MainTestFactory(basicConfiguration);
 
-testFactory.addTestSuiteFactory(htmlSourceTestSuiteGenerator)
-testFactory.addTestSuiteFactory(noSourceTestSuiteGenerator)
-testFactory.addTestSuiteFactory(objectSourceTestSuiteGenerator)
-testFactory.addTestSuiteFactory(stringSourceTestSuiteGenerator)
+testFactory.addTestSuiteFactory(htmlSourceTestSuiteGenerator);
+testFactory.addTestSuiteFactory(noSourceTestSuiteGenerator);
+testFactory.addTestSuiteFactory(objectSourceTestSuiteGenerator);
+testFactory.addTestSuiteFactory(stringSourceTestSuiteGenerator);
 
-testFactory.generate()
+testFactory.generate();
 

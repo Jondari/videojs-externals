@@ -14,7 +14,7 @@ export default class HtmlSourceTestSuiteGenerator extends TestSuiteGenerator {
               secondsSourceObject,
               extraTestGenerators) {
     super(basicConfiguration, firstSourceObject, secondsSourceObject, extraTestGenerators);
-    this.description = 'created with html video>source'
+    this.description = 'created with html video>source';
     this.basicConfiguration = basicConfiguration;
     this.firstSourceObject = firstSourceObject;
     this.secondSourceObject = secondsSourceObject;

@@ -18,7 +18,7 @@ export default class TestSuiteGenerator {
               firstSourceObject,
               secondSourceObject,
               extraTestGenerators) {
-    this.description = 'TO BE filled'
+    this.description = 'TO BE filled';
     this.basicConfiguration = basicConfiguration;
     this.firstSourceObject = firstSourceObject;
     this.secondSourceObject = secondSourceObject;
@@ -29,10 +29,10 @@ export default class TestSuiteGenerator {
   generate() {
     var self = this;
     describe(this.description, function () {
-      self._generateTests()
-      self._generateCommonTests()
-      self._generateExtraTests()
-    })
+      self._generateTests();
+      self._generateCommonTests();
+      self._generateExtraTests();
+    });
   }
 
   /**
@@ -41,9 +41,10 @@ export default class TestSuiteGenerator {
    * beforeEach, afterEach, it, etc. should be put in here
    *
    * @private
+   * @abstract
    */
   _generateTests() {
-    throw 'not implemented'
+    throw 'not implemented';
   }
 
 
@@ -60,6 +61,6 @@ export default class TestSuiteGenerator {
 
 
   _generateExtraTests() {
-    this.extraTestGenerators.forEach((generator) => generator())
+    this.extraTestGenerators.forEach((generator) => generator());
   }
 }
