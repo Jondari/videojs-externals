@@ -1,26 +1,17 @@
 export default class BaseTestConfiguration {
   techName;
+  iframeSourceRegexTemplate;
 
   /**
    *
-   * @param techName {String}
-   * @param sourceObjectTest {Function}
-   * @param playTest {Function}
-   * @param seekTo30Test {Function}
-   * @param changeVolumeTest {Function}
-   * @param changeSourceTest {Function}
+   * @param techName {String} - Case sensitive! It should be given as registered to videojs
+   * @param iframeSourceRegexTemplate {String}
+   *          A template string that accepts a `source` parameter.
+   *          Used to test if the iframe is pointing to the correct source
    */
   constructor(techName,
-              sourceObjectTest,
-              playTest,
-              seekTo30Test,
-              changeVolumeTest,
-              changeSourceTest) {
+              iframeSourceRegexTemplate) {
     this.techName = techName;
-    this.widgetObjectTest = sourceObjectTest;
-    this.playTest = playTest;
-    this.seekTo30Test = seekTo30Test;
-    this.changeVolumeTest = changeVolumeTest;
-    this.changeSourceTest = changeSourceTest;
+    this.iframeSourceRegexTemplate = iframeSourceRegexTemplate;
   }
 }
