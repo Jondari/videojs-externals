@@ -1,17 +1,24 @@
+/**
+ * Should call a jasmine `expect` to test if the iframe is embedding a player for the correct source
+ *
+ * @callback uriForSourceTester
+ * @param uri {String}
+ * @param source {SourceObject}
+ */
+
+
 export default class BaseTestConfiguration {
   techName;
-  iframeSourceRegexTemplate;
+  iframeSourceTest;
 
   /**
    *
    * @param techName {String} - Case sensitive! It should be given as registered to videojs
-   * @param iframeSourceRegexTemplate {String}
-   *          A template string that accepts a `source` parameter.
-   *          Used to test if the iframe is pointing to the correct source
+   * @param iframeSourceTest {uriForSourceTester}
    */
   constructor(techName,
-              iframeSourceRegexTemplate) {
+              iframeSourceTest) {
     this.techName = techName;
-    this.iframeSourceRegexTemplate = iframeSourceRegexTemplate;
+    this.iframeSourceTest = iframeSourceTest;
   }
 }

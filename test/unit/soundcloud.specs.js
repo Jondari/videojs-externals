@@ -1,9 +1,3 @@
-/*
- Create a spy for all functions of a given object
- by spying on the object's prototype
- @param o {Object} object to invade
- */
-
 import {MainTestFactory} from './base/base';
 import BaseTestConfiguration from './base/BaseTestConfiguration';
 import HtmlSourceTestSuiteGenerator from './base/generators/HtmlSourceTestSuiteGenerator';
@@ -11,10 +5,17 @@ import NoSourceTestSuiteGenerator from './base/generators/NoSourceTestSuiteGener
 import ObjectSourceTestSuiteGenerator from './base/generators/ObjectSourceTestSuiteGenerator';
 import StringSourceTestSuiteGenerator from './base/generators/StringSourceTestSuiteGenerator';
 
+var getSourceString = videojs.getComponent('Externals').sourceToString;
+
+function iframeSourceTester(uri, source) {
+  source = getSourceString(source);
+  expect(uri).toMatch(new RegExp(`w.soundcloud.com/player/\\?url=${source}.*`));
+}
+
 const MIME_TYPE = 'audio/soundcloud';
 const basicConfiguration = new BaseTestConfiguration(
   'Soundcloud',
-  'w.soundcloud.com/player/\\?url=${source}.*'
+  iframeSourceTester
 );
 
 var apiSource = {

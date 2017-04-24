@@ -280,7 +280,7 @@ class Externals extends Tech {
    * @returns {String}
    */
   static sourceToString(source){
-    return 'object' === typeof source ? source.src : source
+    return source && 'object' === (typeof source) ? source.src : source;
   }
 
   currentSrc () {

@@ -170,16 +170,12 @@ export default class TestSuiteGenerator {
    * @private
    */
   _generateWidgetPlayerTest() {
-    const pattern = _.template(this.basicConfiguration.iframeSourceRegexTemplate);
+    const iframeSourceTest = this.basicConfiguration.iframeSourceTest;
     return function (done) {
       this.player.ready(() => {
-        var source = null;
-        if (this.source) {
-          source = ( typeof this.source) === 'string' ? this.source : this.source.src;
-        }
         var iframe = document.getElementsByTagName('iframe')[0];
         expect(iframe).toBeTruthy();
-        expect(iframe.src).toMatch(new RegExp(pattern({source: source})));
+        iframeSourceTest(iframe.src, this.source);
         done();
       });
     };
