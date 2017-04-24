@@ -200,6 +200,7 @@ class Youtube extends Externals {
             this.wasPausedBeforeSeek = this.paused();
         }
 
+        this.seekTarget = seconds;
         this.widgetPlayer.seekTo(seconds, true);
         this.trigger('timeupdate');
         this.trigger('seeking');
@@ -209,11 +210,13 @@ class Youtube extends Externals {
         // so run an interval timer to look for the currentTime to change
         if (this.lastState === YT.PlayerState.PAUSED && this.timeBeforeSeek !== seconds) {
             this.clearInterval(this.checkSeekedInPauseInterval);
+            // TODO stop seeking after a while
             this.checkSeekedInPauseInterval = this.setInterval(function () {
                 if (this.lastState !== YT.PlayerState.PAUSED || !this.isSeeking) {
                     // If something changed while we were waiting for the currentTime to change,
                     //  clear the interval timer
                     this.clearInterval(this.checkSeekedInPauseInterval);
+                    this.seekTarget = null;
                 } else if (this.currentTime() !== this.timeBeforeSeek) {
                     this.trigger('timeupdate');
                     this.onSeeked();
@@ -223,7 +226,13 @@ class Youtube extends Externals {
     }
 
     onSeeked () {
+        // We are forced to do an approximative seek because youtube doesn't have a SEEKED event...
+        if(Math.round(this.currentTime()) !== Math.round(this.seekTarget)){
+          return;
+        }
+
         this.clearInterval(this.checkSeekedInPauseInterval);
+        this.seekTarget = null;
         this.isSeeking = false;
 
         if (this.wasPausedBeforeSeek) {

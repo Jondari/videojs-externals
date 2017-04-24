@@ -152,10 +152,13 @@ export default class TestSuiteGenerator {
       player.ready(() => {
         var seconds = 30;
         player.on('play', () => {
+          console.debug('playing -> gonna seek');
           player.currentTime(seconds);
         });
         player.on('seeked', () => {
-          expect(Math.round(player.currentTime())).toEqual(seconds);
+          let time = player.currentTime();
+          console.debug('seeked to ', time);
+          expect(Math.round(time)).toEqual(seconds);
           done();
         });
         player.play();
