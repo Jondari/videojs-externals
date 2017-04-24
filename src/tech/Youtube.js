@@ -1,6 +1,8 @@
 /**
  * @file Youtube.js
  * Externals (iframe) Media Controller - Wrapper for HTML5 Media API
+ *
+ * Documentation at https://developers.google.com/youtube/iframe_api_reference
  */
 import videojs from 'video.js';
 import Externals from './Externals';
