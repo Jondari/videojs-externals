@@ -12,8 +12,8 @@ function getVideoId(source) {
 }
 
 function iframeSourceTester(uri, source) {
-  var sourceId = getVideoId(source);
-  expect(uri).toMatch(new RegExp(`^https://www.youtube.com/embed/${sourceId}.*`));
+  var sourceId = getVideoId(source) || '';
+  expect(uri).toMatch(new RegExp(`^https?://www.youtube.com/embed/${sourceId}.*`));
 }
 
 const MIME_TYPE = 'video/youtube';
@@ -62,9 +62,9 @@ const stringSourceTestSuiteGenerator = new StringSourceTestSuiteGenerator(
 var testFactory = new MainTestFactory(basicConfiguration);
 
 testFactory.addTestSuiteFactory(htmlSourceTestSuiteGenerator);
-// testFactory.addTestSuiteFactory(noSourceTestSuiteGenerator);
-// testFactory.addTestSuiteFactory(objectSourceTestSuiteGenerator);
-// testFactory.addTestSuiteFactory(stringSourceTestSuiteGenerator);
+testFactory.addTestSuiteFactory(noSourceTestSuiteGenerator);
+testFactory.addTestSuiteFactory(objectSourceTestSuiteGenerator);
+testFactory.addTestSuiteFactory(stringSourceTestSuiteGenerator);
 
 testFactory.generate();
 

@@ -80,6 +80,7 @@ class Youtube extends Externals {
             case YT.PlayerState.BUFFERING:
                 this.trigger('timeupdate');
                 this.trigger('waiting');
+                this.trigger('canplay');
                 break;
             default:
                 this.super(event);
@@ -160,21 +161,24 @@ class Youtube extends Externals {
 
     }
 
-    src (source) {
-
-        if (!source || !source.src) {
+    setSrc (source) {
+        if (!source) {
             return;
         }
 
-        this.url = this.parseSrc(source.src);
+        this.src_ = source;
+        var videoId = this.parseSrc(Externals.sourceToString(source));
 
         if (!this.options_.poster) {
-            if (this.url) {
+            // TODO is this the right place to put it?
+            if (videoId) {
                 // Set the low resolution first
-                this.setPoster('//img.youtube.com/vi/' + this.url + '/0.jpg');
+                this.setPoster('//img.youtube.com/vi/' + videoId + '/0.jpg');
 
             }
         }
+
+        this.widgetPlayer.loadVideoById(videoId);
     }
 
     ended () {
