@@ -1,4 +1,4 @@
-import TestSuiteGenerator from './TestSuiteGenerator'
+import TestSuiteGenerator from './TestSuiteGenerator';
 
 export default class HtmlSourceTestSuiteGenerator extends TestSuiteGenerator {
 

@@ -44,6 +44,7 @@ class Youtube extends Externals {
 
     onStateChange (event) {
         let state = event.data;
+        console.debug('state: ', state);
         switch (state) {
             case -1:
                 this.trigger('loadstart');
@@ -53,8 +54,8 @@ class Youtube extends Externals {
             case YT.PlayerState.PLAYING:
                 this.trigger('timeupdate');
                 this.trigger('durationchange');
-                this.trigger('playing');
                 this.trigger('play');
+                this.trigger('playing');
 
                 if (this.isSeeking) {
                     this.onSeeked();
@@ -78,6 +79,8 @@ class Youtube extends Externals {
                 this.trigger('timeupdate');
                 this.trigger('waiting');
                 break;
+            default:
+                this.super(event);
         }
         this.lastState = state;
     }
