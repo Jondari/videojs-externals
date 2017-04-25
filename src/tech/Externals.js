@@ -257,6 +257,7 @@ class Externals extends Tech {
    */
   src (src) {
     if (typeof src !== 'undefined' && this.src_ !== src) {
+      src = Externals.sourceToString(src);
       this.src_ = src;
       this.setSrc(src);
     }

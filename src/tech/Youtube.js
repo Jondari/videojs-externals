@@ -165,7 +165,7 @@ class Youtube extends Externals {
     }
 
     this.src_ = source;
-    var videoId = this.parseSrc(Externals.sourceToString(source));
+    var videoId = this.parseSrc(source);
 
     if (!this.options_.poster) {
       // TODO is this the right place to put it?
