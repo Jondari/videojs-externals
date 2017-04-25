@@ -5,6 +5,8 @@ import NoSourceTestSuiteGenerator from './base/generators/NoSourceTestSuiteGener
 import ObjectSourceTestSuiteGenerator from './base/generators/ObjectSourceTestSuiteGenerator';
 import StringSourceTestSuiteGenerator from './base/generators/StringSourceTestSuiteGenerator';
 
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 5000;
+
 var getSourceString = videojs.getComponent('Externals').sourceToString;
 
 function getVideoId(source) {

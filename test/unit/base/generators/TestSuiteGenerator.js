@@ -102,12 +102,16 @@ export default class TestSuiteGenerator {
     return function (done) {
       return this.player.ready(() => {
         var volume = 0.5;
-        this.player.on('volumechange', () => {
-          expect(this.player.volume()).toEqual(volume);
-          done();
+        this.player.one('playing',()=>{
+          this.player.one('volumechange', () => {
+            let volume = this.player.volume();
+            console.debug('volume change: ', volume);
+            expect(volume).toEqual(volume);
+            done();
+          });
+          this.player.volume(volume);
         });
-        this.player.volume(volume);
-
+        this.player.play();
       });
     };
   }

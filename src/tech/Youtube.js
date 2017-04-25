@@ -25,6 +25,10 @@ class Youtube extends Externals {
         super(options, ready);
     }
 
+    dispose (){
+      window.clearInterval(this.volumeChangeInterval);
+    }
+
     createEl () {
 
         const el_ = super.createEl('div', {
@@ -58,6 +62,7 @@ class Youtube extends Externals {
                 this.trigger('durationchange');
                 this.trigger('play');
                 this.trigger('playing');
+                this.updateVolume();
 
                 if (this.isSeeking) {
                     this.onSeeked();
@@ -247,12 +252,11 @@ class Youtube extends Externals {
     }
 
     updateVolume () {
-        let vol = this.widgetPlayer.getVolume();
+        let vol = this.volume();
         if(typeof this.volumeBefore_ === 'undefined') {
             this.volumeBefore_ = vol;
         }
-        if(this.volume_ !== vol) {
-            this.volume_ = vol;
+        if(this.volumeBefore_ !== vol) {
             this.trigger('volumechange');
         }
     }
@@ -278,16 +282,25 @@ class Youtube extends Externals {
     }
 
     setVolume (percentAsDecimal) {
-        if (percentAsDecimal !== this.volume_) {
+        this.volumeBefore_ = this.volume();
+        if (percentAsDecimal !== this.volumeBefore_) {
             this.widgetPlayer.setVolume(percentAsDecimal * 100.0);
-            this.updateVolume();
+
+            // Wait for a second until YT actually changes the volume
+            this.volumeChangeInterval = window.setInterval(()=>{
+              this.updateVolume();
+              if(this.volume() === percentAsDecimal){
+                window.clearInterval(this.volumeChangeInterval);
+              }
+            }, 50);
+            window.setTimeout(()=>{window.clearInterval(this.volumeChangeInterval); }, 1000);
         }
     }
 
     setMuted (muted) {
         this.muted_ = muted;
         if (muted) {
-            this.volumeBefore_ = this.volume_;
+            this.volumeBefore_ = this.volume();
         }
         this.widgetPlayer.setVolume(muted ? 0 : this.volumeBefore_);
         this.updateVolume();
