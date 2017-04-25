@@ -1,4 +1,4 @@
-import TestSuiteGenerator from './TestSuiteGenerator'
+import TestSuiteGenerator from './TestSuiteGenerator';
 
 export default class NoSourceTestSuiteGenerator extends TestSuiteGenerator {
   htmlResourcePath;
@@ -9,7 +9,7 @@ export default class NoSourceTestSuiteGenerator extends TestSuiteGenerator {
               htmlResourcePath,
               extraTestGenerators) {
     super(basicConfiguration, firstSourceObject, secondSourceObject, extraTestGenerators);
-    this.description = 'created with no source'
+    this.description = 'created with no source';
     this.htmlResourcePath = htmlResourcePath;
   }
 
@@ -32,8 +32,8 @@ export default class NoSourceTestSuiteGenerator extends TestSuiteGenerator {
    * @private
    */
   _generateCommonTests() {
-    it('should create widget player', this.basicConfiguration.widgetObjectTest);
-    it('should change object sources', this.basicConfiguration.changeSourceTest(this.secondSourceObject));
-    it('should change string sources', this.basicConfiguration.changeSourceTest(this.secondSourceObject.src));
+    it('should create widget player', this._generateWidgetPlayerTest());
+    it('should change object sources', this._generateChangeSourceTest(this.secondSourceObject));
+    it('should change string sources', this._generateChangeSourceTest(this.secondSourceObject.src));
   }
 }

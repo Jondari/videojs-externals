@@ -33,18 +33,12 @@ class Soundcloud extends Externals {
   }
 
   createEl () {
-    let soundcloudSource = null;
-    if ('string' === typeof this.options_.source) {
-      this.src_ = soundcloudSource = this.options_.source;
-    }
-    else if ('object' === typeof this.options_.source) {
-      this.src_ = soundcloudSource = this.options_.source.src;
-    }
+    this.src_ = Externals.sourceToString(this.options_.source);
 
     const el_ = super.createEl('iframe', {
       width: '100%',
       height: '100%',
-      src: `https://w.soundcloud.com/player/?url=${soundcloudSource}&auto_play=${this.options_.autoplay}
+      src: `https://w.soundcloud.com/player/?url=${this.src_}&auto_play=${this.options_.autoplay}
       &buying=false&liking=false&sharing=false&show_comments=false&show_playcount=false&show_user=false`
     });
 

@@ -1,4 +1,4 @@
-import TestSuiteGenerator from './TestSuiteGenerator'
+import TestSuiteGenerator from './TestSuiteGenerator';
 
 export default class StringSourceTestSuiteGenerator extends TestSuiteGenerator {
   htmlResourcePath;
@@ -9,7 +9,7 @@ export default class StringSourceTestSuiteGenerator extends TestSuiteGenerator {
               htmlResourcePath,
               extraTestGenerators) {
     super(basicConfiguration, firstSourceObject, secondSourceObject, extraTestGenerators);
-    this.description = 'created with javascript string source'
+    this.description = 'created with javascript string source';
     this.htmlResourcePath = htmlResourcePath;
   }
 

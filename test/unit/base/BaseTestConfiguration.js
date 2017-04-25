@@ -1,26 +1,24 @@
+/**
+ * Should call a jasmine `expect` to test if the iframe is embedding a player for the correct source
+ *
+ * @callback uriForSourceTester
+ * @param uri {String}
+ * @param source {SourceObject}
+ */
+
+
 export default class BaseTestConfiguration {
   techName;
+  iframeSourceTest;
 
   /**
    *
-   * @param techName {String}
-   * @param sourceObjectTest {Function}
-   * @param playTest {Function}
-   * @param seekTo30Test {Function}
-   * @param changeVolumeTest {Function}
-   * @param changeSourceTest {Function}
+   * @param techName {String} - Case sensitive! It should be given as registered to videojs
+   * @param iframeSourceTest {uriForSourceTester}
    */
   constructor(techName,
-              sourceObjectTest,
-              playTest,
-              seekTo30Test,
-              changeVolumeTest,
-              changeSourceTest) {
+              iframeSourceTest) {
     this.techName = techName;
-    this.widgetObjectTest = sourceObjectTest
-    this.playTest = playTest
-    this.seekTo30Test = seekTo30Test
-    this.changeVolumeTest = changeVolumeTest
-    this.changeSourceTest = changeSourceTest
+    this.iframeSourceTest = iframeSourceTest;
   }
 }
