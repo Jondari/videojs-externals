@@ -55,7 +55,7 @@ const objectSourceTestSuiteGenerator = new ObjectSourceTestSuiteGenerator(
 );
 const stringSourceTestSuiteGenerator = new StringSourceTestSuiteGenerator(
   basicConfiguration,
-  {src: 'https://www.youtube.com/watch?v=QaZujug7PPc', type: MIME_TYPE},
+  {src: 'https://www.youtube.com/watch?v=qF-NoQFJrxc', type: MIME_TYPE},
   {src: 'https://www.youtube.com/watch?v=LI_zvy35NlI', type: MIME_TYPE},
   'test/resources/videojs_from_script.html'
 );

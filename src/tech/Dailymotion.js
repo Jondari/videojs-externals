@@ -73,8 +73,8 @@ class Dailymotion extends Externals {
     if (!this.isApiReady()) {
       return;
     }
-    let source = Externals.sourceToString(this.options_.source);
-    let videoId = this.parseSrc(source);
+    this.src_ = Externals.sourceToString(this.options_.source);
+    let videoId = this.parseSrc(this.src_);
 
     const dmOpts = videojs.mergeOptions(this.options_, {
       video: videoId,
@@ -326,6 +326,8 @@ Dailymotion.nativeSourceHandler.canHandleSource = function (source) {
     return Dailymotion.nativeSourceHandler.canPlayType(source.type);
   } else if (source.src) {
     return Dailymotion.nativeSourceHandler.canPlayType(source.src);
+  } else if (typeof source === 'string'){
+    return Dailymotion.nativeSourceHandler.canPlayType(source);
   }
 
   return '';

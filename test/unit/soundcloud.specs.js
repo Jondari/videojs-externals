@@ -8,7 +8,7 @@ import StringSourceTestSuiteGenerator from './base/generators/StringSourceTestSu
 var getSourceString = videojs.getComponent('Externals').sourceToString;
 
 function iframeSourceTester(uri, source) {
-  source = getSourceString(source);
+  source = getSourceString(source) || null;
   expect(uri).toMatch(new RegExp(`w.soundcloud.com/player/\\?url=${source}.*`));
 }
 

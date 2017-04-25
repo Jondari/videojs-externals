@@ -124,15 +124,8 @@ class Youtube extends Externals {
         if (!this.isApiReady()) {
             return;
         }
-        let source = null;
-        if ('string' === typeof this.options_.source) {
-            source = this.options_.source;
-        }
-        else if ('object' === typeof this.options_.source) {
-            source = this.options_.source.src;
-        }
-
-        source = this.parseSrc(source);
+        this.src_ = Externals.sourceToString(this.options_.source);
+        let videoId = this.parseSrc(this.src_);
 
         const ytOpts = videojs.mergeOptions(this.options_, {
             controls: 0,
@@ -147,7 +140,7 @@ class Youtube extends Externals {
         });
 
         this.widgetPlayer = new YT.Player(this.options_.techId, {
-            videoId: source,
+            videoId: videoId,
             playerVars: ytOpts,
             events: {
                 onReady: this.onReady.bind(this),
@@ -354,6 +347,8 @@ Youtube.nativeSourceHandler.canHandleSource = function (source) {
         return Youtube.nativeSourceHandler.canPlayType(source.type);
     } else if (source.src) {
         return Youtube.nativeSourceHandler.canPlayType(source.src);
+    } else if (typeof source === 'string'){
+        return Youtube.nativeSourceHandler.canPlayType(source);
     }
 
     return '';

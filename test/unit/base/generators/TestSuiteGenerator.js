@@ -182,6 +182,7 @@ export default class TestSuiteGenerator {
       this.player.ready(() => {
         var iframe = document.getElementsByTagName('iframe')[0];
         expect(iframe).toBeTruthy();
+        expect(iframe).toBeDefined();
         iframeSourceTest(iframe.src, this.source);
         done();
       });
