@@ -26,6 +26,7 @@ module.exports = function (config) {
     exclude: [
       'test/unit/dailymotion.specs.js',
       // 'test/unit/soundcloud.specs.js',
+      // 'test/unit/youtube.specs.js',
     ],
 
     plugins: [
