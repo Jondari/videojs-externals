@@ -22,7 +22,7 @@ before_install:
     # Install what's needed to play mp4s and audio with firefox
     - sudo apt-get install -qy ubuntu-restricted-addons pulseaudio libpulse0
 
-before_script:
+#before_script:
     # Setup xvfb for browsers
     - export DISPLAY=:99.0
     - sh -e /etc/init.d/xvfb start
