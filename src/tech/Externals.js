@@ -367,14 +367,14 @@ class Externals extends Tech {
     return true;
   }
 
-  onPlayerError (e) {
-    this.errorNumber = e ? e.data : null;
-    this.trigger('error');
+  onPlayerError(e) {
+    this.error(e);
   }
 
-  error () {
-    return {code: 'External unknown error (' + this.errorNumber + ')'};
-  }
+  // TODO investigate why error() was overriden...
+  // error () {
+  //   return {code: 'External unknown error (' + this.errorNumber + ')'};
+  // }
 }
 
 

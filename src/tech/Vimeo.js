@@ -10,7 +10,9 @@ const Component = videojs.getComponent('Component');
 const Tech = videojs.getComponent('Tech');
 
 /**
- * Externals Media Controller - Wrapper for HTML5 Media API
+ * Externals Media Controller - Wrapper for Vimeo Player API
+ *
+ * Player API doc: https://github.com/vimeo/player.js
  *
  * @param {Object=} options Object of option names and values
  * @param {Function=} ready Ready callback function
@@ -139,7 +141,7 @@ class Vimeo extends Externals {
     onStateChange (event) {
         let state = event.type;
         this.lastState = state;
-        super.onStateChange(event);
+        // console.debug("event.type:", state);
         if (event.volume) {
             this.updateVolume();
         }
@@ -157,6 +159,7 @@ class Vimeo extends Externals {
                 if (event.seconds) {
                     this.currentTime_ = event.seconds;
                     this.trigger('timeupdate');
+                    this.trigger('playing');
                 }
                 break;
             case 'progress':
@@ -166,14 +169,21 @@ class Vimeo extends Externals {
                 }
                 break;
             case 'pause':
+                this.paused_ = true;
                 this.trigger('pause');
                 break;
             case 'play':
+                this.paused_ = false;
                 this.trigger('play');
                 break;
             case 'end':
                 this.updateEnded();
                 break;
+            case 'error':
+                this.onPlayerError(event);
+                break;
+            default:
+              super.onStateChange(event);
         }
         this.updatePaused();
     }
@@ -231,8 +241,11 @@ class Vimeo extends Externals {
 
 
     setCurrentTime (seconds) {
+        this.trigger('seeking');
         this.widgetPlayer.setCurrentTime(seconds).then((seconds)=> {
             this.currentTime_ = seconds;
+            this.trigger('timeupdate');
+            this.trigger('seeked');
         });
     }
 
@@ -340,7 +353,18 @@ Vimeo.nativeSourceHandler.dispose = function () {
 // Register the native source handler
 Vimeo.registerSourceHandler(Vimeo.nativeSourceHandler);
 
-Vimeo.Events = 'loaded,play,ended,timeupdate,progress,seeked,texttrackchange,cuechange,volumechange,error'.split(',');
+Vimeo.Events = [
+  'loaded',
+  'play',
+  'ended',
+  'timeupdate',
+  'progress',
+  'seeked',
+  'texttrackchange',
+  'cuechange',
+  'volumechange',
+  'error'
+];
 
 Component.registerComponent('Vimeo', Vimeo);
 
