@@ -15,7 +15,7 @@ function getVimeoVideoId(source) {
 
 function iframeSourceTester(uri, source) {
   var sourceId = getVimeoVideoId(source);
-  expect(uri).toMatch(new RegExp(`^https?://(www\.)?vimeo\.com/?.*/${sourceId}`));
+  expect(uri).toMatch(new RegExp(`^https?://(www\.|player\.)?vimeo\.com/?.*/${sourceId}`));
 }
 
 const MIME_TYPE = 'video/vimeo';
