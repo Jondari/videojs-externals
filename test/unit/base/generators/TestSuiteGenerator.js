@@ -102,7 +102,7 @@ export default class TestSuiteGenerator {
     return function (done) {
       return this.player.ready(() => {
         var volume = 0.5;
-        this.player.one('playing',()=>{
+        this.player.one('playing', () => {
           this.player.one('volumechange', () => {
             let volume = this.player.volume();
             console.debug('volume change: ', volume);
@@ -181,9 +181,15 @@ export default class TestSuiteGenerator {
     return function (done) {
       this.player.ready(() => {
         var iframe = document.getElementsByTagName('iframe')[0];
-        expect(iframe).toBeTruthy();
-        expect(iframe).toBeDefined();
-        iframeSourceTest(iframe.src, this.source);
+        if (this.source) {
+          expect(iframe).toBeTruthy();
+          expect(iframe).toBeDefined();
+          iframeSourceTest(iframe.src, this.source);
+        } else {
+          if(iframe){
+            iframeSourceTest(iframe.src, this.source);
+          }
+        }
         done();
       });
     };

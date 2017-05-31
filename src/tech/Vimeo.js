@@ -8,6 +8,7 @@ import window from 'global/window';
 
 const Component = videojs.getComponent('Component');
 const Tech = videojs.getComponent('Tech');
+const INVALID_SOURCE = '1';
 
 /**
  * Externals Media Controller - Wrapper for Vimeo Player API
@@ -26,25 +27,10 @@ class Vimeo extends Externals {
   }
 
   createEl() {
-
-    let vimeoSource = null;
-    if ('string' === typeof this.options_.source) {
-      vimeoSource = this.options_.source;
-    }
-    else if ('object' === typeof this.options_.source) {
-      vimeoSource = this.options_.source.src;
-    }
-
-    this.src_ = this.parseSrc(vimeoSource);
-
-    const el_ = super.createEl('iframe', {
-      id: this.options_.techId,
-      src: `${this.options_.embed}/${this.src_}??api=1&player_id=${this.options_.techId}&fullscreen=1&autoplay=${this.options_.autoplay}`
+    console.debug('createEl');
+    return super.createEl('div', {
+      id: this.options_.techId
     });
-
-    videojs(this.options_.playerId);
-    return el_;
-
   }
 
 
@@ -61,9 +47,22 @@ class Vimeo extends Externals {
   }
 
   setSrc(src) {
-    this.widgetPlayer.loadVideo(this.parseSrc(src)).then((id) => {
-      this.src_ = id;
-    });
+    if (!this.src_ && !this.el_.querySelector('iframe')) {
+      // When the player is setup incorrectly the first time, we need to re-init
+      // Vimeo leaves its player in a bad state dependent on our element, so we just recreate it
+      // and get a new vimeo player... super hacky
+      let parent = this.el_.parentNode;
+      parent.removeChild(this.el_);
+      parent.appendChild(this.createEl());
+      this.options_.source = src;
+      this.initTech();
+    } else {
+      this.widgetPlayer.loadVideo(this.parseSrc(src)).then(() => {
+        this.src_ = src;
+      }).catch((error) => {
+        this.error(error);
+      });
+    }
   }
 
   isApiReady() {
@@ -104,18 +103,11 @@ class Vimeo extends Externals {
     if (!this.isApiReady()) {
       return;
     }
-    let source = null;
-    if ('string' === typeof this.options_.source) {
-      source = this.options_.source;
-    }
-    else if ('object' === typeof this.options_.source) {
-      source = this.options_.source.src;
-    }
-
-    source = this.parseSrc(source);
+    this.src_ = Externals.sourceToString(this.options_.source);
+    let vimeoSource = this.parseSrc(this.src_) || INVALID_SOURCE;
 
     const vimOpts = videojs.mergeOptions(this.options_, {
-      id: source,
+      id: vimeoSource,
       byline: 0,
       color: '#00adef',
       portrait: 0,
@@ -123,9 +115,12 @@ class Vimeo extends Externals {
     });
 
     this.widgetPlayer = new window.Vimeo.Player(this.options_.techId, vimOpts);
-    this.widgetPlayer.ready().then(videojs.bind(this, this.onReady));
+    this.widgetPlayer.ready().then(videojs.bind(this, this.onReady)).catch((error) => {
+      this.widgetPlayer.unload();
+      this.error(error.message);
+      super.onReady();
+    });
     super.initTech();
-    this.onStateChange({type: -1});
   }
 
   onReady() {

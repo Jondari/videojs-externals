@@ -215,6 +215,7 @@ class Soundcloud extends Externals {
     this.widgetPlayer.load(src, {
         'auto_play': this.options_.autoplay,
         'callback': ()=>{
+          this.src_ = src;
           this.onStateChange({type: SC.Widget.Events.READY});
         }
       }

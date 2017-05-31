@@ -54,7 +54,8 @@ class Dailymotion extends Externals {
   }
 
   setSrc(src) {
-    this.widgetPlayer.load(this.parseSrc(src));
+    this.src_ = src;
+    this.widgetPlayer.load(src);
   }
 
   isApiReady() {
