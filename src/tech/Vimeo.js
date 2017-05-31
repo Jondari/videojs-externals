@@ -35,11 +35,11 @@ class Vimeo extends Externals {
             vimeoSource = this.options_.source.src;
         }
 
-        vimeoSource = this.parseSrc(vimeoSource);
+        this.src_ = this.parseSrc(vimeoSource);
 
         const el_ = super.createEl('iframe', {
             id: this.options_.techId,
-            src: `${this.options_.embed}/${vimeoSource}??api=1&player_id=${this.options_.techId}&fullscreen=1&autoplay=${this.options_.autoplay}`
+            src: `${this.options_.embed}/${this.src_}??api=1&player_id=${this.options_.techId}&fullscreen=1&autoplay=${this.options_.autoplay}`
         });
 
         videojs(this.options_.playerId);
@@ -58,6 +58,12 @@ class Vimeo extends Externals {
                 return match[5];
             }
         }
+    }
+
+    setSrc(src) {
+      this.widgetPlayer.loadVideo(this.parseSrc(src)).then((id)=>{
+        this.src_ = id;
+      });
     }
 
     isApiReady () {
