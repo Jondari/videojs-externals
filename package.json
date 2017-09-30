@@ -69,6 +69,7 @@
     "browserify-shim": "^3.8.14",
     "connect": "^3.6.0",
     "cowsay": "^1.1.9",
+    "eslint": "^4.6.1",
     "grunt": "^1.0.1",
     "grunt-karma": "^2.0.0",
     "jasmine-core": "^2.5.2",
