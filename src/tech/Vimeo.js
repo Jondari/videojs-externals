@@ -27,7 +27,6 @@ class Vimeo extends Externals {
   }
 
   createEl() {
-    console.debug('createEl');
     return super.createEl('div', {
       id: this.options_.techId
     });
@@ -106,15 +105,14 @@ class Vimeo extends Externals {
     this.src_ = Externals.sourceToString(this.options_.source);
     let vimeoSource = this.parseSrc(this.src_) || INVALID_SOURCE;
 
-    const vimOpts = videojs.mergeOptions(this.options_, {
+    const vimOpts = {
       id: vimeoSource,
       byline: 0,
       color: '#00adef',
       portrait: 0,
       fullscreen: 1
-    });
-
-    this.widgetPlayer = new window.Vimeo.Player(this.options_.techId, vimOpts);
+    };
+    this.widgetPlayer = new window.Vimeo.Player(this.el_, vimOpts);
     this.widgetPlayer.ready().then(videojs.bind(this, this.onReady)).catch((error) => {
       this.widgetPlayer.unload();
       this.error(error.message);
@@ -125,7 +123,6 @@ class Vimeo extends Externals {
 
   onReady() {
     super.onReady();
-    this.onStateChange({type: 'loaded'});
   }
 
   setupTriggers() {
@@ -142,7 +139,7 @@ class Vimeo extends Externals {
   onStateChange(event) {
     let state = event.type;
     this.lastState = state;
-    // console.debug("event.type:", state);
+    console.debug('event.type:', state);
     if (event.volume) {
       this.updateVolume();
     }
@@ -152,6 +149,7 @@ class Vimeo extends Externals {
     }
     switch (state) {
       case 'loaded':
+        this.trigger('loaded');
         this.trigger('loadedmetadata');
         this.trigger('durationchange');
         this.trigger('canplay');
