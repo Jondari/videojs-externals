@@ -56,9 +56,8 @@ class Vimeo extends Externals {
       this.options_.source = src;
       this.initTech();
     } else {
-      this.widgetPlayer.loadVideo(this.parseSrc(src)).then(() => {
-        this.src_ = src;
-      }).catch((error) => {
+      this.src_ = src;
+      this.widgetPlayer.loadVideo(this.parseSrc(src)).catch((error) => {
         this.error(error);
       });
     }
