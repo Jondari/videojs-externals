@@ -50,11 +50,12 @@ class Vimeo extends Externals {
       // When the player is setup incorrectly the first time, we need to re-init
       // Vimeo leaves its player in a bad state dependent on our element, so we just recreate it
       // and get a new vimeo player... super hacky
-      let parent = this.el_.parentNode;
-      parent.removeChild(this.el_);
-      parent.appendChild(this.createEl());
       this.options_.source = src;
       this.initTech();
+      this.one('ready', () => {
+        // Simulate event from iframe when we're ready in order to trigger all necessary events
+        this.onStateChange({type: "loaded"})
+      })
     } else {
       this.src_ = src;
       this.widgetPlayer.loadVideo(this.parseSrc(src)).catch((error) => {
@@ -65,36 +66,6 @@ class Vimeo extends Externals {
 
   isApiReady() {
     return window['Vimeo'] && window['Vimeo']['Player'];
-  }
-
-  addScriptTag() {
-    var self = this;
-    if (window['requirejs']) {
-      let requirejs = window['requirejs'];
-      requirejs([this.options_.api], function (Vimeo) {
-        window['Vimeo'] = {Player: Vimeo};
-        self.initTech();
-      });
-    } else {
-      var r = false,
-        d = document,
-        s = d.getElementsByTagName('head')[0] || d.documentElement;
-      var js = d.createElement('script');
-      js.async = true;
-      js.type = 'text/javascript';
-      js.onload = js.onreadystatechange = function () {
-        var rs = this.readyState;
-        if (!r && (!rs || /loaded|complete/.test(rs))) {
-          r = true;
-          // Handle memory leak in IE
-          js.onload = js.onreadystatechange = null;
-          self.initTech();
-        }
-      };
-
-      js.src = this.options_.api;
-      s.insertBefore(js, s.firstChild);
-    }
   }
 
   initTech() {
@@ -115,13 +86,9 @@ class Vimeo extends Externals {
     this.widgetPlayer.ready().then(videojs.bind(this, this.onReady)).catch((error) => {
       this.widgetPlayer.unload();
       this.error(error.message);
-      super.onReady();
+      this.onReady();
     });
     super.initTech();
-  }
-
-  onReady() {
-    super.onReady();
   }
 
   setupTriggers() {
