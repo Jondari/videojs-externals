@@ -197,6 +197,15 @@ class Externals extends Tech {
     this.onStateChange(e);
   }
 
+  /**
+   * Handle state change events coming from the external API.
+   *
+   * It's here that you're expected to trigger the majority of your events.
+   * Events to trigger are the HTML5 media events and videojs events:
+   *   - https://www.w3.org/TR/html5/embedded-content-0.html#mediaevents
+   *   - http://docs.videojs.com/Player.html#event:canplay
+   * @param event
+   */
   onStateChange (event) {
     let state = event.type;
     this.lastState = state;
@@ -461,6 +470,14 @@ Externals.prototype['featuresNativeAudioTracks'] = true;
  */
 Externals.prototype['featuresNativeVideoTracks'] = false;
 
+/**
+ * List of events the External will listen to coming from whatever they are wrapping
+ *
+ * Example:
+ *  If wrapping an iframe and it will send 'buffering' to update the buffering progress,
+ *  Add it here.
+ * @type {*|string[]}
+ */
 Externals.Events = `apiready,ad_play,ad_start,ad_timeupdate,ad_pause,ad_end,video_start,
   'video_end,play,playing,pause,ended,canplay,canplaythrough,timeupdate,progress,seeking,
   'seeked,volumechange,durationchange,fullscreenchange,error`.split(',');
