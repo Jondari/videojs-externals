@@ -27,9 +27,6 @@ export default class MixcloudExternal extends Externals {
 
   createEl() {
     this.src_ = Externals.sourceToString(this.options_.source);
-
-
-    // TODO return a div that will be filled by oEmbed
     // https://www.mixcloud.com/developers/#embedding
     // https://www.mixcloud.com/oembed/?format=json&url=...
     // or construct iframe from https://www.mixcloud.com/widget/iframe/?feed=https%3A%2F%2Fwww.mixcloud.com%2Fmonstercat%2Fmonstercat-best-of-2014-album-mix%2F&hide_cover=1&mini=1&light=1
