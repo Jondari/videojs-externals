@@ -102,7 +102,7 @@ export default class TestSuiteGenerator {
     return function (done) {
       return this.player.ready(() => {
         var volume = 0.5;
-        this.player.one('playing',()=>{
+        this.player.one('playing', () => {
           this.player.one('volumechange', () => {
             let volume = this.player.volume();
             console.debug('volume change: ', volume);
@@ -130,10 +130,19 @@ export default class TestSuiteGenerator {
         player.on('play', () => {
           expect(this.player.paused()).toBeFalsy();
           this.player.one('playing', () => {
-            setTimeout(() => {
-              expect(this.player.currentTime()).toBeGreaterThan(0);
-              done();
-            }, 1000);
+
+            // Check the time at most 5 times every time it's updated
+            const MAX_PROGRESS_UPDATES = 5;
+            var currentProgressUpdates = 0;
+            this.player.on('timeupdate', () => {
+              let time = this.player.currentTime();
+              if(currentProgressUpdates < MAX_PROGRESS_UPDATES && time <=0){
+                ++currentProgressUpdates;
+              } else{
+                expect(time).toBeGreaterThan(0);
+                done();
+              }
+            })
           });
         });
 
