@@ -1,5 +1,4 @@
 const fs = require('fs');
-console.log(__dirname);
 
 module.exports = function (config) {
   var karmaBrowsers = process.env['BROWSERS'] ?
