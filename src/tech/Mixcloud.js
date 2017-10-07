@@ -6,6 +6,7 @@
  */
 import videojs from 'video.js';
 import Externals from './Externals';
+import '../lib/mixcloud'
 
 const Component = videojs.getComponent('Component');
 const Tech = videojs.getComponent('Tech');
