@@ -41,24 +41,27 @@ const noSourceTestSuiteGenerator = new NoSourceTestSuiteGenerator(
 );
 const objectSourceTestSuiteGenerator = new ObjectSourceTestSuiteGenerator(
   basicConfiguration,
-  {src: 'https://soundcloud.com/oshi/kali-uchi', type: MIME_TYPE},
-  {src: 'https://soundcloud.com/apexrise/or-nah', type: MIME_TYPE},
+  // TODO this is one too long, gotta log a bug with mixcloud devs
+  // Seeking to 30 returns 0.2
+  // {src: 'https://www.mixcloud.com/BrilliantCorners/stamp-the-wax-7-with-special-guest-harvey-sutherland-220917/', type: MIME_TYPE},
+  {src: 'https://www.mixcloud.com/truthoughts/tru-thoughts-presents-unfold-290917-with-rapsody-kxngs-dj-juls/', type: MIME_TYPE},
+  {src: 'https://www.mixcloud.com/DJoseSolis/the-official-trance-podcast-episode-276/', type: MIME_TYPE},
   'test/resources/videojs_from_script.html'
 );
 const stringSourceTestSuiteGenerator = new StringSourceTestSuiteGenerator(
   basicConfiguration,
-  {src: 'https://soundcloud.com/hipster-online/04-sweet-home-alabama', type: MIME_TYPE},
-  {src: 'https://soundcloud.com/nordemusic/missing-you-ft-lucas-nord', type: MIME_TYPE},
+  {src: 'https://www.mixcloud.com/FemmeHQ/fallout-mix/', type: MIME_TYPE},
+  {src: 'https://www.mixcloud.com/the264cru/the-comedown-088-akhilius/', type: MIME_TYPE},
   'test/resources/videojs_from_script.html'
 );
 
 
 var testFactory = new MainTestFactory(basicConfiguration);
 
-testFactory.addTestSuiteFactory(htmlSourceTestSuiteGenerator);
-testFactory.addTestSuiteFactory(noSourceTestSuiteGenerator);
-// testFactory.addTestSuiteFactory(objectSourceTestSuiteGenerator);
-// testFactory.addTestSuiteFactory(stringSourceTestSuiteGenerator);
+// testFactory.addTestSuiteFactory(htmlSourceTestSuiteGenerator);
+// testFactory.addTestSuiteFactory(noSourceTestSuiteGenerator);
+testFactory.addTestSuiteFactory(objectSourceTestSuiteGenerator);
+testFactory.addTestSuiteFactory(stringSourceTestSuiteGenerator);
 
 testFactory.generate();
 

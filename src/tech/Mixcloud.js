@@ -117,21 +117,23 @@ export default class MixcloudExternal extends Externals {
   }
 
   initTech() {
+    // We need to handle the widgetplayer not being loaded properly
+    // In the ready event it will actually get to know which methods it can call
+    // Beforehand the aren't there, so .load won't exist
+    const timeoutId = setTimeout(() => {
+      if (this.el_ && (!this.isReady_ || !this.widgetPlayer.load)) {
+        super.onReady()
+      }
+    }, 2000);
+
     this.widgetPlayer = Mixcloud.PlayerWidget(this.el_.querySelector("iframe"));
     this.widgetPlayer.ready.then(() => {
+      clearTimeout(timeoutId);
       this.onReady();
       this.trigger('loadedmetadata');
       this.trigger('durationchange');
       this.trigger('canplay');
     })
-    // We need to handle the widgetplayer not being loaded properly
-    // In the ready event it will actually get to know which methods it can call
-    // Beforehand the aren't there, so .load won't exist
-    setTimeout(() => {
-      if (!this.isReady_ || !this.widgetPlayer.load) {
-        super.onReady()
-      }
-    }, 2000)
   }
 
   setupTriggers() {
@@ -219,7 +221,13 @@ export default class MixcloudExternal extends Externals {
 
   setCurrentTime(position) {
     this.widgetPlayer.seek(position).then(() => {
-      this.trigger("seeked");
+      this.widgetPlayer.getPosition().then((newTime)=>{
+        if(newTime !== this.currentTime_){
+          this.currentTime_ = newTime;
+          this.trigger('timeupdate');
+        }
+        this.trigger("seeked");
+      })
     });
     this.trigger("seeking");
   }
