@@ -27,9 +27,9 @@ export default class MixcloudExternal extends Externals {
 
   createEl() {
     this.src_ = Externals.sourceToString(this.options_.source);
-    var url = new URL(this.src_);
+    var videoId = this.parseSrc(this.src_)
 
-    const iframeSrc = `//www.mixcloud.com/widget/iframe/?feed=${encodeURIComponent(url.pathname)}`;
+    const iframeSrc = `//www.mixcloud.com/widget/iframe/?feed=${encodeURIComponent(videoId)}`;
 
     // TODO return a div that will be filled by oEmbed
     // https://www.mixcloud.com/developers/#embedding
@@ -61,7 +61,7 @@ export default class MixcloudExternal extends Externals {
         break;
 
       case "play":
-        if(this.paused_){
+        if (this.paused_) {
           this.paused_ = false;
           this.trigger('play');
           this.trigger('playing');
@@ -70,10 +70,16 @@ export default class MixcloudExternal extends Externals {
 
       case "progress":
         var [position, duration] = event.data;
-        this.currentTime_ = position;
-        this.duration_ = duration;
-        !this.paused_ && this.trigger('progress');
-        this.trigger('timeupdate');
+        this.trigger('progress');
+        if(position !== this. currentTime_){
+          this.currentTime_ = position;
+          this.trigger('timeupdate')
+        }
+
+        if(duration !== this.duration_){
+          this.duration_ = duration;
+          this.trigger('durationchange');
+        }
         break;
 
       case "pause":
@@ -81,13 +87,8 @@ export default class MixcloudExternal extends Externals {
         this.trigger('pause');
         break;
 
-      // case SC.Widget.Events.SEEK:
-      //   this.currentTime_ = event.currentPosition / 1000
-      //   this.trigger('seeked');
-      //   break;
-
       case "buffering":
-        this.trigger('timeupdate');
+        this.trigger('buffering');
         break;
 
       case "error":
@@ -98,11 +99,11 @@ export default class MixcloudExternal extends Externals {
 
   parseSrc(src) {
     if (src) {
-      // Regex that parse the video ID for any MixcloudExternal URL
-      var regExp = /^(https?:\/\/)?(www.|api.)?mixcloud.com\//i;
+      // Regex that parse the video ID for any Mixcloud URL
+      var regExp = /^(https?:\/\/)?(www.|api.)?mixcloud.com(\/[^#\?&]+)/i;
       var match = src.match(regExp);
 
-      return match ? match[5] || match[3] : null;
+      return match ? match[3] : null;
     }
   }
 
@@ -127,7 +128,7 @@ export default class MixcloudExternal extends Externals {
     for (var i = MixcloudExternal.Events.length - 1; i >= 0; i--) {
       const eventName = MixcloudExternal.Events[i];
       const self = this;
-      this.widgetPlayer.events[eventName].on(function() {
+      this.widgetPlayer.events[eventName].on(function () {
         self.eventHandler(videojs.mergeOptions({type: eventName}, {data: arguments}));
       });
     }
@@ -184,13 +185,10 @@ export default class MixcloudExternal extends Externals {
   }
 
   setSrc(src) {
-    this.widgetPlayer.load(src, {
-        'auto_play': this.options_.autoplay,
-        'callback': () => {
-          this.onStateChange({type: SC.Widget.Events.READY});
-        }
-      }
-    );
+    this.src_ = src;
+    this.widgetPlayer.load(this.parseSrc(this.src_)).then(() => {
+      this.trigger("canplay");
+    });
   }
 
   duration() {
@@ -202,9 +200,10 @@ export default class MixcloudExternal extends Externals {
   }
 
   setCurrentTime(position) {
-    this.widgetPlayer.seek(position).then(()=>{
+    this.widgetPlayer.seek(position).then(() => {
       this.trigger("seeked");
     });
+    this.trigger("seeking");
   }
 
   play() {
@@ -231,8 +230,9 @@ export default class MixcloudExternal extends Externals {
     if (percentAsDecimal !== this.volume_) {
       this.volume_ = percentAsDecimal;
       this.muted_ = !this.volume_;
-      this.widgetPlayer.setVolume(this.volume_);
-      this.updateVolume();
+      this.widgetPlayer.setVolume(this.volume_).then(() => {
+        this.trigger("volumechange");
+      });
     }
   }
 
