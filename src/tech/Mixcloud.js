@@ -27,9 +27,7 @@ export default class MixcloudExternal extends Externals {
 
   createEl() {
     this.src_ = Externals.sourceToString(this.options_.source);
-    var videoId = this.parseSrc(this.src_)
 
-    const iframeSrc = `//www.mixcloud.com/widget/iframe/?feed=${encodeURIComponent(videoId)}`;
 
     // TODO return a div that will be filled by oEmbed
     // https://www.mixcloud.com/developers/#embedding
@@ -38,7 +36,7 @@ export default class MixcloudExternal extends Externals {
     return super.createEl('iframe', {
       width: '100%',
       height: '100%',
-      src: iframeSrc
+      src: this.generateIframeSrc(this.src_)
     });
   }
 
@@ -71,12 +69,12 @@ export default class MixcloudExternal extends Externals {
       case "progress":
         var [position, duration] = event.data;
         this.trigger('progress');
-        if(position !== this. currentTime_){
+        if (position !== this.currentTime_) {
           this.currentTime_ = position;
           this.trigger('timeupdate')
         }
 
-        if(duration !== this.duration_){
+        if (duration !== this.duration_) {
           this.duration_ = duration;
           this.trigger('durationchange');
         }
@@ -105,9 +103,14 @@ export default class MixcloudExternal extends Externals {
 
       return match ? match[3] : null;
     }
+    return null;
   }
 
-  //
+  generateIframeSrc(src) {
+    const videoId = this.parseSrc(src)
+    return `//www.mixcloud.com/widget/iframe/?feed=${encodeURIComponent(videoId)}`;
+  }
+
   onReady() {
     super.initTech();
     super.onReady();
@@ -121,6 +124,14 @@ export default class MixcloudExternal extends Externals {
       this.trigger('durationchange');
       this.trigger('canplay');
     })
+    // We need to handle the widgetplayer not being loaded properly
+    // In the ready event it will actually get to know which methods it can call
+    // Beforehand the aren't there, so .load won't exist
+    setTimeout(() => {
+      if (!this.isReady_ || !this.widgetPlayer.load) {
+        super.onReady()
+      }
+    }, 2000)
   }
 
   setupTriggers() {
@@ -186,9 +197,16 @@ export default class MixcloudExternal extends Externals {
 
   setSrc(src) {
     this.src_ = src;
-    this.widgetPlayer.load(this.parseSrc(this.src_)).then(() => {
-      this.trigger("canplay");
-    });
+    // If initialized without a source, no methods are initialized
+    if (this.widgetPlayer.load) {
+      this.widgetPlayer.load(this.parseSrc(this.src_)).then(() => {
+        this.trigger("canplay");
+      });
+    } else {
+      const iframe = this.el_.querySelector("iframe");
+      iframe.src = this.generateIframeSrc(src);
+      this.initTech();
+    }
   }
 
   duration() {

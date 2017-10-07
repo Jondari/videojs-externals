@@ -10,7 +10,7 @@ var getSourceString = videojs.getComponent('Externals').sourceToString;
 function iframeSourceTester(uri, source) {
   source = getSourceString(source) || null;
   if(source){
-    source = encodeURIComponent(new URL(source).pathname)
+    source = encodeURIComponent(new URL(source).pathname) || null
   }
   expect(uri).toMatch(new RegExp(`mixcloud.com/widget/iframe/\\?feed=${source}`));
 }
@@ -36,7 +36,7 @@ const htmlSourceTestSuiteGenerator = new HtmlSourceTestSuiteGenerator(
 const noSourceTestSuiteGenerator = new NoSourceTestSuiteGenerator(
   basicConfiguration,
   null,
-  {src: 'https://soundcloud.com/pegboardnerds/pegboard-nerds-here-it-comes', type: MIME_TYPE},
+  {src: 'https://www.mixcloud.com/ThisIsHomeAlone/week-35-the-real/', type: MIME_TYPE},
   'test/resources/videojs_from_script.html'
 );
 const objectSourceTestSuiteGenerator = new ObjectSourceTestSuiteGenerator(
@@ -56,7 +56,7 @@ const stringSourceTestSuiteGenerator = new StringSourceTestSuiteGenerator(
 var testFactory = new MainTestFactory(basicConfiguration);
 
 testFactory.addTestSuiteFactory(htmlSourceTestSuiteGenerator);
-// testFactory.addTestSuiteFactory(noSourceTestSuiteGenerator);
+testFactory.addTestSuiteFactory(noSourceTestSuiteGenerator);
 // testFactory.addTestSuiteFactory(objectSourceTestSuiteGenerator);
 // testFactory.addTestSuiteFactory(stringSourceTestSuiteGenerator);
 
