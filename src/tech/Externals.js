@@ -33,6 +33,7 @@ class Externals extends Tech {
       format: 'json',
       url: url
     };
+    this.paused_ = true;
 
     // If we are not on a server, don't specify the origin (it will crash)
     if (window.location.protocol !== 'file:') {
@@ -307,10 +308,18 @@ class Externals extends Tech {
     return false;
   }
 
+  /**
+   * Get the position / current time in seconds
+   * @returns {number}
+   */
   currentTime () {
     return 0;
   }
 
+  /**
+   * Seek to the given position in seconds
+   * @param position {Number}
+   */
   setCurrentTime (position) {
     this.currentTime = position;
   }

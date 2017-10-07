@@ -61,13 +61,18 @@ export default class MixcloudExternal extends Externals {
         break;
 
       case "play":
-        this.paused_ = false;
-        this.trigger('play');
+        if(this.paused_){
+          this.paused_ = false;
+          this.trigger('play');
+          this.trigger('playing');
+        }
         break;
 
       case "progress":
-        this.currentTime_ = ((this.duration_ * 1000) * event.relativePosition) / 1000;
-        this.trigger('playing');
+        var [position, duration] = event.data;
+        this.currentTime_ = position;
+        this.duration_ = duration;
+        !this.paused_ && this.trigger('progress');
         this.trigger('timeupdate');
         break;
 
@@ -100,14 +105,12 @@ export default class MixcloudExternal extends Externals {
       return match ? match[5] || match[3] : null;
     }
   }
+
   //
-  // onReady() {
-  //   this.updatePause();
-  //   this.updateDuration();
-  //   this.updateVolume();
-  //   this.updatePoster();
-  //   this.triggerReady();
-  // }
+  onReady() {
+    super.initTech();
+    super.onReady();
+  }
 
   initTech() {
     this.widgetPlayer = Mixcloud.PlayerWidget(this.el_.querySelector("iframe"));
@@ -117,20 +120,16 @@ export default class MixcloudExternal extends Externals {
       this.trigger('durationchange');
       this.trigger('canplay');
     })
-      // .catch(() => {
-      //   console.error("Couldn't init Mixcloud player", arguments);
-      //   this.onReady();
-      // });
-    super.initTech();
   }
 
   setupTriggers() {
     this.widgetPlayer.vjsTech = this;
     for (var i = MixcloudExternal.Events.length - 1; i >= 0; i--) {
       const eventName = MixcloudExternal.Events[i];
-      this.widgetPlayer.events[eventName] = (data) => {
-        this.eventHandler(videojs.mergeOptions({type: eventName}, data));
-      };
+      const self = this;
+      this.widgetPlayer.events[eventName].on(function() {
+        self.eventHandler(videojs.mergeOptions({type: eventName}, {data: arguments}));
+      });
     }
   }
 
@@ -154,13 +153,6 @@ export default class MixcloudExternal extends Externals {
    */
   exitFullScreen() {
     this.widgetPlayer.webkitExitFullScreen();
-  }
-
-  updateDuration() {
-    this.widgetPlayer.getDuration((duration) => {
-      this.duration_ = duration / 1000;
-      this.trigger('durationchange');
-    });
   }
 
   updateVolume() {
@@ -210,10 +202,9 @@ export default class MixcloudExternal extends Externals {
   }
 
   setCurrentTime(position) {
-    const newPosition = position * 1000;
-    console.debug("seekTo: ", newPosition)
-    this.widgetPlayer.seekTo(newPosition);
-    this.trigger('seeking');
+    this.widgetPlayer.seek(position).then(()=>{
+      this.trigger("seeked");
+    });
   }
 
   play() {
@@ -222,7 +213,6 @@ export default class MixcloudExternal extends Externals {
 
   pause() {
     this.widgetPlayer.pause();
-    this.updatePause();
   }
 
   paused() {
