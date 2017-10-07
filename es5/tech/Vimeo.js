@@ -1,37 +1,41 @@
-/**
- * @file Vimeo.js
- * Externals (iframe) Media Controller - Wrapper for HTML5 Media API
- */
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+var _video = require('video.js');
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var _videoJs = require('video.js');
-
-var _videoJs2 = _interopRequireDefault(_videoJs);
+var _video2 = _interopRequireDefault(_video);
 
 var _Externals2 = require('./Externals');
 
 var _Externals3 = _interopRequireDefault(_Externals2);
 
-var _globalWindow = require('global/window');
+var _window = require('global/window');
 
-var _globalWindow2 = _interopRequireDefault(_globalWindow);
+var _window2 = _interopRequireDefault(_window);
 
-var Component = _videoJs2['default'].getComponent('Component');
-var Tech = _videoJs2['default'].getComponent('Tech');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @file Vimeo.js
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Externals (iframe) Media Controller - Wrapper for HTML5 Media API
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+var Component = _video2.default.getComponent('Component');
+var Tech = _video2.default.getComponent('Tech');
 
 /**
  * Externals Media Controller - Wrapper for HTML5 Media API
@@ -42,13 +46,13 @@ var Tech = _videoJs2['default'].getComponent('Tech');
  * @class Vimeo
  */
 
-var Vimeo = (function (_Externals) {
+var Vimeo = function (_Externals) {
     _inherits(Vimeo, _Externals);
 
     function Vimeo(options, ready) {
         _classCallCheck(this, Vimeo);
 
-        _get(Object.getPrototypeOf(Vimeo.prototype), 'constructor', this).call(this, options, ready);
+        return _possibleConstructorReturn(this, (Vimeo.__proto__ || Object.getPrototypeOf(Vimeo)).call(this, options, ready));
     }
 
     _createClass(Vimeo, [{
@@ -58,18 +62,18 @@ var Vimeo = (function (_Externals) {
             var vimeoSource = null;
             if ('string' === typeof this.options_.source) {
                 vimeoSource = this.options_.source;
-            } else if ('object' === typeof this.options_.source) {
+            } else if ('object' === _typeof(this.options_.source)) {
                 vimeoSource = this.options_.source.src;
             }
 
             vimeoSource = this.parseSrc(vimeoSource);
 
-            var el_ = _get(Object.getPrototypeOf(Vimeo.prototype), 'createEl', this).call(this, 'iframe', {
+            var el_ = _get(Vimeo.prototype.__proto__ || Object.getPrototypeOf(Vimeo.prototype), 'createEl', this).call(this, 'iframe', {
                 id: this.options_.techId,
                 src: this.options_.embed + '/' + vimeoSource + '??api=1&player_id=' + this.options_.techId + '&fullscreen=1&autoplay=' + this.options_.autoplay
             });
 
-            (0, _videoJs2['default'])(this.options_.playerId);
+            (0, _video2.default)(this.options_.playerId);
             return el_;
         }
     }, {
@@ -88,15 +92,16 @@ var Vimeo = (function (_Externals) {
     }, {
         key: 'isApiReady',
         value: function isApiReady() {
-            return _globalWindow2['default']['Vimeo'] && _globalWindow2['default']['Vimeo']['Player'];
+            return _window2.default['Vimeo'] && _window2.default['Vimeo']['Player'];
         }
     }, {
         key: 'addScriptTag',
         value: function addScriptTag() {
             var self = this;
-            if (_globalWindow2['default']['requirejs']) {
+            if (_window2.default['requirejs']) {
+                var requirejs = _window2.default['requirejs'];
                 requirejs([this.options_.api], function (Vimeo) {
-                    _globalWindow2['default']['Vimeo'] = { Player: Vimeo };
+                    _window2.default['Vimeo'] = { Player: Vimeo };
                     self.initTech();
                 });
             } else {
@@ -129,13 +134,13 @@ var Vimeo = (function (_Externals) {
             var source = null;
             if ('string' === typeof this.options_.source) {
                 source = this.options_.source;
-            } else if ('object' === typeof this.options_.source) {
+            } else if ('object' === _typeof(this.options_.source)) {
                 source = this.options_.source.src;
             }
 
             source = this.parseSrc(source);
 
-            var vimOpts = _videoJs2['default'].mergeOptions(this.options_, {
+            var vimOpts = _video2.default.mergeOptions(this.options_, {
                 id: source,
                 byline: 0,
                 color: '#00adef',
@@ -143,29 +148,29 @@ var Vimeo = (function (_Externals) {
                 fullscreen: 1
             });
 
-            this.widgetPlayer = new _globalWindow2['default'].Vimeo.Player(this.options_.techId, vimOpts);
-            this.widgetPlayer.ready().then(_videoJs2['default'].bind(this, this.onReady));
-            _get(Object.getPrototypeOf(Vimeo.prototype), 'initTech', this).call(this);
+            this.widgetPlayer = new _window2.default.Vimeo.Player(this.options_.techId, vimOpts);
+            this.widgetPlayer.ready().then(_video2.default.bind(this, this.onReady));
+            _get(Vimeo.prototype.__proto__ || Object.getPrototypeOf(Vimeo.prototype), 'initTech', this).call(this);
             this.onStateChange({ type: -1 });
         }
     }, {
         key: 'onReady',
         value: function onReady() {
-            _get(Object.getPrototypeOf(Vimeo.prototype), 'onReady', this).call(this);
+            _get(Vimeo.prototype.__proto__ || Object.getPrototypeOf(Vimeo.prototype), 'onReady', this).call(this);
             this.onStateChange({ type: 'loaded' });
         }
     }, {
         key: 'setupTriggers',
         value: function setupTriggers() {
-            var _this = this;
+            var _this2 = this;
 
             this.widgetPlayer.vjsTech = this;
 
-            var _loop = function () {
+            var _loop = function _loop() {
                 var eventName = Vimeo.Events[i];
                 /*jshint loopfunc: true */
-                _this.widgetPlayer.on(eventName, function (data) {
-                    _this.eventHandler(_videoJs2['default'].mergeOptions({ type: eventName }, data));
+                _this2.widgetPlayer.on(eventName, function (data) {
+                    _this2.eventHandler(_video2.default.mergeOptions({ type: eventName }, data));
                 });
             };
 
@@ -178,11 +183,11 @@ var Vimeo = (function (_Externals) {
         value: function onStateChange(event) {
             var state = event.type;
             this.lastState = state;
-            _get(Object.getPrototypeOf(Vimeo.prototype), 'onStateChange', this).call(this, event);
+            _get(Vimeo.prototype.__proto__ || Object.getPrototypeOf(Vimeo.prototype), 'onStateChange', this).call(this, event);
             if (event.volume) {
                 this.updateVolume();
             }
-            if (event.duration && this.duration_ != event.duration) {
+            if (event.duration && this.duration_ !== event.duration) {
                 this.duration_ = event.duration;
                 this.trigger('durationchange');
             }
@@ -219,35 +224,37 @@ var Vimeo = (function (_Externals) {
     }, {
         key: 'updateVolume',
         value: function updateVolume() {
-            var _this2 = this;
+            var _this3 = this;
 
             this.widgetPlayer.getVolume().then(function (volume) {
-                _this2.volume_ = volume;
-                if (_this2.volume_ != volume) {
-                    _this2.trigger('volumechange');
+                _this3.volume_ = volume;
+                if (_this3.volume_ !== volume) {
+                    _this3.trigger('volumechange');
                 }
             });
         }
     }, {
         key: 'updateEnded',
         value: function updateEnded() {
-            var _this3 = this;
+            var _this4 = this;
 
             this.widgetPlayer.getEnded().then(function (ended) {
-                _this3.ended_ = ended;
-                if (ended) _this3.trigger('ended');
+                _this4.ended_ = ended;
+                if (ended) {
+                    _this4.trigger('ended');
+                }
             });
         }
     }, {
         key: 'updatePaused',
         value: function updatePaused() {
-            var _this4 = this;
+            var _this5 = this;
 
             this.widgetPlayer.getPaused().then(function (paused) {
-                if (paused != _this4.paused_) {
-                    _this4.paused_ = paused;
+                if (paused !== _this5.paused_) {
+                    _this5.paused_ = paused;
                     if (paused) {
-                        _this4.trigger('pause');
+                        _this5.trigger('pause');
                     }
                 }
             });
@@ -255,16 +262,16 @@ var Vimeo = (function (_Externals) {
     }, {
         key: 'updateDuration',
         value: function updateDuration() {
-            var _this5 = this;
+            var _this6 = this;
 
             this.widgetPlayer.getDuration().then(function (duration) {
-                _this5.duration_ = duration;
+                _this6.duration_ = duration;
             });
         }
     }, {
         key: 'buffered',
         value: function buffered() {
-            return _videoJs2['default'].createTimeRange(0, this.buffered_ * this.duration_ || 0);
+            return _video2.default.createTimeRange(0, this.buffered_ * this.duration_ || 0);
         }
     }, {
         key: 'ended',
@@ -284,10 +291,10 @@ var Vimeo = (function (_Externals) {
     }, {
         key: 'setCurrentTime',
         value: function setCurrentTime(seconds) {
-            var _this6 = this;
+            var _this7 = this;
 
             this.widgetPlayer.setCurrentTime(seconds).then(function (seconds) {
-                _this6.currentTime_ = seconds;
+                _this7.currentTime_ = seconds;
             });
         }
     }, {
@@ -318,11 +325,11 @@ var Vimeo = (function (_Externals) {
     }, {
         key: 'setVolume',
         value: function setVolume(percentAsDecimal) {
-            var _this7 = this;
+            var _this8 = this;
 
             if (percentAsDecimal !== this.volume_) {
                 this.widgetPlayer.setVolume(percentAsDecimal).then(function () {
-                    _this7.updateVolume();
+                    _this8.updateVolume();
                 });
             }
         }
@@ -338,7 +345,7 @@ var Vimeo = (function (_Externals) {
     }]);
 
     return Vimeo;
-})(_Externals3['default']);
+}(_Externals3.default);
 
 Vimeo.prototype.options_ = {
     api: '//player.vimeo.com/api/player.js',
@@ -412,5 +419,4 @@ Component.registerComponent('Vimeo', Vimeo);
 
 Tech.registerTech('Vimeo', Vimeo);
 
-exports['default'] = Vimeo;
-module.exports = exports['default'];
+exports.default = Vimeo;

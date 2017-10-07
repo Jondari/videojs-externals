@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 module.exports = function (config) {
   var karmaBrowsers = process.env['BROWSERS'] ?
     process.env['BROWSERS'].split(':') :
@@ -25,9 +27,17 @@ module.exports = function (config) {
 
     exclude: [
       'test/unit/dailymotion.specs.js',
+      // 'test/unit/mixcloud.specs.js',
       // 'test/unit/soundcloud.specs.js',
       // 'test/unit/youtube.specs.js',
     ],
+
+    protocol: "https",
+    // certs from https://github.com/gruntjs/grunt-contrib-connect/tree/master/tasks/certs
+    httpsServerOptions: {
+      key: fs.readFileSync(`${__dirname}/resources/ssl/server.key`, 'utf8'),
+      cert: fs.readFileSync(`${__dirname}/resources/ssl/server.crt`, 'utf8')
+    },
 
     plugins: [
       "karma-browserify",

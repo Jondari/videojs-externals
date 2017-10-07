@@ -1,30 +1,32 @@
-/**
- * @file videojs-externals.js
- * Externals (iframe) Media Controller - Wrapper for HTML5 Media API
- */
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+var _video = require('video.js');
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+var _video2 = _interopRequireDefault(_video);
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _videoJs = require('video.js');
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var _videoJs2 = _interopRequireDefault(_videoJs);
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-var Component = _videoJs2['default'].getComponent('Component');
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @file videojs-externals.js
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Externals (iframe) Media Controller - Wrapper for HTML5 Media API
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+var Component = _video2.default.getComponent('Component');
 //const ClickableComponent = videojs.getComponent('ClickableComponent');
-var Tech = _videoJs2['default'].getComponent('Tech');
+var Tech = _video2.default.getComponent('Tech');
 
 /**
  * Externals Media Controller - Wrapper for HTML5 Media API
@@ -35,15 +37,17 @@ var Tech = _videoJs2['default'].getComponent('Tech');
  * @class Externals
  */
 
-var Externals = (function (_Tech) {
+var Externals = function (_Tech) {
   _inherits(Externals, _Tech);
 
   function Externals(options, ready) {
     _classCallCheck(this, Externals);
 
-    _get(Object.getPrototypeOf(Externals.prototype), 'constructor', this).call(this, options, ready);
-    this.params = {
-      id: this.options_.techId,
+    var _this = _possibleConstructorReturn(this, (Externals.__proto__ || Object.getPrototypeOf(Externals)).call(this, options, ready));
+
+    var url = options.source ? options.source.src : null;
+    _this.params = {
+      id: _this.options_.techId,
       autoplay: parseInt(options.autoplay),
       chromeless: parseInt(options.controls),
       html: 1,
@@ -52,20 +56,22 @@ var Externals = (function (_Tech) {
       controls: 'html',
       wmode: 'opaque',
       format: 'json',
-      url: options.source.src
+      url: url
     };
+    _this.paused_ = true;
 
     // If we are not on a server, don't specify the origin (it will crash)
     if (window.location.protocol !== 'file:') {
-      this.params.origin = window.location.protocol + '//' + window.location.hostname;
+      _this.params.origin = window.location.protocol + '//' + window.location.hostname;
     }
 
-    this.videoId = this.parseSrc(options.source.src);
+    _this.videoId = _this.parseSrc(url);
     // Set the vjs-youtube class to the player
     // Parent is not set yet so we have to wait a tick
-    setTimeout((function () {
-      this.loadApi();
-    }).bind(this));
+    setTimeout(function () {
+      _this.loadApi();
+    });
+    return _this;
   }
 
   _createClass(Externals, [{
@@ -100,12 +106,12 @@ var Externals = (function (_Tech) {
     key: 'createEl',
     value: function createEl(type, options, blocker) {
 
-      var el = _videoJs2['default'].createEl('div', {
+      var el = _video2.default.createEl('div', {
         id: 'vjs-tech' + this.options_.techId,
         className: 'vjs-tech vjs-tech-' + this.className_
       });
 
-      var iframeContainer = _videoJs2['default'].createEl(type, _videoJs2['default'].mergeOptions({
+      var iframeContainer = _video2.default.createEl(type, _video2.default.mergeOptions({
         id: this.options_.techId,
         scrolling: 'no',
         marginWidth: 0,
@@ -126,20 +132,20 @@ var Externals = (function (_Tech) {
       el.appendChild(iframeContainer);
       var isOnMobile = this.isOnMobile();
       if (!isOnMobile && blocker !== false || blocker) {
-        var divBlocker = _videoJs2['default'].createEl('div', {
+        var divBlocker = _video2.default.createEl('div', {
           className: 'vjs-iframe-blocker',
           style: 'position:absolute;top:0;left:0;width:100%;height:100%'
         });
 
         // In case the blocker is still there and we want to pause
-        _videoJs2['default'].on(divBlocker, 'click', _videoJs2['default'].bind(this, this.togglePlayPause));
-        _videoJs2['default'].on(divBlocker, 'tap', _videoJs2['default'].bind(this, this.togglePlayPause));
-        _videoJs2['default'].on(divBlocker, 'touchend', _videoJs2['default'].bind(this, this.togglePlayPause));
+        _video2.default.on(divBlocker, 'click', _video2.default.bind(this, this.togglePlayPause));
+        _video2.default.on(divBlocker, 'tap', _video2.default.bind(this, this.togglePlayPause));
+        _video2.default.on(divBlocker, 'touchend', _video2.default.bind(this, this.togglePlayPause));
 
         el.appendChild(divBlocker);
       }
 
-      var tagPlayer = (0, _videoJs2['default'])(this.options_.playerId);
+      var tagPlayer = (0, _video2.default)(this.options_.playerId);
 
       tagPlayer.addClass('vjs-' + this.className_);
       if (isOnMobile) {
@@ -160,7 +166,7 @@ var Externals = (function (_Tech) {
   }, {
     key: 'isOnMobile',
     value: function isOnMobile() {
-      return _videoJs2['default'].browser.IS_EDGE || _videoJs2['default'].browser.IS_ANDROID || _videoJs2['default'].browser.IS_IOS;
+      return _video2.default.browser.IS_EDGE || _video2.default.browser.IS_ANDROID || _video2.default.browser.IS_IOS;
     }
   }, {
     key: 'addScriptTag',
@@ -189,11 +195,11 @@ var Externals = (function (_Tech) {
     key: 'loadApi',
     value: function loadApi() {
       if (!this.isApiReady()) {
+        //Add to the queue because the Externals API is not ready
         Externals.apiReadyQueue.push(this);
         this.addScriptTag();
         this.injectCss();
       } else {
-        //Add to the queue because the Externals API is not ready
         this.initTech();
       }
     }
@@ -213,7 +219,7 @@ var Externals = (function (_Tech) {
     value: function setupTriggers() {
       this.widgetPlayer.vjsTech = this;
       for (var i = Externals.Events.length - 1; i >= 0; i--) {
-        var listener = _videoJs2['default'].bind(this, this.eventHandler);
+        var listener = _video2.default.bind(this, this.eventHandler);
         this.widgetPlayer.addEventListener(Externals.Events[i], listener);
       }
     }
@@ -224,8 +230,18 @@ var Externals = (function (_Tech) {
         return;
       }
       this.onStateChange(e);
-      this.trigger(e);
     }
+
+    /**
+     * Handle state change events coming from the external API.
+     *
+     * It's here that you're expected to trigger the majority of your events.
+     * Events to trigger are the HTML5 media events and videojs events:
+     *   - https://www.w3.org/TR/html5/embedded-content-0.html#mediaevents
+     *   - http://docs.videojs.com/Player.html#event:canplay
+     * @param event
+     */
+
   }, {
     key: 'onStateChange',
     value: function onStateChange(event) {
@@ -263,6 +279,9 @@ var Externals = (function (_Tech) {
         case 'error':
           this.onPlayerError();
           break;
+        default:
+          console.debug("Unknown event ", event);
+          this.trigger(event);
       }
     }
   }, {
@@ -286,16 +305,39 @@ var Externals = (function (_Tech) {
      * Set video
      *
      * @param {Object=} src Source object
-     * @method setSrc
      */
+
   }, {
     key: 'src',
     value: function src(_src) {
-      if (typeof _src !== 'undefined') {
-        this.src_ = this.parseSrc(_src);
+      if (typeof _src !== 'undefined' && this.src_ !== _src) {
+        _src = Externals.sourceToString(_src);
+        this.src_ = _src;
+        this.setSrc(_src);
       }
-      return this.src_;
+      return this.currentSrc();
     }
+
+    /**
+     * Should call the external API to change the source
+     *
+     * @param src {SourceObject|String}
+     * @abstract
+     */
+
+  }, {
+    key: 'setSrc',
+    value: function setSrc(src) {
+      throw 'Not yet implemented but called with ' + src;
+    }
+
+    /**
+     * Helper to get the simple source string
+     *
+     * @param source {SourceObject|String}
+     * @returns {String}
+     */
+
   }, {
     key: 'currentSrc',
     value: function currentSrc() {
@@ -322,11 +364,23 @@ var Externals = (function (_Tech) {
     value: function paused() {
       return false;
     }
+
+    /**
+     * Get the position / current time in seconds
+     * @returns {number}
+     */
+
   }, {
     key: 'currentTime',
     value: function currentTime() {
       return 0;
     }
+
+    /**
+     * Seek to the given position in seconds
+     * @param position {Number}
+     */
+
   }, {
     key: 'setCurrentTime',
     value: function setCurrentTime(position) {
@@ -348,6 +402,7 @@ var Externals = (function (_Tech) {
      *
      * @method enterFullScreen
      */
+
   }, {
     key: 'enterFullScreen',
     value: function enterFullScreen() {}
@@ -357,6 +412,7 @@ var Externals = (function (_Tech) {
      *
      * @method exitFullScreen
      */
+
   }, {
     key: 'exitFullScreen',
     value: function exitFullScreen() {}
@@ -396,7 +452,7 @@ var Externals = (function (_Tech) {
   }, {
     key: 'onPlayerError',
     value: function onPlayerError(e) {
-      this.errorNumber = e.data;
+      this.errorNumber = e ? e.data : null;
       this.trigger('error');
     }
   }, {
@@ -404,10 +460,15 @@ var Externals = (function (_Tech) {
     value: function error() {
       return { code: 'External unknown error (' + this.errorNumber + ')' };
     }
+  }], [{
+    key: 'sourceToString',
+    value: function sourceToString(source) {
+      return source && 'object' === (typeof source === 'undefined' ? 'undefined' : _typeof(source)) ? source.src : source || null;
+    }
   }]);
 
   return Externals;
-})(Tech);
+}(Tech);
 
 Externals.prototype.className_ = ' vjs-externals';
 Externals.prototype.widgetPlayer = {};
@@ -482,11 +543,18 @@ Externals.prototype['featuresNativeAudioTracks'] = true;
  */
 Externals.prototype['featuresNativeVideoTracks'] = false;
 
+/**
+ * List of events the External will listen to coming from whatever they are wrapping
+ *
+ * Example:
+ *  If wrapping an iframe and it will send 'buffering' to update the buffering progress,
+ *  Add it here.
+ * @type {*|string[]}
+ */
 Externals.Events = 'apiready,ad_play,ad_start,ad_timeupdate,ad_pause,ad_end,video_start,\n  \'video_end,play,playing,pause,ended,canplay,canplaythrough,timeupdate,progress,seeking,\n  \'seeked,volumechange,durationchange,fullscreenchange,error'.split(',');
 
 Component.registerComponent('Externals', Externals);
 
 Tech.registerTech('Externals', Externals);
 
-exports['default'] = Externals;
-module.exports = exports['default'];
+exports.default = Externals;
