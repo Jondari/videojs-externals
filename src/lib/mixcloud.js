@@ -110,7 +110,11 @@
   }
 
   function t(e, n) {
-    e.postMessage(JSON.stringify(n), o)
+    // Patch to allow making calls to any iframe
+    // Not exactly secure, but we aren't sharing any sensitive information
+    // https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage
+    // The very first call ("api") was being blocked, so no events and methods could be discovered
+    e.postMessage(JSON.stringify(n), '*')
   }
 
   var o = "https://www.mixcloud.com", r = 0, i = [];
