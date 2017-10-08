@@ -4,7 +4,8 @@ module.exports = function (config) {
   var karmaBrowsers = process.env['BROWSERS'] ?
     process.env['BROWSERS'].split(':') :
     [
-      'Chromium'
+      'MyChromium',
+      'MyFirefoxHeadless'
     ];
 
   config.set({
