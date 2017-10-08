@@ -5,12 +5,15 @@
 ![Alt text](https://cloud.githubusercontent.com/assets/3854951/19686244/92827b54-9ac0-11e6-8b6c-95f361cd2f3a.png "Soundcloud sample")
 ## Supports
 
-- [x] Youtube
-- [x] Soundcloud
-- [x] Vimeo
-- [x] Spotify (simple embed)
-- [x] Deezer
+- [ ] ~~Bandcamp~~ No API :(
 - [x] Dailymotion
+- [x] Deezer
+- [ ] Jamendo
+- [x] Mixcloud
+- [x] Soundcloud
+- [x] Spotify (simple embed)
+- [x] Vimeo
+- [x] Youtube
 - [ ] Twitch
 
 ## Install

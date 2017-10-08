@@ -1,21 +1,19 @@
-/**
- * @file videojs-externals.js
- * Externals (iframe) Media Controller - Wrapper for HTML5 Media API
- */
 'use strict';
 
 require('./tech/Externals');
 
-require('./tech/Youtube');
+require('./tech/Dailymotion');
 
 require('./tech/Deezer');
+
+require('./tech/Mixcloud');
+
+require('./tech/Soundcloud');
 
 require('./tech/Spotify');
 
 require('./tech/Vimeo');
 
-require('./tech/Dailymotion');
-
-require('./tech/Soundcloud');
+require('./tech/Youtube');
 
 require('./component/sub-poster-image');

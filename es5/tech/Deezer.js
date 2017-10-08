@@ -1,33 +1,37 @@
-/**
- * @file Deezer.js
- * Externals (iframe) Media Controller - Wrapper for HTML5 Media API
- */
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+var _video = require('video.js');
 
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var _videoJs = require('video.js');
-
-var _videoJs2 = _interopRequireDefault(_videoJs);
+var _video2 = _interopRequireDefault(_video);
 
 var _Externals2 = require('./Externals');
 
 var _Externals3 = _interopRequireDefault(_Externals2);
 
-var Component = _videoJs2['default'].getComponent('Component');
-var Tech = _videoJs2['default'].getComponent('Tech');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @file Deezer.js
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Externals (iframe) Media Controller - Wrapper for HTML5 Media API
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+var Component = _video2.default.getComponent('Component');
+var Tech = _video2.default.getComponent('Tech');
 
 /**
  * Externals Media Controller - Wrapper for HTML5 Media API
@@ -38,20 +42,20 @@ var Tech = _videoJs2['default'].getComponent('Tech');
  * @class Deezer
  */
 
-var Deezer = (function (_Externals) {
+var Deezer = function (_Externals) {
   _inherits(Deezer, _Externals);
 
   function Deezer(options, ready) {
     _classCallCheck(this, Deezer);
 
-    _get(Object.getPrototypeOf(Deezer.prototype), 'constructor', this).call(this, options, ready);
+    return _possibleConstructorReturn(this, (Deezer.__proto__ || Object.getPrototypeOf(Deezer)).call(this, options, ready));
   }
 
   _createClass(Deezer, [{
     key: 'injectCss',
     value: function injectCss() {
       var css = '.vjs-' + this.className_ + ' > .vjs-poster { display:block; width:50%; background-size:contain; background-position: 0 50%; background-color: #000; }\n    .vjs-' + this.className_ + ' .vjs-tech > .vjs-poster {  display:block; background-color: rgba(76, 50, 65, 0.35);}\n    .vjs-deezer-info{position:absolute;padding:3em 1em 1em 1em;left:50%;top:0;right:0;bottom:0;\n      text-align: center; pointer-events: none; text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.69);}';
-      _get(Object.getPrototypeOf(Deezer.prototype), 'injectCss', this).call(this, css);
+      _get(Deezer.prototype.__proto__ || Object.getPrototypeOf(Deezer.prototype), 'injectCss', this).call(this, css);
     }
   }, {
     key: 'createEl',
@@ -60,23 +64,23 @@ var Deezer = (function (_Externals) {
       var source = null;
       if ('string' === typeof this.options_.source) {
         source = this.options_.source;
-      } else if ('object' === typeof this.options_.source) {
+      } else if ('object' === _typeof(this.options_.source)) {
         source = this.options_.source.src;
       }
 
       source = this.parseSrc(source);
 
-      var el_ = _get(Object.getPrototypeOf(Deezer.prototype), 'createEl', this).call(this, 'div', {
+      var el_ = _get(Deezer.prototype.__proto__ || Object.getPrototypeOf(Deezer.prototype), 'createEl', this).call(this, 'div', {
         width: '100%',
         height: '100%',
         src: '//www.deezer.com/plugins/player?type=tracks&id=' + source + '\n      &format=classic&color=007FEB&autoplay=' + this.options_.autoplay + '\n      &playlist=' + this.options_.playList + '&width=100%&height=100%'
       });
 
-      this.infosEl_ = _videoJs2['default'].createEl('div', {
+      this.infosEl_ = _video2.default.createEl('div', {
         className: 'vjs-deezer-info'
       });
 
-      var deezerEl = _videoJs2['default'].createEl('div', {
+      var deezerEl = _video2.default.createEl('div', {
         id: 'dz-root'
       });
 
@@ -147,7 +151,7 @@ var Deezer = (function (_Externals) {
   }, {
     key: 'onReady',
     value: function onReady() {
-      _get(Object.getPrototypeOf(Deezer.prototype), 'onReady', this).call(this);
+      _get(Deezer.prototype.__proto__ || Object.getPrototypeOf(Deezer.prototype), 'onReady', this).call(this);
       this.updateDuration();
       this.updateVolume();
       this.updatePoster();
@@ -166,19 +170,19 @@ var Deezer = (function (_Externals) {
         }
       });
       this.widgetPlayer = DZ.player;
-      _get(Object.getPrototypeOf(Deezer.prototype), 'initTech', this).call(this);
+      _get(Deezer.prototype.__proto__ || Object.getPrototypeOf(Deezer.prototype), 'initTech', this).call(this);
     }
   }, {
     key: 'setupTriggers',
     value: function setupTriggers() {
-      var _this = this;
+      var _this2 = this;
 
       this.widgetPlayer.vjsTech = this;
       for (var i = Deezer.Events.length - 1; i >= 0; i--) {
         var eventName = Deezer.Events[i];
         /*jshint loopfunc: true */
         DZ.Event.subscribe(eventName, function (data, event) {
-          _this.eventHandler(_videoJs2['default'].mergeOptions({ type: event || data }, data));
+          _this2.eventHandler(_video2.default.mergeOptions({ type: event || data }, data));
         });
       }
     }
@@ -193,6 +197,7 @@ var Deezer = (function (_Externals) {
      *
      * @method enterFullScreen
      */
+
   }, {
     key: 'enterFullScreen',
     value: function enterFullScreen() {}
@@ -202,6 +207,7 @@ var Deezer = (function (_Externals) {
      *
      * @method exitFullScreen
      */
+
   }, {
     key: 'exitFullScreen',
     value: function exitFullScreen() {}
@@ -226,22 +232,22 @@ var Deezer = (function (_Externals) {
   }, {
     key: 'updatePoster',
     value: function updatePoster() {
-      var _this2 = this;
+      var _this3 = this;
 
       try {
         //const track = this.widgetPlayer.getCurrentTrack();
         var track = {};
         if ('string' === typeof this.options_.source) {
           track.id = this.options_.source;
-        } else if ('object' === typeof this.options_.source) {
+        } else if ('object' === _typeof(this.options_.source)) {
           track.id = this.options_.source.src;
         }
 
         track.id = this.parseSrc(track.id);
 
         DZ.api('/track/' + track.id, function (response) {
-          _this2.setPoster('' + response.album['cover_big']);
-          _this2.update(response);
+          _this3.setPoster('' + response.album['cover_big']);
+          _this3.update(response);
         });
       } catch (e) {
         console.log('unable to set poster', e);
@@ -259,7 +265,7 @@ var Deezer = (function (_Externals) {
       if (!source || !source.src) {
         if ('string' === typeof this.options_.source) {
           source = this.options_.source;
-        } else if ('object' === typeof this.options_.source) {
+        } else if ('object' === _typeof(this.options_.source)) {
           source = this.options_.source.src;
         }
 
@@ -331,7 +337,7 @@ var Deezer = (function (_Externals) {
   }]);
 
   return Deezer;
-})(_Externals3['default']);
+}(_Externals3.default);
 
 Deezer.prototype.className_ = 'deezer';
 
@@ -407,5 +413,4 @@ Component.registerComponent('Deezer', Deezer);
 
 Tech.registerTech('Deezer', Deezer);
 
-exports['default'] = Deezer;
-module.exports = exports['default'];
+exports.default = Deezer;
