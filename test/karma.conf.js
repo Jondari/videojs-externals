@@ -32,7 +32,7 @@ module.exports = function (config) {
       // 'test/unit/youtube.specs.js',
     ],
 
-    protocol: "https",
+    protocol: "http",
     // certs from https://github.com/gruntjs/grunt-contrib-connect/tree/master/tasks/certs
     httpsServerOptions: {
       key: fs.readFileSync(`${__dirname}/resources/ssl/server.key`, 'utf8'),
