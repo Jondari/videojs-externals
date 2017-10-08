@@ -5,7 +5,7 @@ module.exports = function (config) {
     process.env['BROWSERS'].split(':') :
     [
       'MyChromium',
-      'MyFirefoxHeadless'
+      'Firefox'
     ];
 
   config.set({
