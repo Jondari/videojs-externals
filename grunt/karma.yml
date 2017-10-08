@@ -1,12 +1,22 @@
 options:
   configFile: "test/karma.conf.js"
+  customLaunchers:
+    # Possible args https://peter.sh/experiments/chromium-command-line-switches/#allow-insecure-localhost
+    MyChrome:
+      base: "Chrome"
+      flags:
+        - "--allow-insecure-localhost"
+    MyChromium:
+      base: "Chromium"
+      flags:
+        - "--allow-insecure-localhost"
 
 chrome:
   browsers:
-    - Chrome
+    - MyChrome
 chromium:
   browsers:
-    - Chromium
+    - MyChromium
 firefox:
   browsers:
     - Firefox
