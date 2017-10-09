@@ -5,6 +5,7 @@
 import './tech/Externals';
 import './tech/Dailymotion';
 import './tech/Deezer';
+import './tech/Jamendo';
 import './tech/Mixcloud';
 import './tech/Soundcloud';
 import './tech/Spotify';
