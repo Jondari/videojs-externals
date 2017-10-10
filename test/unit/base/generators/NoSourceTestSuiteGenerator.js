@@ -32,7 +32,9 @@ export default class NoSourceTestSuiteGenerator extends TestSuiteGenerator {
    * @private
    */
   _generateCommonTests() {
-    it('should create widget player', this._generateWidgetPlayerTest());
+    if(this.basicConfiguration.iframeSourceTest){
+      it('should create widget player', this._generateWidgetPlayerTest());
+    }
     it('should change object sources', this._generateChangeSourceTest(this.secondSourceObject));
     it('should change string sources', this._generateChangeSourceTest(this.secondSourceObject.src));
   }

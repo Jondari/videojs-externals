@@ -57,7 +57,9 @@ export default class TestSuiteGenerator {
 
   _generateCommonTests() {
     // TODO add test for track without artwork
-    it('should create widget player', this._generateWidgetPlayerTest());
+    if(this.basicConfiguration.iframeSourceTest){
+      it('should create widget player', this._generateWidgetPlayerTest());
+    }
     it('should play the song', this._generatePlayTest());
     it('should seek to 30 seconds', this._generateSeekTo30Test());
     it('should halve the volume', this._generateHalveVolumeTest());
