@@ -17,7 +17,7 @@ export default class BaseTestConfiguration {
    * @param iframeSourceTest {uriForSourceTester}
    */
   constructor(techName,
-              iframeSourceTest) {
+              iframeSourceTest=null) {
     this.techName = techName;
     this.iframeSourceTest = iframeSourceTest;
   }
