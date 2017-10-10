@@ -44,8 +44,8 @@ const stringSourceTestSuiteGenerator = new StringSourceTestSuiteGenerator(
 
 var testFactory = new MainTestFactory(basicConfiguration);
 
-testFactory.addTestSuiteFactory(htmlSourceTestSuiteGenerator);
-// testFactory.addTestSuiteFactory(noSourceTestSuiteGenerator);
+// testFactory.addTestSuiteFactory(htmlSourceTestSuiteGenerator);
+testFactory.addTestSuiteFactory(noSourceTestSuiteGenerator);
 // testFactory.addTestSuiteFactory(objectSourceTestSuiteGenerator);
 // testFactory.addTestSuiteFactory(stringSourceTestSuiteGenerator);
 
