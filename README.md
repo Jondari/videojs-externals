@@ -8,7 +8,7 @@
 - [ ] ~~Bandcamp~~ No API :(
 - [x] Dailymotion
 - [x] Deezer
-- [ ] Jamendo
+- [x] Jamendo
 - [x] Mixcloud
 - [x] Soundcloud
 - [x] Spotify (simple embed)
