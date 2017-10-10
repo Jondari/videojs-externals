@@ -107,7 +107,7 @@ Jamendo.nativeSourceHandler.canHandleSource = function (source) {
 };
 
 Jamendo.nativeSourceHandler.handleSource = function (source, tech) {
-  tech.src(source.src);
+  tech.src(source.src ? source.src : source);
 };
 
 /*
