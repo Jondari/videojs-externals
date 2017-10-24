@@ -134,13 +134,13 @@ export default class TestSuiteGenerator {
           this.player.one('playing', () => {
 
             // Check the time at most 5 times every time it's updated
-            const MAX_PROGRESS_UPDATES = 5;
+            const MAX_PROGRESS_UPDATES = 10;
             var currentProgressUpdates = 0;
             this.player.on('timeupdate', () => {
               let time = this.player.currentTime();
-              if(currentProgressUpdates < MAX_PROGRESS_UPDATES && time <=0){
+              if (currentProgressUpdates < MAX_PROGRESS_UPDATES && time <= 0) {
                 ++currentProgressUpdates;
-              } else{
+              } else {
                 expect(time).toBeGreaterThan(0);
                 done();
               }
