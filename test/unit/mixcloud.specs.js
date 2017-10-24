@@ -18,7 +18,10 @@ function iframeSourceTester(uri, source) {
 const MIME_TYPE = 'audio/mixcloud';
 const basicConfiguration = new BaseTestConfiguration(
   'Mixcloud',
-  iframeSourceTester
+  iframeSourceTester,
+  {
+    poster: true
+  }
 );
 
 const htmlSourceTestSuiteGenerator = new HtmlSourceTestSuiteGenerator(

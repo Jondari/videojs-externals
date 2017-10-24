@@ -18,7 +18,7 @@ const Tech = videojs.getComponent('Tech');
  */
 
 class Externals extends Tech {
-  constructor (options, ready) {
+  constructor(options, ready) {
     super(options, ready);
     let url = options.source ? options.source.src : null;
     this.params = {
@@ -43,12 +43,27 @@ class Externals extends Tech {
     this.videoId = this.parseSrc(url);
     // Set the vjs-youtube class to the player
     // Parent is not set yet so we have to wait a tick
-    setTimeout(()=> {
+    setTimeout(() => {
       this.loadApi();
     });
   }
 
-  injectCss (overrideStyle) {
+  /**
+   *
+   * @returns {string}
+   * @private
+   */
+  static _generateFallbackPoster() {
+    let canvas = document.createElement("canvas");
+    canvas.height = 100;
+    canvas.width = 450;
+    let context = canvas.getContext("2d");
+    context.font = "90px serif";
+    context.fillText("No poster", 0, 70);
+    return canvas.toDataURL()
+  }
+
+  injectCss(overrideStyle) {
     let css = // iframe blocker to catch mouse events
       `.vjs-${this.className_} .vjs-iframe-blocker { display: none; }
       .vjs-${this.className_}.vjs-user-inactive .vjs-iframe-blocker { display: block; }
@@ -72,11 +87,11 @@ class Externals extends Tech {
     head.appendChild(style);
   }
 
-  parseSrc (src) {
+  parseSrc(src) {
     return src;
   }
 
-  createEl (type, options, blocker) {
+  createEl(type, options, blocker) {
 
     let el = videojs.createEl('div', {
       id: 'vjs-tech' + this.options_.techId,
@@ -128,7 +143,7 @@ class Externals extends Tech {
     return el;
   }
 
-  togglePlayPause () {
+  togglePlayPause() {
     if (this.paused()) {
       this.play();
     } else {
@@ -136,11 +151,11 @@ class Externals extends Tech {
     }
   }
 
-  isOnMobile () {
+  isOnMobile() {
     return videojs.browser.IS_EDGE || videojs.browser.IS_ANDROID || videojs.browser.IS_IOS;
   }
 
-  addScriptTag () {
+  addScriptTag() {
     var r = false,
       self = this,
       d = document,
@@ -162,7 +177,7 @@ class Externals extends Tech {
     s.insertBefore(js, s.firstChild);
   }
 
-  loadApi () {
+  loadApi() {
     if (!this.isApiReady()) {
       //Add to the queue because the Externals API is not ready
       Externals.apiReadyQueue.push(this);
@@ -173,16 +188,16 @@ class Externals extends Tech {
     }
   }
 
-  isApiReady () {
+  isApiReady() {
     return false;
   }
 
-  initTech () {
+  initTech() {
     this.setupTriggers();
     this.onStateChange({data: -1, type: -1});
   }
 
-  setupTriggers () {
+  setupTriggers() {
     this.widgetPlayer.vjsTech = this;
     for (var i = Externals.Events.length - 1; i >= 0; i--) {
       var listener = videojs.bind(this, this.eventHandler);
@@ -190,7 +205,7 @@ class Externals extends Tech {
     }
   }
 
-  eventHandler (e) {
+  eventHandler(e) {
     if (!e) {
       return;
     }
@@ -206,7 +221,7 @@ class Externals extends Tech {
    *   - http://docs.videojs.com/Player.html#event:canplay
    * @param event
    */
-  onStateChange (event) {
+  onStateChange(event) {
     let state = event.type;
     this.lastState = state;
     switch (state) {
@@ -247,15 +262,18 @@ class Externals extends Tech {
     }
   }
 
-  onReady () {
+  onReady() {
     this.triggerReady();
   }
 
-  poster () {
+  poster() {
     return this.poster_;
   }
 
-  setPoster (poster) {
+  setPoster(poster) {
+    if(poster === undefined || poster === ''){
+      poster = Externals._generateFallbackPoster();
+    }
     this.poster_ = poster;
     this.trigger('posterchange');
   }
@@ -265,7 +283,7 @@ class Externals extends Tech {
    *
    * @param {Object=} src Source object
    */
-  src (src) {
+  src(src) {
     if (typeof src !== 'undefined' && this.src_ !== src) {
       src = Externals.sourceToString(src);
       this.src_ = src;
@@ -280,7 +298,7 @@ class Externals extends Tech {
    * @param src {SourceObject|String}
    * @abstract
    */
-  setSrc(src){
+  setSrc(src) {
     throw `Not yet implemented but called with ${src}`;
   }
 
@@ -290,18 +308,18 @@ class Externals extends Tech {
    * @param source {SourceObject|String}
    * @returns {String}
    */
-  static sourceToString(source){
+  static sourceToString(source) {
     return source && 'object' === (typeof source) ? source.src : (source || null);
   }
 
-  currentSrc () {
+  currentSrc() {
     return this.src_;
   }
 
-  play () {
+  play() {
   }
 
-  ended () {
+  ended() {
     if (this.isReady_) {
       return this.lastState === 0;
     } else {
@@ -310,10 +328,10 @@ class Externals extends Tech {
     }
   }
 
-  pause () {
+  pause() {
   }
 
-  paused () {
+  paused() {
     return false;
   }
 
@@ -321,7 +339,7 @@ class Externals extends Tech {
    * Get the position / current time in seconds
    * @returns {number}
    */
-  currentTime () {
+  currentTime() {
     return 0;
   }
 
@@ -329,15 +347,15 @@ class Externals extends Tech {
    * Seek to the given position in seconds
    * @param position {Number}
    */
-  setCurrentTime (position) {
+  setCurrentTime(position) {
     this.currentTime = position;
   }
 
-  duration () {
+  duration() {
     return 0;
   }
 
-  volume () {
+  volume() {
     return this.volume_;
   }
 
@@ -346,7 +364,7 @@ class Externals extends Tech {
    *
    * @method enterFullScreen
    */
-  enterFullScreen () {
+  enterFullScreen() {
   }
 
   /**
@@ -354,43 +372,43 @@ class Externals extends Tech {
    *
    * @method exitFullScreen
    */
-  exitFullScreen () {
+  exitFullScreen() {
   }
 
 
-  setVolume (percentAsDecimal) {
+  setVolume(percentAsDecimal) {
     if (typeof(percentAsDecimal) !== 'undefined' && percentAsDecimal !== this.volume_) {
       this.volume_ = percentAsDecimal;
       this.trigger('volumechange');
     }
   }
 
-  buffered () {
+  buffered() {
     return [];
   }
 
-  controls () {
+  controls() {
     return false;
   }
 
-  muted () {
+  muted() {
     return this.muted_;
   }
 
-  setMuted (muted) {
+  setMuted(muted) {
     this.muted_ = muted;
   }
 
-  supportsFullScreen () {
+  supportsFullScreen() {
     return true;
   }
 
-  onPlayerError (e) {
+  onPlayerError(e) {
     this.errorNumber = e ? e.data : null;
     this.trigger('error');
   }
 
-  error () {
+  error() {
     return {code: 'External unknown error (' + this.errorNumber + ')'};
   }
 }

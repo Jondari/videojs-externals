@@ -56,9 +56,11 @@ export default class TestSuiteGenerator {
 
 
   _generateCommonTests() {
-    // TODO add test for track without artwork
-    if(this.basicConfiguration.iframeSourceTest){
+    if (this.basicConfiguration.iframeSourceTest) {
       it('should create widget player', this._generateWidgetPlayerTest());
+    }
+    if (!this.basicConfiguration.toggledTests.poster) {
+      it('should have a poster', this._generatePosterTest());
     }
     it('should play the song', this._generatePlayTest());
     it('should seek to 30 seconds', this._generateSeekTo30Test());
@@ -151,6 +153,31 @@ export default class TestSuiteGenerator {
         // Async request
         player.play();
       });
+    };
+  }
+
+  /**
+   * Create a function with a jasmine test that verifies that a poster was retrieved
+   *
+   * @returns {Function}
+   * @private
+   */
+  _generatePosterTest() {
+    return function (done) {
+      const doCheck = () => {
+        expect(this.player.poster()).toBeDefined("");
+        expect(this.player.poster()).not.toEqual("");
+        done();
+      }
+      this.player.on('posterchange', () => {
+        if (this.player.poster() !== '') {
+          doCheck()
+        } else {
+          this.player.one('posterchange', () => {
+            doCheck()
+          })
+        }
+      })
     };
   }
 
