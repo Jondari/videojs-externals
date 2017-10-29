@@ -1,10 +1,11 @@
 /**
  * @file Jamendo.js
- * Jamendo (iframe) Media Controller - Wrapper for HTML5 Media API
+ * Jamendo (iframe) Media Controller - Wrapper for HTML5 tech to play Jamendo URLs
  */
 import videojs from 'video.js';
 
 import Externals from './Externals';
+import utils from '../lib/utils'
 
 const Component = videojs.getComponent('Component');
 const Tech = videojs.getComponent('Tech');
@@ -24,8 +25,10 @@ export default class Jamendo extends Html5 {
   constructor(options, ready) {
     super(options, ready);
 
+    this.clientId = options.clientId;
+
     this.ready(() => {
-      if(this.src_){
+      if (this.src_) {
         this.setPoster(this.src_)
       }
     })
@@ -45,16 +48,50 @@ export default class Jamendo extends Html5 {
       // Wait till we're ready to change the poster
       // Otherwise the "posterchange" event might be triggered
       // before any listeners are registered
-      if(this.ready_){
+      if (this.ready_) {
         this.setPoster(src);
       }
     }
     return this.currentSrc();
   }
 
-  setPoster(jamendoSrc){
-    super.setPoster(`https://imgjam1.jamendo.com/tracks/s1466/${Jamendo.parseSrc(jamendoSrc)}/covers/1.300.jpg`);
-    this.trigger('posterchange');
+  setPoster(jamendoSrc) {
+    let promise;
+    let trackId = Jamendo.parseSrc(jamendoSrc);
+    let fallbackUrl = `https://imgjam1.jamendo.com/tracks/s1466/${trackId}/covers/1.300.jpg`;
+    if (this.clientId) {
+      // Use the API to get the right image URL and more data about the track
+      // Doc https://developer.jamendo.com/v3.0/tracks
+      // TODO possibly do this only once and save the promise in the class
+      promise = new Promise((resolve, reject) => {
+        let queryParams = utils.encodeQueryData({
+          client_id: this.clientId,
+          id: trackId,
+          imagesize: 600
+        });
+        videojs.xhr({
+          url: `https://api.jamendo.com/v3.0/tracks/?${queryParams}`,
+          json: true,
+        }, (error, response, body) => {
+          let posterUrl = fallbackUrl;
+          if (!error && body.results && body.results.length > 0) {
+            let track = body.results[0];
+            posterUrl = track.image || posterUrl;
+          }
+
+          // The player may have been destroyed before getting the response
+          // TODO maybe also check that we're setting the poster for the right source?
+          // TODO the track may have changed in the meantime
+          this.el_ && resolve(posterUrl);
+        })
+      })
+    } else {
+      promise = Promise.resolve(fallbackUrl);
+    }
+    promise.then((posterUrl) => {
+      super.setPoster(posterUrl);
+      this.trigger('posterchange');
+    })
   }
 
   currentSrc() {
@@ -64,10 +101,8 @@ export default class Jamendo extends Html5 {
   setSrc(src) {
     // Use the `tracks/file` API to build URL for a redirection to the file
     // https://developer.jamendo.com/v3.0/tracks/file
-    // TODO test with more sources to see if the URL will change
     // Otherwise use the API to get the real mp3 URL
     super.setSrc(`https://mp3l.jamendo.com/?trackid=${Jamendo.parseSrc(src)}&format=mp31`);
-    // super.setSrc(`https://api.jamendo.com/v3.0/tracks/file/?client_id=${this.options_.clientId}&id=${Jamendo.parseSrc(src)}`);
   }
 
   /**
