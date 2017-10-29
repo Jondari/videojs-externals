@@ -195,6 +195,8 @@ class Soundcloud extends Externals {
         let artworkUrl = sound['artwork_url'];
         if (artworkUrl) {
           this.setPoster(artworkUrl.replace('large.jpg', 't500x500.jpg'));
+        } else {
+          this.setPoster();
         }
         let waveformUrl = sound['waveform_url'];
         if (waveformUrl) {

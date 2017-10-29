@@ -21,7 +21,10 @@ function iframeSourceTester(uri, source) {
 const MIME_TYPE = 'video/dailymotion';
 const basicConfiguration = new BaseTestConfiguration(
   'Dailymotion',
-  iframeSourceTester
+  iframeSourceTester,
+  {
+    poster: true
+  }
 );
 
 const htmlSourceTestSuiteGenerator = new HtmlSourceTestSuiteGenerator(

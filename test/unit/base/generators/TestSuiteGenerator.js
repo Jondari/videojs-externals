@@ -56,9 +56,11 @@ export default class TestSuiteGenerator {
 
 
   _generateCommonTests() {
-    // TODO add test for track without artwork
-    if(this.basicConfiguration.iframeSourceTest){
+    if (this.basicConfiguration.iframeSourceTest) {
       it('should create widget player', this._generateWidgetPlayerTest());
+    }
+    if (!this.basicConfiguration.toggledTests.poster) {
+      it('should have a poster', this._generatePosterTest());
     }
     it('should play the song', this._generatePlayTest());
     it('should seek to 30 seconds', this._generateSeekTo30Test());
@@ -134,13 +136,13 @@ export default class TestSuiteGenerator {
           this.player.one('playing', () => {
 
             // Check the time at most 5 times every time it's updated
-            const MAX_PROGRESS_UPDATES = 5;
+            const MAX_PROGRESS_UPDATES = 10;
             var currentProgressUpdates = 0;
             this.player.on('timeupdate', () => {
               let time = this.player.currentTime();
-              if(currentProgressUpdates < MAX_PROGRESS_UPDATES && time <=0){
+              if (currentProgressUpdates < MAX_PROGRESS_UPDATES && time <= 0) {
                 ++currentProgressUpdates;
-              } else{
+              } else {
                 expect(time).toBeGreaterThan(0);
                 done();
               }
@@ -151,6 +153,31 @@ export default class TestSuiteGenerator {
         // Async request
         player.play();
       });
+    };
+  }
+
+  /**
+   * Create a function with a jasmine test that verifies that a poster was retrieved
+   *
+   * @returns {Function}
+   * @private
+   */
+  _generatePosterTest() {
+    return function (done) {
+      const doCheck = () => {
+        expect(this.player.poster()).toBeDefined("");
+        expect(this.player.poster()).not.toEqual("");
+        done();
+      }
+      this.player.on('posterchange', () => {
+        if (this.player.poster() !== '') {
+          doCheck()
+        } else {
+          this.player.one('posterchange', () => {
+            doCheck()
+          })
+        }
+      })
     };
   }
 

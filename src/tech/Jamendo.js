@@ -23,10 +23,16 @@ export default class Jamendo extends Html5 {
 
   constructor(options, ready) {
     super(options, ready);
+
+    this.ready(() => {
+      if(this.src_){
+        this.setPoster(this.src_)
+      }
+    })
   }
 
   /**
-   * Set video
+   * Set jamendo source
    *
    * @param {Object=} src Source object
    */
@@ -35,8 +41,20 @@ export default class Jamendo extends Html5 {
       src = Externals.sourceToString(src);
       this.src_ = src;
       this.setSrc(src);
+
+      // Wait till we're ready to change the poster
+      // Otherwise the "posterchange" event might be triggered
+      // before any listeners are registered
+      if(this.ready_){
+        this.setPoster(src);
+      }
     }
     return this.currentSrc();
+  }
+
+  setPoster(jamendoSrc){
+    super.setPoster(`https://imgjam1.jamendo.com/tracks/s1466/${Jamendo.parseSrc(jamendoSrc)}/covers/1.300.jpg`);
+    this.trigger('posterchange');
   }
 
   currentSrc() {

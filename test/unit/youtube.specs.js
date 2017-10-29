@@ -21,7 +21,10 @@ function iframeSourceTester(uri, source) {
 const MIME_TYPE = 'video/youtube';
 const basicConfiguration = new BaseTestConfiguration(
   'Youtube',
-  iframeSourceTester
+  iframeSourceTester,
+  {
+    poster: true
+  }
 );
 
 const htmlSourceTestSuiteGenerator = new HtmlSourceTestSuiteGenerator(
