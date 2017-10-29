@@ -28,6 +28,10 @@ export default class TestSuiteGenerator {
     this.secondSourceObject = secondSourceObject;
     this.extraTestGenerators = extraTestGenerators || [];
     this.techNameForVjs = basicConfiguration.techName.toLowerCase();
+    this.playerOptions = {
+        techOrder: [this.techNameForVjs],
+        [this.techNameForVjs]: this.basicConfiguration.techOptions || {}
+      }
   }
 
   /**

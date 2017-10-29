@@ -21,9 +21,7 @@ export default class NoSourceTestSuiteGenerator extends TestSuiteGenerator {
       this.vFromScript = window.__html__[self.htmlResourcePath];
       document.body.innerHTML = this.vFromScript;
       expect(document.getElementById(this.videoTagId)).not.toBeNull();
-      this.player = videojs(this.videoTagId, {
-        'techOrder': [self.techNameForVjs]
-      });
+      this.player = videojs(this.videoTagId, this.playerOptions);
     });
   }
 

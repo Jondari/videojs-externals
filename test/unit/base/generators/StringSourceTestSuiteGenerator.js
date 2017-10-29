@@ -21,10 +21,10 @@ export default class StringSourceTestSuiteGenerator extends TestSuiteGenerator {
       this.vFromScript = window.__html__[self.htmlResourcePath];
       document.body.innerHTML = this.vFromScript;
       expect(document.getElementById(this.videoTagId)).not.toBeNull();
-      this.player = videojs(this.videoTagId, {
-        'techOrder': [self.techNameForVjs],
+      let options = Object.assign({
         'sources': [this.source.src]
-      });
+      }, self.playerOptions);
+      this.player = videojs(this.videoTagId, options);
     });
   }
 }

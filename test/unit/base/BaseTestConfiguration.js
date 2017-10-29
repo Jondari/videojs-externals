@@ -11,6 +11,7 @@ export default class BaseTestConfiguration {
   techName;
   iframeSourceTest;
   toggledTests;
+  techOptions;
 
   /**
    *
@@ -18,12 +19,16 @@ export default class BaseTestConfiguration {
    * @param iframeSourceTest {uriForSourceTester}
    * @param toggledTests {Object=}
    * @param toggledTests.poster {Boolean}
+   * @param techOptions {Object=} Options specific to the tech
    */
   constructor(techName,
               iframeSourceTest=null,
-              toggledTests={}) {
+              toggledTests={},
+              techOptions={}
+  ) {
     this.techName = techName;
     this.iframeSourceTest = iframeSourceTest;
     this.toggledTests = toggledTests;
+    this.techOptions = techOptions;
   }
 }

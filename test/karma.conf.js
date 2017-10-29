@@ -1,5 +1,4 @@
 const fs = require('fs');
-
 module.exports = function (config) {
   var karmaBrowsers = process.env['BROWSERS'] ?
     process.env['BROWSERS'].split(':') :
@@ -8,14 +7,30 @@ module.exports = function (config) {
       'Firefox'
     ];
 
+  var karmaEnv = require("./env.json") || process.env;
+
   config.set({
     // base path, that will be used to resolve files and exclude
     basePath: '..',
 
     browsers: karmaBrowsers,
 
+    client: {
+      // Will be an array with a JSON string.. sometimes?
+      // Other times it will be just be the object
+      // https://github.com/bendrucker/karma-env
+      env: {
+        techOptions: {
+          jamendo: {
+            clientId: karmaEnv["JAMENDO_CLIENT_ID"]
+          }
+        }
+      }
+    },
+
     frameworks: [
       'browserify',
+      'env',
       'jasmine',
     ],
 
@@ -29,9 +44,9 @@ module.exports = function (config) {
     exclude: [
       'test/unit/dailymotion.specs.js',
       // 'test/unit/jamendo.specs.js',
-      // 'test/unit/mixcloud.specs.js',
-      // 'test/unit/soundcloud.specs.js',
-      // 'test/unit/youtube.specs.js',
+      'test/unit/mixcloud.specs.js',
+      'test/unit/soundcloud.specs.js',
+      'test/unit/youtube.specs.js',
     ],
 
     protocol: "http",
@@ -46,6 +61,7 @@ module.exports = function (config) {
       "karma-jasmine",
       "karma-chrome-launcher",
       "karma-detect-browsers",
+      "karma-env",
       "karma-firefox-launcher",
       "karma-html2js-preprocessor",
       "karma-ie-launcher",

@@ -6,8 +6,22 @@ import ObjectSourceTestSuiteGenerator from './base/generators/ObjectSourceTestSu
 import StringSourceTestSuiteGenerator from './base/generators/StringSourceTestSuiteGenerator';
 
 const MIME_TYPE = 'audio/jamendo';
+
+let jamendoOptions = {};
+let envOptions = window.__karma__.config.env;
+let techOptions;
+if (Array.isArray(envOptions)) {
+  if (envOptions.length > 0) {
+    techOptions = JSON.parse(envOptions[0])["techOptions"];
+  }
+} else if (typeof envOptions === "object") {
+  techOptions = envOptions.techOptions
+}
+techOptions = techOptions || {};
+jamendoOptions = techOptions["jamendo"] || jamendoOptions;
+
 const basicConfiguration = new BaseTestConfiguration(
-  'Jamendo', null
+  'Jamendo', null, {}, jamendoOptions
 );
 
 const htmlSourceTestSuiteGenerator = new HtmlSourceTestSuiteGenerator(

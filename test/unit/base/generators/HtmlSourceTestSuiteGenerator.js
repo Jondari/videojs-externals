@@ -35,7 +35,7 @@ export default class HtmlSourceTestSuiteGenerator extends TestSuiteGenerator {
         width="100%"
         height="360"
         class="video-js vjs-default-skin"
-        data-setup='{ "techOrder" : [ "${self.techNameForVjs}" ]}'
+        data-setup='${JSON.stringify(self.playerOptions)}'
         >
           <source src="${this.source.src}" type="${this.source.type}">
       </video>`;
