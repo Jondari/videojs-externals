@@ -7,9 +7,7 @@ import StringSourceTestSuiteGenerator from './base/generators/StringSourceTestSu
 
 const MIME_TYPE = 'audio/jamendo';
 const basicConfiguration = new BaseTestConfiguration(
-  'Jamendo', null, {
-    poster: true
-  }
+  'Jamendo', null
 );
 
 const htmlSourceTestSuiteGenerator = new HtmlSourceTestSuiteGenerator(
