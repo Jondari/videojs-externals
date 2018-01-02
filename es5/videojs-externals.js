@@ -6,6 +6,8 @@ require('./tech/Dailymotion');
 
 require('./tech/Deezer');
 
+require('./tech/Jamendo');
+
 require('./tech/Mixcloud');
 
 require('./tech/Soundcloud');

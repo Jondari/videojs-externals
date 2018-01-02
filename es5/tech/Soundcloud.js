@@ -251,6 +251,8 @@ var Soundcloud = function (_Externals) {
           var artworkUrl = sound['artwork_url'];
           if (artworkUrl) {
             _this6.setPoster(artworkUrl.replace('large.jpg', 't500x500.jpg'));
+          } else {
+            _this6.setPoster();
           }
           var waveformUrl = sound['waveform_url'];
           if (waveformUrl) {

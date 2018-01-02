@@ -74,6 +74,13 @@ var Externals = function (_Tech) {
     return _this;
   }
 
+  /**
+   *
+   * @returns {string}
+   * @private
+   */
+
+
   _createClass(Externals, [{
     key: 'injectCss',
     value: function injectCss(overrideStyle) {
@@ -297,6 +304,9 @@ var Externals = function (_Tech) {
   }, {
     key: 'setPoster',
     value: function setPoster(poster) {
+      if (poster === undefined || poster === '') {
+        poster = Externals._generateFallbackPoster();
+      }
       this.poster_ = poster;
       this.trigger('posterchange');
     }
@@ -461,6 +471,17 @@ var Externals = function (_Tech) {
       return { code: 'External unknown error (' + this.errorNumber + ')' };
     }
   }], [{
+    key: '_generateFallbackPoster',
+    value: function _generateFallbackPoster() {
+      var canvas = document.createElement("canvas");
+      canvas.height = 100;
+      canvas.width = 450;
+      var context = canvas.getContext("2d");
+      context.font = "90px serif";
+      context.fillText("No poster", 0, 70);
+      return canvas.toDataURL();
+    }
+  }, {
     key: 'sourceToString',
     value: function sourceToString(source) {
       return source && 'object' === (typeof source === 'undefined' ? 'undefined' : _typeof(source)) ? source.src : source || null;

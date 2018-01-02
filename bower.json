@@ -1,9 +1,10 @@
 {
   "name": "videojs-externals",
-  "version": "1.0.12",
-  "homepage": "https://github.com/Afrostream/videojs-externals",
+  "version": "2.0.0-alpha",
+  "homepage": "https://github.com/LoveIsGrief/videojs-externals",
   "authors": [
-    "Benjipott <pott.benjamin@gmail.com>"
+    "Benjipott <pott.benjamin@gmail.com>",
+    "Michael Vogel <LoveIsGrief@users.noreply.github.com>"
   ],
   "description": "Externals playback technology for Video.js",
   "main": "es5/videojs-externals.js",
