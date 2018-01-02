@@ -1,8 +1,11 @@
 {
   "name": "videojs-externals",
   "description": "Externals playback technology for Video.js",
-  "version": "1.1.0",
+  "version": "2.0.0-alpha",
   "author": "Benjamin Pott",
+  "contributors": [
+    "Michael Vogel <LoveIsGrief@users.noreply.github.com>"
+  ],
   "main": "es5/videojs-externals.js",
   "license": "MIT",
   "keywords": [
@@ -17,7 +20,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Afrostream/videojs-externals.git"
+    "url": "https://github.com/LoveIsGrief/videojs-externals.git"
   },
   "peerDependencies": {},
   "scripts": {
