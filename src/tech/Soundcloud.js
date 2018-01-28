@@ -19,6 +19,7 @@ const Tech = videojs.getComponent('Tech');
 
 class Soundcloud extends Externals {
   constructor (options, ready) {
+    options.autoplay = !!options.autoplay;
     super(options, ready);
   }
 
@@ -38,8 +39,8 @@ class Soundcloud extends Externals {
     const el_ = super.createEl('iframe', {
       width: '100%',
       height: '100%',
-      src: `https://w.soundcloud.com/player/?url=${this.src_}&auto_play=${this.options_.autoplay}
-      &buying=false&liking=false&sharing=false&show_comments=false&show_playcount=false&show_user=false`
+      src: `https://w.soundcloud.com/player/?url=${this.src_}&auto_play=${this.options_.autoplay}`+
+      `&buying=false&liking=false&sharing=false&show_comments=false&show_playcount=false&show_user=false`
     });
 
     this.infosEl_ = videojs.createEl('div', {
