@@ -105,7 +105,9 @@ class Soundcloud extends Externals {
         break;
 
       case SC.Widget.Events.ERROR:
-        this.onPlayerError();
+        if(this.src_){
+          this.onPlayerError();
+        }
         break;
     }
   }

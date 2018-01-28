@@ -217,6 +217,9 @@ export default class TestSuiteGenerator {
   _generateWidgetPlayerTest() {
     const iframeSourceTest = this.basicConfiguration.iframeSourceTest;
     return function (done) {
+      this.player.on('error', (error) => {
+        fail(error)
+      })
       this.player.ready(() => {
         var iframe = document.getElementsByTagName('iframe')[0];
         expect(iframe).toBeTruthy();
