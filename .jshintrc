@@ -35,6 +35,7 @@
     // jasmine
     "jasmine",
     "expect",
+    "fail",
     "spyOn",
     "describe",
     "it",
