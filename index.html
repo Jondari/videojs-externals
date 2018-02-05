@@ -7,7 +7,7 @@
         content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
   <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
         rel="stylesheet">
-  <link href="node_modules/video.js/dist/video-js.css" rel="stylesheet">
+  <link href="//cdn.rawgit.com/videojs/video.js/v5.20.4/dist/video-js.min.css" rel="stylesheet">
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.min.js">
   </script>
   <script
@@ -16,17 +16,18 @@
   <script
     src="//cdn.rawgit.com/angular-ui/bootstrap/gh-pages/ui-bootstrap-2.5.0.min.js">
   </script>
-  <script src="node_modules/video.js/dist/video.js"></script>
+  <script src="//cdn.rawgit.com/videojs/video.js/v5.20.4/dist/video.min.js"></script>
   <script src="dist/videojs-externals.js"></script>
   <script>
     const CONTAINER_ID = "video-container"
     const PLAYER_ID = "player"
+    const PLAYER_WIDTH = 250;
 
     function getPlayConfig() {
       return {
         controls: true,
         autoplay: 0,
-        width: 250,
+        width: PLAYER_WIDTH,
         techOrder: [
           , 'dailymotion'
           , 'deezer'
@@ -46,12 +47,12 @@
      */
     class SourceSwitcher {
 
-        /**
-         * Helper to get rid of the existing player, if it exists
-         *
-         * @return {Promise}
-         *    fulfilled once the player is disposed and the element destroyed
-         */
+      /**
+       * Helper to get rid of the existing player, if it exists
+       *
+       * @return {Promise}
+       *    fulfilled once the player is disposed and the element destroyed
+       */
       removePlayer() {
         return new Promise((resolve, reject) => {
           if (document.getElementById(PLAYER_ID)) {
@@ -97,6 +98,7 @@
           var container = document.getElementById(CONTAINER_ID);
           var video = document.createElement('video');
           video.id = 'player'
+          video.width = `${PLAYER_WIDTH}px`;
           video.className = 'video-js vjs-fluid vjs-default-skin'
           video.crossOrigin = true
           video.setAttribute('crossorigin', true)
@@ -119,6 +121,7 @@
           var container = document.getElementById(CONTAINER_ID);
           var video = document.createElement('video');
           video.id = 'player'
+          video.width = `${PLAYER_WIDTH}px`;
           video.className = 'video-js vjs-fluid vjs-default-skin'
           video.crossOrigin = true
           video.setAttribute('crossorigin', true)
@@ -190,6 +193,7 @@
         new SourceSwitcher()[$scope.selected.creationType]($scope.selected.source)
       }
     }
+
     angular.module("demoApp", ["ui.bootstrap"])
       .controller("DemoController", DemoController);
 
@@ -198,55 +202,65 @@
 </head>
 <body ng-app="demoApp">
 
-<div class="container" ng-controller="DemoController">
+<div class="page-header">
+  <h1>Video.js-externals<small>A wrapper around various external players</small></h1>
+  <a href="https://github.com/LoveIsGrief/videojs-externals/"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+</div>
 
-  <!-- Creation selection -->
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Creation options:</h3>
+<div class="main container-fluid">
+
+  <div class="col-md-4 col-lg-4" ng-controller="DemoController">
+
+    <!-- Creation selection -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Creation options:</h3>
+      </div>
+      <div class="panel-body" role="group">
+        <div class="radio" ng-repeat="(type, description) in creationTypes">
+          <label>
+            <input
+              type="radio"
+              ng-model="selected.creationType"
+              ng-value="type"
+            >
+            {{ description }}
+          </label>
+        </div>
+      </div>
     </div>
-    <div class="panel-body" role="group">
-      <div class="radio" ng-repeat="(type, description) in creationTypes">
-        <label>
-          <input
-            type="radio"
-            ng-model="selected.creationType"
-            ng-value="type"
-          >
-          {{ description }}
-        </label>
+
+    <!-- Source selection -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Source:</h3>
+      </div>
+      <div class="panel-body btn-group" role="group">
+        <button
+          ng-repeat="source in sources"
+          ng-model="selected.source"
+          uib-btn-radio="source"
+        >
+          {{ source.tech }}
+        </button>
+      </div>
+      <pre>{{ selected.source |json}}</pre>
+      <div class="form-group">
+        <input type="text" class="form-control" ng-model="selected.source.src">
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary" ng-click="load()" ng-if="selected.source">
+          Load source
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- Source selection -->
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">Source:</h3>
-    </div>
-    <div class="panel-body btn-group" role="group">
-      <button
-        ng-repeat="source in sources"
-        ng-model="selected.source"
-        uib-btn-radio="source"
-      >
-        {{ source.tech }}
-      </button>
-    </div>
-    <pre>{{ selected.source |json}}</pre>
-    <div class="form-group">
-      <input type="text" class="form-control" ng-model="selected.source.src">
-    </div>
-    <div class="form-group">
-      <button class="btn btn-primary" ng-click="load()" ng-if="selected.source">
-        Load source
-      </button>
-    </div>
+  <div id="video-container" class="col-md-8 col-lg-8">
   </div>
+
 </div>
 
-<div id="video-container">
-</div>
-
+<footer class="container-fluid">Forked from <a target="_blank" href="https://github.com/Afrostream/videojs-externals">Afrostream/videojs-externals</a></footer>
 </body>
 </html>
