@@ -14,9 +14,15 @@ const TECHS = [
 ];
 
 function urlToVjsSource(url) {
-  const tech = new URL(url).pathname.split(".")[0].toLowerCase();
+  let urlO;
+  try {
+    urlO = new URL(url);
+  } catch (e) {
+    return false
+  }
+  const tech = TECHS.find((tech) => urlO.hostname.includes(tech));
   if (!TECHS.includes(tech)) {
-    throw `unsupported url: ${url}`
+    return false
   }
 
   return {
@@ -74,9 +80,12 @@ class SourceSwitcher {
    */
   dynamically(source) {
     if (document.getElementById(PLAYER_ID)) {
-      videojs("player").src(source)
+      return new Promise((accept) => {
+        videojs("player").src(source)
+        accept(videojs("player"))
+      })
     } else {
-      this.recreateJavascript(source)
+      return this.recreateJavascript(source)
     }
   }
 
@@ -87,18 +96,20 @@ class SourceSwitcher {
    *      A videojs source object with src and type
    */
   recreateJavascript(source) {
-    this.removePlayer().then(function () {
-      var container = document.getElementById(CONTAINER_ID);
-      var video = document.createElement('video');
-      video.id = 'player'
-      video.width = `${PLAYER_WIDTH}px`;
-      video.className = 'video-js vjs-fluid vjs-default-skin'
-      video.crossOrigin = true
-      video.setAttribute('crossorigin', true)
-      container.appendChild(video)
-      var playerConfig = getPlayConfig()
-      playerConfig.sources = [source]
-      var player = videojs('player', playerConfig)
+    return new Promise((accept) => {
+      this.removePlayer().then(function () {
+        var container = document.getElementById(CONTAINER_ID);
+        var video = document.createElement('video');
+        video.id = 'player'
+        video.width = `${PLAYER_WIDTH}px`;
+        video.className = 'video-js vjs-fluid vjs-default-skin'
+        video.crossOrigin = true
+        video.setAttribute('crossorigin', true)
+        container.appendChild(video)
+        var playerConfig = getPlayConfig()
+        playerConfig.sources = [source]
+        accept(videojs('player', playerConfig))
+      })
     })
   }
 
@@ -110,21 +121,23 @@ class SourceSwitcher {
    *      A videojs source object with src and type
    */
   recreateWithTag(source) {
-    this.removePlayer().then(function () {
-      var container = document.getElementById(CONTAINER_ID);
-      var video = document.createElement('video');
-      video.id = 'player'
-      video.width = `${PLAYER_WIDTH}px`;
-      video.className = 'video-js vjs-fluid vjs-default-skin'
-      video.crossOrigin = true
-      video.setAttribute('crossorigin', true)
-      var sourceTag = document.createElement("source")
-      sourceTag.src = source.src
-      sourceTag.type = source.type
-      video.appendChild(sourceTag)
+    return new Promise((accept) => {
+      this.removePlayer().then(function () {
+        var container = document.getElementById(CONTAINER_ID);
+        var video = document.createElement('video');
+        video.id = 'player'
+        video.width = `${PLAYER_WIDTH}px`;
+        video.className = 'video-js vjs-fluid vjs-default-skin'
+        video.crossOrigin = true
+        video.setAttribute('crossorigin', true)
+        var sourceTag = document.createElement("source")
+        sourceTag.src = source.src
+        sourceTag.type = source.type
+        video.appendChild(sourceTag)
 
-      container.appendChild(video)
-      var player = videojs('player', getPlayConfig())
+        container.appendChild(video)
+        accept(videojs('player', getPlayConfig()))
+      })
     })
   }
 
@@ -132,48 +145,24 @@ class SourceSwitcher {
 
 function DemoController($scope) {
 
+  $scope.autoplay = true;
+
   $scope.sources = [
-    {
-      tech: "Dailymotion",
-      src: "http://www.dailymotion.com/video/x56imdz_une-pluie-d-hommages-pour-le-chanteur-george-michael-sur-les-reseaux-sociaux_news",
-      type: "video/dailymotion"
-    },
-    {
-      tech: "Deezer",
-      src: "http://www.deezer.com/track/1167893",
-      type: "audio/deezer"
-    },
-    {
-      tech: "Jamendo",
-      src: "https://www.jamendo.com/track/1466090/universal-funk",
-      type: "audio/jamendo"
-    },
-    {
-      tech: "Mixcloud",
-      src: "https://www.mixcloud.com/johndigweed/transitions-with-john-digweed-and-dj-vibe/",
-      type: "audio/mixcloud"
-    },
-    {
-      tech: "Soundcloud",
-      src: "https://soundcloud.com/yozzie-b/rhiana-where-have-u-been-ukg",
-      type: "audio/soundcloud"
-    },
-    {
-      tech: "Vimeo",
-      src: "https://vimeo.com/210321457",
-      type: "video/vimeo"
-    },
-    {
-      tech: "Youtube",
-      src: "https://www.youtube.com/watch?v=DIDp05SHJVk",
-      type: "video/youtube"
-    }
-  ]
+    "http://www.dailymotion.com/video/x56imdz_une-pluie-d-hommages-pour-le-chanteur-george-michael-sur-les-reseaux-sociaux_news",
+    // "http://www.deezer.com/track/1167893", // needs flash >_>
+    "https://www.jamendo.com/track/1466090/universal-funk",
+    "https://www.mixcloud.com/johndigweed/transitions-with-john-digweed-and-dj-vibe/",
+    "https://soundcloud.com/yozzie-b/rhiana-where-have-u-been-ukg",
+    "https://vimeo.com/210321457",
+    "https://www.youtube.com/watch?v=DIDp05SHJVk",
+  ].map((source) => {
+    return {source, id: source}
+  })
 
   $scope.creationTypes = {
-    "dynamically": "Dynamic source change",
     "recreateJavascript": "recreate player with javascript source",
     "recreateWithTag": "recreate player with audio/video tag",
+    // "dynamically": "Dynamic source change",
   }
 
   $scope.selected = {
@@ -182,8 +171,53 @@ function DemoController($scope) {
 
   }
 
-  $scope.load = function () {
-    new SourceSwitcher()[$scope.selected.creationType]($scope.selected.source)
+  $scope.play = function () {
+    new SourceSwitcher()[$scope.selected.creationType](
+      urlToVjsSource($scope.selected.source.source)
+    ).then((player) => {
+      player.ready(function () {
+        this.play();
+        if ($scope.autoplay) {
+          player.on('ended', () => {
+            $scope.$apply(() => {
+              let currentIndex = $scope.sources.findIndex((source) => {
+                return source.id === $scope.selected.source.id
+              })
+              const nextIndex = (currentIndex + 1) % $scope.sources.length;
+              $scope.selected.source = $scope.sources[nextIndex];
+              $scope.play();
+            })
+          })
+        }
+      })
+    })
+  }
+
+  $scope.playSource = function (source) {
+    $scope.selected.source = source;
+    $scope.play();
+  }
+
+  $scope.isValidSource = (url) => {
+    return !!urlToVjsSource(url)
+  }
+
+  $scope.addToPlaylist = function () {
+    $scope.sources.push({source: $scope.inputSource, id: Date.now()});
+    $scope.inputSource = '';
+  }
+
+  $scope.getItemClass = function (item, even) {
+    let _class;
+    if ($scope.selected.source.id === item.id) {
+      _class = 'primary';
+    } else if (even) {
+      _class = 'default';
+    } else {
+      _class = 'info';
+    }
+
+    return "bg-" + _class
   }
 }
 

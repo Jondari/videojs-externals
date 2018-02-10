@@ -1,0 +1,50 @@
+.options-body {
+  display: flex;
+  justify-content: space-between;
+}
+
+.playlist-panel .panel-heading {
+  display: flex;
+  justify-content: space-between;
+}
+
+.playlist-body{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-height: 250px;
+}
+
+.playlist {
+  overflow-y: auto;
+}
+
+.playlist-item {
+  display: flex;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.playlist-item .play-button {
+  flex-shrink: 1;
+}
+
+.playlist-item .source-url {
+  flex-grow: 2;
+}
+
+.playlist-item .remove-button {
+  flex-shrink: 1;
+}
+
+.playlist-panel .form-inline {
+  display: flex;
+  align-content: center;
+}
+
+.playlist-panel .form-inline .form-group {
+  flex-grow: 1;
+  margin-bottom: unset;
+}

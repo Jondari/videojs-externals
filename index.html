@@ -24,8 +24,14 @@
 <body ng-app="demoApp">
 
 <div class="page-header">
-  <h1>Video.js-externals<small>A wrapper around various external players</small></h1>
-  <a href="https://github.com/LoveIsGrief/videojs-externals/"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+  <h1>Video.js-externals
+    <small>A wrapper around various external players</small>
+  </h1>
+  <a href="https://github.com/LoveIsGrief/videojs-externals/"><img
+    style="position: absolute; top: 0; right: 0; border: 0;"
+    src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67"
+    alt="Fork me on GitHub"
+    data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
 </div>
 
 <div class="main container-fluid">
@@ -37,51 +43,78 @@
       <div class="panel-heading">
         <h3 class="panel-title">Creation options:</h3>
       </div>
-      <div class="panel-body" role="group">
-        <div class="radio" ng-repeat="(type, description) in creationTypes">
-          <label>
-            <input
-              type="radio"
-              ng-model="selected.creationType"
-              ng-value="type"
-            >
-            {{ description }}
-          </label>
+      <div class="panel-body options-body" role="group">
+        <div class="creation-options">
+          <div class="radio" ng-repeat="(type, description) in creationTypes">
+            <label>
+              <input
+                type="radio"
+                ng-model="selected.creationType"
+                ng-value="type"
+              >
+              {{ description }}
+            </label>
+          </div>
+        </div>
+        <div class="options">
+          <div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" ng-model="autoplay"> Autoplay
+              </label>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Source selection -->
-    <div class="panel panel-default">
+    <!-- Playlist panel -->
+    <div class="panel panel-default playlist-panel">
       <div class="panel-heading">
-        <h3 class="panel-title">Source:</h3>
+        <h3 class="panel-title">Playlist</h3>
+        <!-- Play button -->
+        <!--<div class="btn btn-default" ng-click="load()" ng-if="sources">Start playing</div>-->
       </div>
-      <div class="panel-body btn-group" role="group">
-        <button
-          ng-repeat="source in sources"
-          ng-model="selected.source"
-          uib-btn-radio="source"
-        >
-          {{ source.tech }}
-        </button>
-      </div>
-      <pre>{{ selected.source |json}}</pre>
-      <div class="form-group">
-        <input type="text" class="form-control" ng-model="selected.source.src">
-      </div>
-      <div class="form-group">
-        <button class="btn btn-primary" ng-click="load()" ng-if="selected.source">
-          Load source
-        </button>
+      <div class="panel-body playlist-body" role="group">
+        <!-- Playlist -->
+        <div class="playlist">
+          <div
+            class="playlist-item"
+            ng-repeat="source in sources"
+          >
+            <button class="play-button"
+                    ng-click="playSource(source)">Play</button>
+            <input
+              disabled type="text" class="source-url" value="{{source.source}}"
+              ng-class="getItemClass(source, $even)"
+            >
+            <!--<button type="submit" class="remove-button">X</button>-->
+          </div>
+        </div>
+
+        <!-- New item form -->
+        <div class="form-inline">
+          <div class="form-group">
+            <input type="text" class="form-control" ng-model="inputSource">
+
+          </div>
+          <button class="btn btn-primary"
+                  ng-disabled="!isValidSource(inputSource)"
+                  ng-click="addToPlaylist()"
+          >
+            Add
+          </button>
+        </div>
+
       </div>
     </div>
+
+    <div id="video-container" class="col-md-8 col-lg-8">
+    </div>
+
   </div>
 
-  <div id="video-container" class="col-md-8 col-lg-8">
-  </div>
-
-</div>
-
-<footer class="container-fluid">Forked from <a target="_blank" href="https://github.com/Afrostream/videojs-externals">Afrostream/videojs-externals</a></footer>
+  <footer class="container-fluid">Forked from <a target="_blank" href="https://github.com/Afrostream/videojs-externals">Afrostream/videojs-externals</a>
+  </footer>
 </body>
 </html>
