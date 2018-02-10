@@ -83,7 +83,8 @@
             ng-repeat="source in sources"
           >
             <button class="play-button"
-                    ng-click="playSource(source)">Play</button>
+                    ng-click="playSource(source)">Play
+            </button>
             <input
               disabled type="text" class="source-url" value="{{source.source}}"
               ng-class="getItemClass(source, $even)"
@@ -109,9 +110,9 @@
       </div>
     </div>
 
-    <div id="video-container" class="col-md-8 col-lg-8">
-    </div>
 
+  </div>
+  <div id="video-container" class="col-md-8 col-lg-8">
   </div>
 
   <footer class="container-fluid">Forked from <a target="_blank" href="https://github.com/Afrostream/videojs-externals">Afrostream/videojs-externals</a>
