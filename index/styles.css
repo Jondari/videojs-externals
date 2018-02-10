@@ -48,3 +48,7 @@
   flex-grow: 1;
   margin-bottom: unset;
 }
+
+.playlist-panel .form-inline .form-group input {
+  width: 100%;
+}
