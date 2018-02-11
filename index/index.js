@@ -145,6 +145,7 @@ class SourceSwitcher {
 
 function DemoController($scope) {
   let idCounter = 0;
+  let player = null;
   $scope.autoplay = true;
 
   $scope.inputSource = '';
@@ -173,22 +174,45 @@ function DemoController($scope) {
 
   }
 
+
+  $scope.getIndex = function (aSource) {
+    aSource = aSource || $scope.selected.source
+    return $scope.sources.findIndex((source) => {
+      return source.id === aSource.id
+    })
+  }
+
+  $scope.moveToNext = function () {
+    // Empty list means we don't do squat
+    if ($scope.sources.length < 1) {
+      return
+    }
+    let currentIndex = $scope.getIndex();
+    const nextIndex = (currentIndex + 1) % $scope.sources.length;
+    $scope.selected.source = $scope.sources[nextIndex];
+    return {oldIndex: currentIndex, currentIndex: nextIndex}
+  }
+
+  $scope.playNext = function () {
+    if ($scope.moveToNext()) {
+      $scope.play();
+    }
+  }
+
   $scope.play = function () {
+    if (!$scope.selected.source) {
+      return
+    }
+
     new SourceSwitcher()[$scope.selected.creationType](
       urlToVjsSource($scope.selected.source.source)
-    ).then((player) => {
-      player.ready(function () {
+    ).then((aPlayer) => {
+      player = aPlayer;
+      aPlayer.ready(function () {
         this.play();
         if ($scope.autoplay) {
-          player.on('ended', () => {
-            $scope.$apply(() => {
-              let currentIndex = $scope.sources.findIndex((source) => {
-                return source.id === $scope.selected.source.id
-              })
-              const nextIndex = (currentIndex + 1) % $scope.sources.length;
-              $scope.selected.source = $scope.sources[nextIndex];
-              $scope.play();
-            })
+          aPlayer.on('ended', () => {
+            $scope.$apply($scope.playNext)
           })
         }
       })
@@ -206,17 +230,48 @@ function DemoController($scope) {
   $scope.addToPlaylist = function () {
     $scope.inputSource.split("\n").forEach((line) => {
       const words = line.trim().split(" ");
-      let url = words.find( word => word.startsWith("http"));
-      if(!url){
+      let url = words.find(word => word.startsWith("http"));
+      if (!url) {
         return
       }
       url = url.trim();
-      if(!urlToVjsSource(url)){
+      if (!urlToVjsSource(url)) {
         return
       }
+
+      const newActive = $scope.sources.length === 0;
       $scope.sources.push({source: url, id: url + idCounter++});
+      if (newActive) {
+        $scope.selected.source = $scope.sources[0]
+      }
     })
     $scope.inputSource = '';
+  }
+
+  $scope.removeFromPlaylist = function (source) {
+    const oldIndex = $scope.getIndex(source);
+
+    $scope.sources.splice(oldIndex, 1);
+
+    // Not an active item, so forget you
+    if ($scope.selected.source !== source) {
+      return
+    }
+
+    // Move to the next item... or not
+    if ($scope.sources.length === 0) {
+      $scope.selected.source = null;
+      player.dispose();
+      player = null;
+    } else {
+      $scope.selected.source = $scope.sources[oldIndex];
+      if ($scope.autoplay) {
+        $scope.play()
+      } else if (player) {
+        player.dispose();
+        player = null;
+      }
+    }
   }
 
   /**
