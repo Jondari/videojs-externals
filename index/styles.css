@@ -12,10 +12,10 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  max-height: 250px;
 }
 
 .playlist {
+  max-height: 250px;
   overflow-y: auto;
 }
 
