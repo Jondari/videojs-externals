@@ -96,11 +96,12 @@
         <!-- New item form -->
         <div class="form-inline">
           <div class="form-group">
-            <input type="text" class="form-control" ng-model="inputSource">
+            <textarea rows="3" class="form-control" ng-model="inputSource">
+            </textarea>
 
           </div>
           <button class="btn btn-primary"
-                  ng-disabled="!isValidSource(inputSource)"
+                  ng-disabled="!inputSource.trim()"
                   ng-click="addToPlaylist()"
           >
             Add

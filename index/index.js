@@ -2,7 +2,7 @@ const CONTAINER_ID = "video-container"
 const PLAYER_ID = "player"
 const PLAYER_WIDTH = 250;
 const TECHS = [
-  , 'dailymotion'
+  'dailymotion'
   , 'deezer'
   , 'jamendo'
   , 'mixcloud'
@@ -144,8 +144,10 @@ class SourceSwitcher {
 }
 
 function DemoController($scope) {
-
+  let idCounter = 0;
   $scope.autoplay = true;
+
+  $scope.inputSource = '';
 
   $scope.sources = [
     "http://www.dailymotion.com/video/x56imdz_une-pluie-d-hommages-pour-le-chanteur-george-michael-sur-les-reseaux-sociaux_news",
@@ -198,15 +200,31 @@ function DemoController($scope) {
     $scope.play();
   }
 
-  $scope.isValidSource = (url) => {
-    return !!urlToVjsSource(url)
-  }
-
+  /**
+   * Gets one URL per line of textarea input and adds it to the playlist
+   */
   $scope.addToPlaylist = function () {
-    $scope.sources.push({source: $scope.inputSource, id: Date.now()});
+    $scope.inputSource.split("\n").forEach((line) => {
+      const words = line.trim().split(" ");
+      let url = words.find( word => word.startsWith("http"));
+      if(!url){
+        return
+      }
+      url = url.trim();
+      if(!urlToVjsSource(url)){
+        return
+      }
+      $scope.sources.push({source: url, id: url + idCounter++});
+    })
     $scope.inputSource = '';
   }
 
+  /**
+   * Class for a playlist item
+   * @param item
+   * @param even
+   * @returns {string}
+   */
   $scope.getItemClass = function (item, even) {
     let _class;
     if ($scope.selected.source.id === item.id) {
