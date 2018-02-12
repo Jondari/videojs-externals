@@ -37,7 +37,7 @@ class Vimeo extends Externals {
 
         const el_ = super.createEl('iframe', {
             id: this.options_.techId,
-            src: `${this.options_.embed}/${vimeoSource}??api=1&player_id=${this.options_.techId}&fullscreen=1&autoplay=${this.options_.autoplay}`
+            src: `${this.options_.embed}/${vimeoSource}?api=1&player_id=${this.options_.techId}&fullscreen=1&autoplay=${this.options_.autoplay}&background=true`
         });
 
         videojs(this.options_.playerId);
