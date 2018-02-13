@@ -1,18 +1,30 @@
 const fs = require('fs');
 
 module.exports = function (config) {
-  var karmaBrowsers = process.env['BROWSERS'] ?
+  const BROWSERS = process.env['BROWSERS'] ?
     process.env['BROWSERS'].split(':') :
     [
       'MyChromium',
       'Firefox'
+    ];
+  const SPECS = process.env['SPECS'] ?
+    process.env['SPECS'].split(':') : ['*'];
+  const EX_SPECS = process.env['EX_SPECS'] ?
+    process.env['EX_SPECS'].split(':') :
+    [
+      // Add a test to exlude in a format like below
+      // 'test/unit/dailymotion.specs.js',
+      // 'test/unit/jamendo.specs.js',
+      // 'test/unit/mixcloud.specs.js',
+      // 'test/unit/soundcloud.specs.js',
+      // 'test/unit/youtube.specs.js',
     ];
 
   config.set({
     // base path, that will be used to resolve files and exclude
     basePath: '..',
 
-    browsers: karmaBrowsers,
+    browsers: BROWSERS,
 
     frameworks: [
       'browserify',
@@ -23,16 +35,10 @@ module.exports = function (config) {
       'node_modules/video.js/dist/video.js',
       'src/videojs-externals.js',
       'test/resources/*.html',
-      'test/**/*.specs.js'
+      ...SPECS.map( spec => `test/**/${spec.toLowerCase().trim()}.specs.js`)
     ],
 
-    exclude: [
-      'test/unit/dailymotion.specs.js',
-      // 'test/unit/jamendo.specs.js',
-      // 'test/unit/mixcloud.specs.js',
-      // 'test/unit/soundcloud.specs.js',
-      // 'test/unit/youtube.specs.js',
-    ],
+    exclude: EX_SPECS,
 
     protocol: "http",
     // certs from https://github.com/gruntjs/grunt-contrib-connect/tree/master/tasks/certs
