@@ -10,15 +10,11 @@ module.exports = function (config) {
   const SPECS = process.env['SPECS'] ?
     process.env['SPECS'].split(':') : ['*'];
   const EX_SPECS = process.env['EX_SPECS'] ?
-    process.env['EX_SPECS'].split(':') :
-    [
-      // Add a test to exlude in a format like below
-      // 'test/unit/dailymotion.specs.js',
-      // 'test/unit/jamendo.specs.js',
-      // 'test/unit/mixcloud.specs.js',
-      // 'test/unit/soundcloud.specs.js',
-      // 'test/unit/youtube.specs.js',
-    ];
+    process.env['EX_SPECS'].split(':') : [];
+
+  function specToPath(spec) {
+    return `test/**/${spec.toLowerCase().trim()}.specs.js`
+  }
 
   config.set({
     // base path, that will be used to resolve files and exclude
@@ -35,10 +31,10 @@ module.exports = function (config) {
       'node_modules/video.js/dist/video.js',
       'src/videojs-externals.js',
       'test/resources/*.html',
-      ...SPECS.map( spec => `test/**/${spec.toLowerCase().trim()}.specs.js`)
+      ...SPECS.map(specToPath)
     ],
 
-    exclude: EX_SPECS,
+    exclude: EX_SPECS.map(specToPath),
 
     protocol: "http",
     // certs from https://github.com/gruntjs/grunt-contrib-connect/tree/master/tasks/certs
