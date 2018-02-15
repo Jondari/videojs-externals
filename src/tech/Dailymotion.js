@@ -288,7 +288,7 @@ Dailymotion.prototype.className_ = 'dailymotion';
 
 /* Dailymotion Support Testing -------------------------------------------------------- */
 
-Dailymotion.isSupported = function () {
+Dailymotion.isSupported = function() {
   return true;
 };
 
@@ -309,7 +309,7 @@ Dailymotion.nativeSourceHandler = {};
  * @param  {String} type    The mimetype to check
  * @return {String}         'probably', 'maybe', or '' (empty string)
  */
-Dailymotion.nativeSourceHandler.canPlayType = function (type) {
+Dailymotion.nativeSourceHandler.canPlayType = function(type) {
   return (type.indexOf('dailymotion') !== -1);
 };
 
@@ -319,21 +319,21 @@ Dailymotion.nativeSourceHandler.canPlayType = function (type) {
  * @param  {Object} source  The source object
  * @return {String}         'probably', 'maybe', or '' (empty string)
  */
-Dailymotion.nativeSourceHandler.canHandleSource = function (source) {
+Dailymotion.nativeSourceHandler.canHandleSource = function(source) {
 
   // If a type was provided we should rely on that
   if (source.type) {
     return Dailymotion.nativeSourceHandler.canPlayType(source.type);
   } else if (source.src) {
     return Dailymotion.nativeSourceHandler.canPlayType(source.src);
-  } else if (typeof source === 'string'){
+  } else if (typeof source === 'string') {
     return Dailymotion.nativeSourceHandler.canPlayType(source);
   }
 
   return '';
 };
 
-Dailymotion.nativeSourceHandler.handleSource = function (source, tech) {
+Dailymotion.nativeSourceHandler.handleSource = function(source, tech) {
   tech.src(source.src);
 };
 
@@ -341,7 +341,7 @@ Dailymotion.nativeSourceHandler.handleSource = function (source, tech) {
  * Clean up the source handler when disposing the player or switching sources..
  * (no cleanup is needed when supporting the format natively)
  */
-Dailymotion.nativeSourceHandler.dispose = function () {
+Dailymotion.nativeSourceHandler.dispose = function() {
 };
 
 // Register the native source handler

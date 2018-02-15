@@ -28,7 +28,7 @@ rules:
         parameters: first
       FunctionExpression:
         parameters: first
-      SwitchCase: 2
+      SwitchCase: 1
   linebreak-style:
     - error
     - unix
@@ -42,3 +42,6 @@ rules:
   no-implied-eval: error
   no-unexpected-multiline: error
   no-unreachable: error
+  space-before-function-paren:
+    - error
+    - never

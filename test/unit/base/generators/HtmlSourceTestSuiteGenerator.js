@@ -25,7 +25,7 @@ export default class HtmlSourceTestSuiteGenerator extends TestSuiteGenerator {
     // binding `this` to something else will most likely break tests
     var self = this;
 
-    beforeEach(function () {
+    beforeEach(function() {
       this.source = self.firstSourceObject;
       expect(this.player).toBeUndefined();
       document.body.innerHTML = `

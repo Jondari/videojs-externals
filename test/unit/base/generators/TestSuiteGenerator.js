@@ -1,10 +1,6 @@
-var _ = require('lodash-compat');
+/*eslint no-console: off */
 
 export default class TestSuiteGenerator {
-  basicConfiguration;
-  firstSourceObject;
-  secondSourceObject;
-  extraTestGenerators;
 
   /**
    *
@@ -35,7 +31,7 @@ export default class TestSuiteGenerator {
    */
   generate() {
     var self = this;
-    describe(this.description, function () {
+    describe(this.description, function() {
       self._generateTests();
       self._generateCommonTests();
       self._generateExtraTests();
@@ -81,7 +77,7 @@ export default class TestSuiteGenerator {
     var getSourceString = videojs.getComponent('Externals').sourceToString;
     var newSourceString;
     newSourceString = getSourceString(newSource);
-    return function (done) {
+    return function(done) {
       let player = this.player;
       player.one('ready', () => {
         player.one('canplay', () => {
@@ -103,7 +99,7 @@ export default class TestSuiteGenerator {
    * @private
    */
   _generateHalveVolumeTest() {
-    return function (done) {
+    return function(done) {
       return this.player.ready(() => {
         var volume = 0.5;
         this.player.one('playing', () => {
@@ -127,7 +123,7 @@ export default class TestSuiteGenerator {
    * @private
    */
   _generatePlayTest() {
-    return function (done) {
+    return function(done) {
       this.player.ready(() => {
         // Register for when player will actually start playing
         let player = this.player;
@@ -163,7 +159,7 @@ export default class TestSuiteGenerator {
    * @private
    */
   _generatePosterTest() {
-    return function (done) {
+    return function(done) {
       const doCheck = () => {
         expect(this.player.poster()).toBeDefined("");
         expect(this.player.poster()).not.toEqual("");
@@ -189,7 +185,7 @@ export default class TestSuiteGenerator {
    * @private
    */
   _generateSeekTo30Test() {
-    return function (done) {
+    return function(done) {
       let player = this.player;
       player.ready(() => {
         var seconds = 30;
@@ -216,7 +212,7 @@ export default class TestSuiteGenerator {
    */
   _generateWidgetPlayerTest() {
     const iframeSourceTest = this.basicConfiguration.iframeSourceTest;
-    return function (done) {
+    return function(done) {
       this.player.on('error', (error) => {
         fail(error)
       })

@@ -1,3 +1,4 @@
+/* global Mixcloud */
 /**
  * @file MixcloudExternal.js
  * Externals (iframe) Media Controller - Wrapper for HTML5 Media API
@@ -95,7 +96,7 @@ export default class MixcloudExternal extends Externals {
   parseSrc(src) {
     if (src) {
       // Regex that parse the video ID for any Mixcloud URL
-      var regExp = /^(https?:\/\/)?(www.|api.)?mixcloud.com(\/[^#\?&]+)/i;
+      var regExp = /^(https?:\/\/)?(www.|api.)?mixcloud.com(\/[^#?&]+)/i;
       var match = src.match(regExp);
 
       return match ? match[3] : null;
@@ -138,7 +139,7 @@ export default class MixcloudExternal extends Externals {
     for (var i = MixcloudExternal.Events.length - 1; i >= 0; i--) {
       const eventName = MixcloudExternal.Events[i];
       const self = this;
-      this.widgetPlayer.events[eventName].on(function () {
+      this.widgetPlayer.events[eventName].on(function() {
         self.eventHandler(videojs.mergeOptions({type: eventName}, {data: arguments}));
       });
     }
@@ -218,8 +219,8 @@ export default class MixcloudExternal extends Externals {
 
   setCurrentTime(position) {
     this.widgetPlayer.seek(position).then(() => {
-      this.widgetPlayer.getPosition().then((newTime)=>{
-        if(newTime !== this.currentTime_){
+      this.widgetPlayer.getPosition().then((newTime) => {
+        if (newTime !== this.currentTime_) {
           this.currentTime_ = newTime;
           this.trigger('timeupdate');
         }
@@ -276,7 +277,7 @@ MixcloudExternal.prototype.options_ = {
 
 /* MixcloudExternal Support Testing -------------------------------------------------------- */
 
-MixcloudExternal.isSupported = function () {
+MixcloudExternal.isSupported = function() {
   return true;
 };
 
@@ -297,7 +298,7 @@ MixcloudExternal.nativeSourceHandler = {};
  * @param  {String} type    The mimetype to check
  * @return {String}         'probably', 'maybe', or '' (empty string)
  */
-MixcloudExternal.nativeSourceHandler.canPlayType = function (source) {
+MixcloudExternal.nativeSourceHandler.canPlayType = function(source) {
   return (source.indexOf('mixcloud') !== -1);
 };
 
@@ -307,7 +308,7 @@ MixcloudExternal.nativeSourceHandler.canPlayType = function (source) {
  * @param  {Object} source  The source object
  * @return {String}         'probably', 'maybe', or '' (empty string)
  */
-MixcloudExternal.nativeSourceHandler.canHandleSource = function (source) {
+MixcloudExternal.nativeSourceHandler.canHandleSource = function(source) {
 
   // If a type was provided we should rely on that
   if (source.type) {
@@ -321,7 +322,7 @@ MixcloudExternal.nativeSourceHandler.canHandleSource = function (source) {
   return '';
 };
 
-MixcloudExternal.nativeSourceHandler.handleSource = function (source, tech) {
+MixcloudExternal.nativeSourceHandler.handleSource = function(source, tech) {
   tech.src(source.src);
 };
 
@@ -329,7 +330,7 @@ MixcloudExternal.nativeSourceHandler.handleSource = function (source, tech) {
  * Clean up the source handler when disposing the player or switching sources..
  * (no cleanup is needed when supporting the format natively)
  */
-MixcloudExternal.nativeSourceHandler.dispose = function () {
+MixcloudExternal.nativeSourceHandler.dispose = function() {
 };
 
 

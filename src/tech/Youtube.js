@@ -1,3 +1,4 @@
+/* global YT */
 /**
  * @file Youtube.js
  * Externals (iframe) Media Controller - Wrapper for HTML5 Media API
@@ -96,7 +97,7 @@ class Youtube extends Externals {
   parseSrc(src) {
     if (src) {
       // Regex that parse the video ID for any Youtube URL
-      var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
       var match = src.match(regExp);
 
       if (match && match[2].length === 11) {
@@ -115,7 +116,7 @@ class Youtube extends Externals {
   }
 
   onYoutubeReady() {
-    YT.ready(function () {
+    YT.ready(function() {
       this.initTech();
     }.bind(this));
   }
@@ -213,7 +214,7 @@ class Youtube extends Externals {
     if (this.lastState === YT.PlayerState.PAUSED && this.timeBeforeSeek !== seconds) {
       this.clearInterval(this.checkSeekedInPauseInterval);
       // TODO stop seeking after a while
-      this.checkSeekedInPauseInterval = this.setInterval(function () {
+      this.checkSeekedInPauseInterval = this.setInterval(function() {
         if (this.lastState !== YT.PlayerState.PAUSED || !this.isSeeking) {
           // If something changed while we were waiting for the currentTime to change,
           //  clear the interval timer
@@ -311,7 +312,7 @@ Youtube.prototype.className_ = 'youtube';
 
 /* Youtube Support Testing -------------------------------------------------------- */
 
-Youtube.isSupported = function () {
+Youtube.isSupported = function() {
   return true;
 };
 
@@ -332,7 +333,7 @@ Youtube.nativeSourceHandler = {};
  * @param  {String} source    The mimetype to check
  * @return {String}         'probably', 'maybe', or '' (empty string)
  */
-Youtube.nativeSourceHandler.canPlayType = function (source) {
+Youtube.nativeSourceHandler.canPlayType = function(source) {
   return (source.indexOf('youtube') !== -1);
 };
 
@@ -342,7 +343,7 @@ Youtube.nativeSourceHandler.canPlayType = function (source) {
  * @param  {Object} source  The source object
  * @return {String}         'probably', 'maybe', or '' (empty string)
  */
-Youtube.nativeSourceHandler.canHandleSource = function (source) {
+Youtube.nativeSourceHandler.canHandleSource = function(source) {
 
   // If a type was provided we should rely on that
   if (source.type) {
@@ -356,7 +357,7 @@ Youtube.nativeSourceHandler.canHandleSource = function (source) {
   return '';
 };
 
-Youtube.nativeSourceHandler.handleSource = function (source, tech) {
+Youtube.nativeSourceHandler.handleSource = function(source, tech) {
   tech.src(source.src);
 };
 
@@ -364,7 +365,7 @@ Youtube.nativeSourceHandler.handleSource = function (source, tech) {
  * Clean up the source handler when disposing the player or switching sources..
  * (no cleanup is needed when supporting the format natively)
  */
-Youtube.nativeSourceHandler.dispose = function () {
+Youtube.nativeSourceHandler.dispose = function() {
 };
 
 

@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-module.exports = function (config) {
+module.exports = function(config) {
   const BROWSERS = process.env['BROWSERS'] ?
     process.env['BROWSERS'].split(':') :
     [
@@ -73,7 +73,7 @@ module.exports = function (config) {
        * For https://github.com/litixsoft/karma-detect-browsers
        * @param availableBrowsers {Array}
        */
-      postDetection: function (availableBrowsers) {
+      postDetection: function(availableBrowsers) {
 
         // Manualy insert Chromium
         // Until https://github.com/litixsoft/karma-detect-browsers/issues/22 is resolved

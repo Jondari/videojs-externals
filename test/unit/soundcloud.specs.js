@@ -24,10 +24,10 @@ var apiSource = {
   type: 'audio/soundcloud'
 };
 var extraTests = [
-  function () {
+  function() {
     it('should take api object sources', this._generateChangeSourceTest(apiSource));
   },
-  function () {
+  function() {
     it('should take api string sources', this._generateChangeSourceTest(apiSource.src));
   }
 ];
