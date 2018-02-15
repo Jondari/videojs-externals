@@ -1,0 +1,44 @@
+env:
+  browser: true
+  es6: true
+  jasmine: true
+  node: true
+extends: 'eslint:recommended'
+parserOptions:
+  sourceType: module
+globals:
+  videojs: true
+rules:
+  comma-spacing:
+    - warn
+    -
+      before: false
+      after: true
+  curly:
+    - error
+    - all
+  eqeqeq:
+    - warn
+    - smart
+  indent:
+    - error
+    - 2
+    -
+      FunctionDeclaration:
+        parameters: first
+      FunctionExpression:
+        parameters: first
+      SwitchCase: 2
+  linebreak-style:
+    - error
+    - unix
+  keyword-spacing:
+    - error
+    -
+      before: true
+      after: true
+  no-console: warn
+  no-eval: error
+  no-implied-eval: error
+  no-unexpected-multiline: error
+  no-unreachable: error
