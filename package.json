@@ -33,10 +33,11 @@
     "build:js:uglify": "uglifyjs dist/videojs-externals.js --comments --mangle --compress -o dist/videojs-externals.min.js",
     "build:test": "npm-run-all mkdirs build:test:browserify",
     "build:test:browserify": "browserify `find test -name '*.specs.js'` -t babelify -o dist-test/videojs-externals.js",
-    "lint": "jshint .",
+    "lint": "eslint .",
     "clean": "rm -rf dist dist-test es5",
     "mkdirs": "mkdir -p dist dist-test es5",
-    "prepublish": "npm run build",
+    "precommit": "npm run lint",
+    "prepublishOnly": "npm run build",
     "prestart": "npm-run-all -p docs build",
     "dev": "npm-run-all -p start watch",
     "start": "npm-run-all -p start:serve",
@@ -51,9 +52,6 @@
     "watch:js": "watchify src/videojs-externals.js -t babelify -v -o dist/videojs-externals.js",
     "validate": "npm ls"
   },
-  "pre-commit": [
-    "lint"
-  ],
   "browserify": {
     "transform": [
       "browserify-shim"
@@ -72,8 +70,10 @@
     "browserify-shim": "^3.8.14",
     "connect": "^3.6.5",
     "cowsay": "^1.1.9",
+    "eslint": "^4.17.0",
     "grunt": "^1.0.1",
     "grunt-karma": "^2.0.0",
+    "husky": "^0.14.3",
     "jasmine-core": "^2.8.0",
     "jshint": "^2.9.4",
     "karma": "^1.6.0",
@@ -91,7 +91,6 @@
     "mkdirp": "^0.5.1",
     "npm-run-all": "^4.0.2",
     "portscanner": "^2.1.1",
-    "precommit-hook": "^3.0.0",
     "serve-static": "^1.13.1",
     "uglify-js": "^2.8.22",
     "watchify": "^3.9.0"

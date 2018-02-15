@@ -9,7 +9,7 @@ var getSourceString = videojs.getComponent('Externals').sourceToString;
 
 function iframeSourceTester(uri, source) {
   source = getSourceString(source) || null;
-  if(source){
+  if (source) {
     source = encodeURIComponent(new URL(source).pathname) || null
   }
   expect(uri).toMatch(new RegExp(`mixcloud.com/widget/iframe/\\?feed=${source}`));
@@ -47,7 +47,10 @@ const objectSourceTestSuiteGenerator = new ObjectSourceTestSuiteGenerator(
   // TODO this is one too long, gotta log a bug with mixcloud devs
   // Seeking to 30 returns 0.2
   // {src: 'https://www.mixcloud.com/BrilliantCorners/stamp-the-wax-7-with-special-guest-harvey-sutherland-220917/', type: MIME_TYPE},
-  {src: 'https://www.mixcloud.com/truthoughts/tru-thoughts-presents-unfold-290917-with-rapsody-kxngs-dj-juls/', type: MIME_TYPE},
+  {
+    src: 'https://www.mixcloud.com/truthoughts/tru-thoughts-presents-unfold-290917-with-rapsody-kxngs-dj-juls/',
+    type: MIME_TYPE
+  },
   {src: 'https://www.mixcloud.com/DJoseSolis/the-official-trance-podcast-episode-276/', type: MIME_TYPE},
   'test/resources/videojs_from_script.html'
 );

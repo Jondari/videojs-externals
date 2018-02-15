@@ -17,7 +17,9 @@
 - [ ] Twitch
 
 ## Install
-You can use bower (`bower install videojs-externals`), npm (`npm install videojs-externals`) or the source and build it using `npm run build`. Then, the only file you need is dist/videojs-externals.min.js.
+
+At the moment it is not available with bower or npm yet.
+One can download dist/videojs-externals.min.js or point to it using the [RawGit CDN](https://rawgit.com/) 
 
 ## Example
 ```html
@@ -45,50 +47,52 @@ You can use bower (`bower install videojs-externals`), npm (`npm install videojs
 
 See the examples folder for more
 
-## How does it work?
-Including the script Youtube.min.js will add the YouTube as a tech. You just have to add it to your techOrder option. Then, you add the option src with your YouTube URL.
+# Development
 
-It supports:
-  ###Youtube
-  - youtube.com as well as youtu.be
-  - Regular URLs: http://www.youtube.com/watch?v=xjS6SftYQaQ
-  - Embeded URLs: http://www.youtube.com/embed/xjS6SftYQaQ
-  - Playlist URLs: http://www.youtube.com/playlist?list=PLA60DCEB33156E51F OR http://www.youtube.com/watch?v=xjS6SftYQaQ&list=SPA60DCEB33156E51F
-  ###Soundcloud.com
-  - https://soundcloud.com/yozzie-b/rhiana-where-have-u-been-ukg
-  ###Dailymotion.com
-  - http://www.dailymotion.com/video/x5822x6_of-shadows-and-wings-d-ombres-et-d-ailes_shortfilms
-  - http://www.dailymotion.com/embed/video/x5822x6
-  
-## Options
-It supports every regular Video.js options. Additionally, you can change any [YouTube parameter](https://developers.google.com/youtube/player_parameters?hl=en#Parameters). Here is an example of setting the `iv_load_policy` parameter to `1`.
+## Requirements
 
-```html
-<video
-  id="vid1"
-  class="video-js vjs-default-skin"
-  controls
-  autoplay
-  width="640" height="264"
-  data-setup='{ "techOrder": ["youtube"], "sources": [{ "type": "video/youtube", "src": "https://www.youtube.com/watch?v=xjS6SftYQaQ"}], "youtube": { "iv_load_policy": 1 } }'
->
-</video>
+ - [Node.js](https://nodejs.org/en/) (tested with v8) (install using [nvm](https://github.com/creationix/nvm) is recommendable)
+ - [npm](https://www.npmjs.com/get-npm) or [yarn](https://yarnpkg.com/lang/en/docs/install/)
+ 
+## Setup
+
+```bash
+# Install deps
+npm install # or yarn install
+
+# Grunt is needed for running tasks
+npm install -g grunt-cli
 ```
 
-### YouTube controls
-Because `controls` is already a Video.js option, to use the YouTube controls, you must set the `ytControls` parameter.
+## Testing
 
-```html
-<video
-  id="vid1"
-  class="video-js vjs-default-skin"
-  controls
-  autoplay
-  width="640" height="264"
-  data-setup='{ "techOrder": ["youtube"], "sources": [{ "type": "video/youtube", "src": "https://www.youtube.com/watch?v=xjS6SftYQaQ"}], "youtube": { "ytControls": 2 } }'
->
-</video>
-```
+Is done with [karma testrunner](https://karma-runner.github.io/2.0/index.html)
+which is in turn run by grunt.  
+Check out the tasks in [grunt/](grunt/) for the available tasks.
+
+The tests are in the [test/](test/) folder. 
+[Generators](test/unit/base/) were used to produce the same test-suites for each tech.
+
+`grunt test` will test all techs in Chromium and Firefox.
+
+### Selecting browsers
+
+Use `grunt karma:detected` to run tests in all browsers that can be detected on your computer.
+
+You can set the environment variable **BROWSERS** to a `:` separated list of browsers e.g 
+`export BROWSERS=Chromium:Chrome:Firefox:MyFirefoxHeadless`
+
+### Including or excluding specs
+
+The environment variables **SPECS** and **EX_SPECS** allow targeting techs to test. 
+As with **BROWSERS** provide a `:` separated list of techs e.g `export SPECS=jamendo:soundcloud:youtube`
+
+### Continuous testing
+
+`grunt karma:watch` will take care of opening a browser with the tests and running them every time 
+ you make a change to the the watched files (sources and specs).
+
+Of course the enviroment variables mentioned above have an effect on this too...
 
 ##Special Thank You
 Thanks to Steve Heffernan for the amazing Video.js and to John Hurliman for the original version of the YouTube tech

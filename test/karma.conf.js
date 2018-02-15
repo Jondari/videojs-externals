@@ -1,18 +1,26 @@
 const fs = require('fs');
 
-module.exports = function (config) {
-  var karmaBrowsers = process.env['BROWSERS'] ?
+module.exports = function(config) {
+  const BROWSERS = process.env['BROWSERS'] ?
     process.env['BROWSERS'].split(':') :
     [
       'MyChromium',
       'Firefox'
     ];
+  const SPECS = process.env['SPECS'] ?
+    process.env['SPECS'].split(':') : ['*'];
+  const EX_SPECS = process.env['EX_SPECS'] ?
+    process.env['EX_SPECS'].split(':') : [];
+
+  function specToPath(spec) {
+    return `test/**/${spec.toLowerCase().trim()}.specs.js`
+  }
 
   config.set({
     // base path, that will be used to resolve files and exclude
     basePath: '..',
 
-    browsers: karmaBrowsers,
+    browsers: BROWSERS,
 
     frameworks: [
       'browserify',
@@ -23,16 +31,10 @@ module.exports = function (config) {
       'node_modules/video.js/dist/video.js',
       'src/videojs-externals.js',
       'test/resources/*.html',
-      'test/**/*.specs.js'
+      ...SPECS.map(specToPath)
     ],
 
-    exclude: [
-      'test/unit/dailymotion.specs.js',
-      // 'test/unit/jamendo.specs.js',
-      // 'test/unit/mixcloud.specs.js',
-      // 'test/unit/soundcloud.specs.js',
-      // 'test/unit/youtube.specs.js',
-    ],
+    exclude: EX_SPECS.map(specToPath),
 
     protocol: "http",
     // certs from https://github.com/gruntjs/grunt-contrib-connect/tree/master/tasks/certs
@@ -71,7 +73,7 @@ module.exports = function (config) {
        * For https://github.com/litixsoft/karma-detect-browsers
        * @param availableBrowsers {Array}
        */
-      postDetection: function (availableBrowsers) {
+      postDetection: function(availableBrowsers) {
 
         // Manualy insert Chromium
         // Until https://github.com/litixsoft/karma-detect-browsers/issues/22 is resolved

@@ -25,7 +25,7 @@ export default class Jamendo extends Html5 {
     super(options, ready);
 
     this.ready(() => {
-      if(this.src_){
+      if (this.src_) {
         this.setPoster(this.src_)
       }
     })
@@ -45,14 +45,14 @@ export default class Jamendo extends Html5 {
       // Wait till we're ready to change the poster
       // Otherwise the "posterchange" event might be triggered
       // before any listeners are registered
-      if(this.ready_){
+      if (this.ready_) {
         this.setPoster(src);
       }
     }
     return this.currentSrc();
   }
 
-  setPoster(jamendoSrc){
+  setPoster(jamendoSrc) {
     super.setPoster(`https://imgjam1.jamendo.com/tracks/s1466/${Jamendo.parseSrc(jamendoSrc)}/covers/1.300.jpg`);
     this.trigger('posterchange');
   }
@@ -100,7 +100,7 @@ Jamendo.nativeSourceHandler = {};
  * @param  {String} type    The mimetype to check
  * @return {String}         'probably', 'maybe', or '' (empty string)
  */
-Jamendo.nativeSourceHandler.canPlayType = function (source) {
+Jamendo.nativeSourceHandler.canPlayType = function(source) {
   return (source.indexOf('jamendo') !== -1);
 };
 
@@ -110,7 +110,7 @@ Jamendo.nativeSourceHandler.canPlayType = function (source) {
  * @param  {Object} source  The source object
  * @return {String}         'probably', 'maybe', or '' (empty string)
  */
-Jamendo.nativeSourceHandler.canHandleSource = function (source) {
+Jamendo.nativeSourceHandler.canHandleSource = function(source) {
 
   // If a type was provided we should rely on that
   if (source.type) {
@@ -124,7 +124,7 @@ Jamendo.nativeSourceHandler.canHandleSource = function (source) {
   return '';
 };
 
-Jamendo.nativeSourceHandler.handleSource = function (source, tech) {
+Jamendo.nativeSourceHandler.handleSource = function(source, tech) {
   tech.src(source.src ? source.src : source);
 };
 
@@ -132,7 +132,7 @@ Jamendo.nativeSourceHandler.handleSource = function (source, tech) {
  * Clean up the source handler when disposing the player or switching sources..
  * (no cleanup is needed when supporting the format natively)
  */
-Jamendo.nativeSourceHandler.dispose = function () {
+Jamendo.nativeSourceHandler.dispose = function() {
 };
 
 // Register the native source handler

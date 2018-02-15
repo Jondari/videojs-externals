@@ -1,3 +1,4 @@
+/* global SC */
 /**
  * @file Soundcloud.js
  * Externals (iframe) Media Controller - Wrapper for HTML5 Media API
@@ -18,12 +19,12 @@ const Tech = videojs.getComponent('Tech');
  */
 
 class Soundcloud extends Externals {
-  constructor (options, ready) {
+  constructor(options, ready) {
     options.autoplay = !!options.autoplay;
     super(options, ready);
   }
 
-  injectCss () {
+  injectCss() {
     let css = `.vjs-${this.className_} > .vjs-poster { display:block; width:50%; }
     .vjs-${this.className_} .vjs-tech { }
     .vjs-${this.className_} .vjs-tech > .vjs-poster {  display:block; }
@@ -33,13 +34,13 @@ class Soundcloud extends Externals {
     super.injectCss(css);
   }
 
-  createEl () {
+  createEl() {
     this.src_ = Externals.sourceToString(this.options_.source);
 
     const el_ = super.createEl('iframe', {
       width: '100%',
       height: '100%',
-      src: `https://w.soundcloud.com/player/?url=${this.src_}&auto_play=${this.options_.autoplay}`+
+      src: `https://w.soundcloud.com/player/?url=${this.src_}&auto_play=${this.options_.autoplay}` +
       `&buying=false&liking=false&sharing=false&show_comments=false&show_playcount=false&show_user=false`
     });
 
@@ -53,11 +54,11 @@ class Soundcloud extends Externals {
     return el_;
   }
 
-  isApiReady () {
+  isApiReady() {
     return window['SC'];
   }
 
-  onStateChange (event) {
+  onStateChange(event) {
     let state = event.type;
     console.debug("event: ", event)
     switch (state) {
@@ -85,7 +86,7 @@ class Soundcloud extends Externals {
         break;
 
       case SC.Widget.Events.PLAY_PROGRESS:
-        this.currentTime_ = ((this.duration_ * 1000) * event.relativePosition ) / 1000;
+        this.currentTime_ = ((this.duration_ * 1000) * event.relativePosition) / 1000;
         this.trigger('canplay');
         this.trigger('playing');
         //this.trigger('timeupdate');
@@ -106,14 +107,14 @@ class Soundcloud extends Externals {
         break;
 
       case SC.Widget.Events.ERROR:
-        if(this.src_){
+        if (this.src_) {
           this.onPlayerError();
         }
         break;
     }
   }
 
-  parseSrc (src) {
+  parseSrc(src) {
     if (src) {
       // Regex that parse the video ID for any Soundcloud URL
       var regExp = /^(https?:\/\/)?(www.|api.)?soundcloud.com\//i;
@@ -123,7 +124,7 @@ class Soundcloud extends Externals {
     }
   }
 
-  onReady () {
+  onReady() {
     this.updatePause();
     this.updateDuration();
     this.updateVolume();
@@ -131,12 +132,12 @@ class Soundcloud extends Externals {
     this.triggerReady();
   }
 
-  initTech () {
+  initTech() {
     this.widgetPlayer = SC.Widget(this.options_.techId);
     super.initTech();
   }
 
-  setupTriggers () {
+  setupTriggers() {
     this.widgetPlayer.vjsTech = this;
     for (var i = Soundcloud.Events.length - 1; i >= 0; i--) {
       const eventName = Soundcloud.Events[i];
@@ -147,7 +148,7 @@ class Soundcloud extends Externals {
     }
   }
 
-  ended () {
+  ended() {
     return this.duration() === this.currentTime();
   }
 
@@ -156,7 +157,7 @@ class Soundcloud extends Externals {
    *
    * @method enterFullScreen
    */
-  enterFullScreen () {
+  enterFullScreen() {
     this.widgetPlayer.webkitEnterFullScreen();
   }
 
@@ -165,31 +166,31 @@ class Soundcloud extends Externals {
    *
    * @method exitFullScreen
    */
-  exitFullScreen () {
+  exitFullScreen() {
     this.widgetPlayer.webkitExitFullScreen();
   }
 
-  updatePause () {
+  updatePause() {
     this.widgetPlayer.isPaused((paused) => {
       this.paused_ = paused;
     });
   }
 
-  updateDuration () {
+  updateDuration() {
     this.widgetPlayer.getDuration((duration) => {
       this.duration_ = duration / 1000;
       this.trigger('durationchange');
     });
   }
 
-  updateVolume () {
+  updateVolume() {
     this.widgetPlayer.getVolume((volume) => {
       this.volume_ = volume;
       this.trigger('volumechange');
     });
   }
 
-  updatePoster () {
+  updatePoster() {
     try {
       this.widgetPlayer.getCurrentSound((sound) => {
         if (!sound) {
@@ -212,58 +213,58 @@ class Soundcloud extends Externals {
     }
   }
 
-  update (sound) {
+  update(sound) {
     this.infosEl_.innerHTML = sound.title;
   }
 
-  setSrc (src) {
+  setSrc(src) {
     this.widgetPlayer.load(src, {
-        'auto_play': this.options_.autoplay,
-        'callback': ()=>{
-          this.onStateChange({type: SC.Widget.Events.READY});
-        }
+      'auto_play': this.options_.autoplay,
+      'callback': () => {
+        this.onStateChange({type: SC.Widget.Events.READY});
       }
+    }
     );
   }
 
-  duration () {
+  duration() {
     return this.duration_;
   }
 
-  currentTime () {
+  currentTime() {
     return this.currentTime_;
   }
 
-  setCurrentTime (position) {
+  setCurrentTime(position) {
     const newPosition = position * 1000;
     console.debug("seekTo: ", newPosition)
     this.widgetPlayer.seekTo(newPosition);
     this.trigger('seeking');
   }
 
-  play () {
+  play() {
     this.widgetPlayer.play();
     this.updatePause();
   }
 
-  pause () {
+  pause() {
     this.widgetPlayer.pause();
     this.updatePause();
   }
 
-  paused () {
+  paused() {
     return this.paused_;
   }
 
-  muted () {
+  muted() {
     return this.muted_;
   }
 
-  volume () {
+  volume() {
     return this.volume_;
   }
 
-  setVolume (percentAsDecimal) {
+  setVolume(percentAsDecimal) {
     if (percentAsDecimal !== this.volume_) {
       this.volume_ = percentAsDecimal;
       this.muted_ = !this.volume_;
@@ -272,7 +273,7 @@ class Soundcloud extends Externals {
     }
   }
 
-  setMuted (muted) {
+  setMuted(muted) {
     this.muted_ = muted;
     this.widgetPlayer.setVolume(this.muted_ ? 0 : this.volume_);
     this.updateVolume();
@@ -289,7 +290,7 @@ Soundcloud.prototype.options_ = {
 
 /* Soundcloud Support Testing -------------------------------------------------------- */
 
-Soundcloud.isSupported = function () {
+Soundcloud.isSupported = function() {
   return true;
 };
 
@@ -310,7 +311,7 @@ Soundcloud.nativeSourceHandler = {};
  * @param  {String} type    The mimetype to check
  * @return {String}         'probably', 'maybe', or '' (empty string)
  */
-Soundcloud.nativeSourceHandler.canPlayType = function (source) {
+Soundcloud.nativeSourceHandler.canPlayType = function(source) {
   return (source.indexOf('soundcloud') !== -1);
 };
 
@@ -320,21 +321,21 @@ Soundcloud.nativeSourceHandler.canPlayType = function (source) {
  * @param  {Object} source  The source object
  * @return {String}         'probably', 'maybe', or '' (empty string)
  */
-Soundcloud.nativeSourceHandler.canHandleSource = function (source) {
+Soundcloud.nativeSourceHandler.canHandleSource = function(source) {
 
   // If a type was provided we should rely on that
   if (source.type) {
     return Soundcloud.nativeSourceHandler.canPlayType(source.type);
   } else if (source.src) {
     return Soundcloud.nativeSourceHandler.canPlayType(source.src);
-  } else if (typeof source === 'string'){
+  } else if (typeof source === 'string') {
     return Soundcloud.nativeSourceHandler.canPlayType(source);
   }
 
   return '';
 };
 
-Soundcloud.nativeSourceHandler.handleSource = function (source, tech) {
+Soundcloud.nativeSourceHandler.handleSource = function(source, tech) {
   tech.src(source.src);
 };
 
@@ -342,7 +343,7 @@ Soundcloud.nativeSourceHandler.handleSource = function (source, tech) {
  * Clean up the source handler when disposing the player or switching sources..
  * (no cleanup is needed when supporting the format natively)
  */
-Soundcloud.nativeSourceHandler.dispose = function () {
+Soundcloud.nativeSourceHandler.dispose = function() {
 };
 
 

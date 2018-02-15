@@ -1,7 +1,6 @@
 import TestSuiteGenerator from './TestSuiteGenerator';
 
 export default class NoSourceTestSuiteGenerator extends TestSuiteGenerator {
-  htmlResourcePath;
 
   constructor(basicConfiguration,
               firstSourceObject,
@@ -16,7 +15,7 @@ export default class NoSourceTestSuiteGenerator extends TestSuiteGenerator {
   _generateTests() {
     var self = this;
 
-    beforeEach(function () {
+    beforeEach(function() {
       this.source = null;
       this.vFromScript = window.__html__[self.htmlResourcePath];
       document.body.innerHTML = this.vFromScript;
@@ -32,7 +31,7 @@ export default class NoSourceTestSuiteGenerator extends TestSuiteGenerator {
    * @private
    */
   _generateCommonTests() {
-    if(this.basicConfiguration.iframeSourceTest){
+    if (this.basicConfiguration.iframeSourceTest) {
       it('should create widget player', this._generateWidgetPlayerTest());
     }
     it('should change object sources', this._generateChangeSourceTest(this.secondSourceObject));

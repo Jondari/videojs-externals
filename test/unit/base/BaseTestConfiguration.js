@@ -8,9 +8,6 @@
 
 
 export default class BaseTestConfiguration {
-  techName;
-  iframeSourceTest;
-  toggledTests;
 
   /**
    *
@@ -20,8 +17,8 @@ export default class BaseTestConfiguration {
    * @param toggledTests.poster {Boolean}
    */
   constructor(techName,
-              iframeSourceTest=null,
-              toggledTests={}) {
+              iframeSourceTest = null,
+              toggledTests = {}) {
     this.techName = techName;
     this.iframeSourceTest = iframeSourceTest;
     this.toggledTests = toggledTests;

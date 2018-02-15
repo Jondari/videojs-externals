@@ -15,7 +15,7 @@ const PosterImage = videojs.getComponent('PosterImage');
  */
 class SubPosterImage extends PosterImage {
 
-  constructor (player, options) {
+  constructor(player, options) {
     super(player, options);
   }
 
@@ -24,7 +24,7 @@ class SubPosterImage extends PosterImage {
    *
    * @method update
    */
-  update (url) {
+  update(url) {
 
     this.setSrc(url);
 

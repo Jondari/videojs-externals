@@ -1,3 +1,4 @@
+/* global DZ */
 /**
  * @file Deezer.js
  * Externals (iframe) Media Controller - Wrapper for HTML5 Media API
@@ -18,11 +19,11 @@ const Tech = videojs.getComponent('Tech');
  */
 
 class Deezer extends Externals {
-  constructor (options, ready) {
+  constructor(options, ready) {
     super(options, ready);
   }
 
-  injectCss () {
+  injectCss() {
     let css = `.vjs-${this.className_} > .vjs-poster { display:block; width:50%; background-size:contain; background-position: 0 50%; background-color: #000; }
     .vjs-${this.className_} .vjs-tech > .vjs-poster {  display:block; background-color: rgba(76, 50, 65, 0.35);}
     .vjs-deezer-info{position:absolute;padding:3em 1em 1em 1em;left:50%;top:0;right:0;bottom:0;
@@ -30,7 +31,7 @@ class Deezer extends Externals {
     super.injectCss(css);
   }
 
-  createEl () {
+  createEl() {
 
     let source = null;
     if ('string' === typeof this.options_.source) {
@@ -65,11 +66,11 @@ class Deezer extends Externals {
     return el_;
   }
 
-  isApiReady () {
+  isApiReady() {
     return window['DZ'] && window['DZ']['player'];
   }
 
-  onStateChange (event) {
+  onStateChange(event) {
     let state = event.type;
     switch (state) {
       case -1:
@@ -110,7 +111,7 @@ class Deezer extends Externals {
     }
   }
 
-  parseSrc (src) {
+  parseSrc(src) {
     if (src) {
       // Regex that parse the video ID for any Dailymotion URL
       var regExp = /^https?:\/\/(?:www\.)?deezer\.com\/(track|album|playlist)\/(\d+)$/;
@@ -120,14 +121,14 @@ class Deezer extends Externals {
     }
   }
 
-  onReady () {
+  onReady() {
     super.onReady();
     this.updateDuration();
     this.updateVolume();
     this.updatePoster();
   }
 
-  initTech () {
+  initTech() {
     DZ.init({
       channelUrl: `${window.location.protocol}//${window.location.hostname}`,
       appId: this.options_.appId,
@@ -142,7 +143,7 @@ class Deezer extends Externals {
     super.initTech();
   }
 
-  setupTriggers () {
+  setupTriggers() {
     this.widgetPlayer.vjsTech = this;
     for (var i = Deezer.Events.length - 1; i >= 0; i--) {
       const eventName = Deezer.Events[i];
@@ -153,7 +154,7 @@ class Deezer extends Externals {
     }
   }
 
-  ended () {
+  ended() {
     return this.duration() === this.currentTime();
   }
 
@@ -162,7 +163,7 @@ class Deezer extends Externals {
    *
    * @method enterFullScreen
    */
-  enterFullScreen () {
+  enterFullScreen() {
   }
 
   /**
@@ -170,25 +171,25 @@ class Deezer extends Externals {
    *
    * @method exitFullScreen
    */
-  exitFullScreen () {
+  exitFullScreen() {
   }
 
-  updatePause () {
+  updatePause() {
     this.paused_ = !this.widgetPlayer.isPlaying();
   }
 
-  updateDuration () {
+  updateDuration() {
     const track = this.widgetPlayer.getCurrentTrack();
     this.duration_ = track && track.duration || 0;
     this.trigger('durationchange');
   }
 
-  updateVolume () {
+  updateVolume() {
     this.volume_ = this.widgetPlayer.getVolume();
     this.trigger('volumechange');
   }
 
-  updatePoster () {
+  updatePoster() {
     try {
       //const track = this.widgetPlayer.getCurrentTrack();
       let track = {};
@@ -210,11 +211,11 @@ class Deezer extends Externals {
     }
   }
 
-  update (sound) {
+  update(sound) {
     this.infosEl_.innerHTML = sound.title;
   }
 
-  src (source) {
+  src(source) {
 
 
     if (!source || !source.src) {
@@ -231,42 +232,42 @@ class Deezer extends Externals {
     this.widgetPlayer.playTracks([source]);
   }
 
-  duration () {
+  duration() {
     return this.duration_;
   }
 
-  currentTime () {
+  currentTime() {
     return this.currentTime_;
   }
 
-  setCurrentTime (position) {
+  setCurrentTime(position) {
     this.trigger('seeking');
     this.widgetPlayer.seekTo(position * 1000);
   }
 
-  play () {
+  play() {
     this.widgetPlayer.play();
     this.updatePause();
   }
 
-  pause () {
+  pause() {
     this.widgetPlayer.pause();
     this.updatePause();
   }
 
-  paused () {
+  paused() {
     return this.paused_;
   }
 
-  muted () {
+  muted() {
     return this.muted_;
   }
 
-  volume () {
+  volume() {
     return this.volume_;
   }
 
-  setVolume (percentAsDecimal) {
+  setVolume(percentAsDecimal) {
     if (percentAsDecimal !== this.volume_) {
       this.volume_ = percentAsDecimal;
       this.muted_ = !this.volume_;
@@ -275,7 +276,7 @@ class Deezer extends Externals {
     }
   }
 
-  setMuted (muted) {
+  setMuted(muted) {
     this.muted_ = muted;
     this.widgetPlayer.setMute(this.muted_);
     this.updateVolume();
@@ -294,7 +295,7 @@ Deezer.prototype.options_ = {
 
 /* Deezer Support Testing -------------------------------------------------------- */
 
-Deezer.isSupported = function () {
+Deezer.isSupported = function() {
   return true;
 };
 
@@ -315,7 +316,7 @@ Deezer.nativeSourceHandler = {};
  * @param  {String} type    The mimetype to check
  * @return {String}         'probably', 'maybe', or '' (empty string)
  */
-Deezer.nativeSourceHandler.canPlayType = function (source) {
+Deezer.nativeSourceHandler.canPlayType = function(source) {
   return (source.indexOf('deezer') !== -1);
 };
 
@@ -325,7 +326,7 @@ Deezer.nativeSourceHandler.canPlayType = function (source) {
  * @param  {Object} source  The source object
  * @return {String}         'probably', 'maybe', or '' (empty string)
  */
-Deezer.nativeSourceHandler.canHandleSource = function (source) {
+Deezer.nativeSourceHandler.canHandleSource = function(source) {
 
   // If a type was provided we should rely on that
   if (source.type) {
@@ -337,7 +338,7 @@ Deezer.nativeSourceHandler.canHandleSource = function (source) {
   return '';
 };
 
-Deezer.nativeSourceHandler.handleSource = function (source, tech) {
+Deezer.nativeSourceHandler.handleSource = function(source, tech) {
   tech.src(source.src);
 };
 
@@ -345,7 +346,7 @@ Deezer.nativeSourceHandler.handleSource = function (source, tech) {
  * Clean up the source handler when disposing the player or switching sources..
  * (no cleanup is needed when supporting the format natively)
  */
-Deezer.nativeSourceHandler.dispose = function () {
+Deezer.nativeSourceHandler.dispose = function() {
 };
 
 

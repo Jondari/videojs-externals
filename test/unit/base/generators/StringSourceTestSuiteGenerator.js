@@ -1,7 +1,6 @@
 import TestSuiteGenerator from './TestSuiteGenerator';
 
 export default class StringSourceTestSuiteGenerator extends TestSuiteGenerator {
-  htmlResourcePath;
 
   constructor(basicConfiguration,
               firstSourceObject,
@@ -16,7 +15,7 @@ export default class StringSourceTestSuiteGenerator extends TestSuiteGenerator {
   _generateTests() {
     var self = this;
 
-    beforeEach(function () {
+    beforeEach(function() {
       this.source = self.firstSourceObject;
       this.vFromScript = window.__html__[self.htmlResourcePath];
       document.body.innerHTML = this.vFromScript;

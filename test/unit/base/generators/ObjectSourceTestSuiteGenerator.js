@@ -1,7 +1,6 @@
 import TestSuiteGenerator from './TestSuiteGenerator';
 
 export default class ObjectSourceTestSuiteGenerator extends TestSuiteGenerator {
-  htmlResourcePath;
 
   constructor(basicConfiguration,
               firstSourceObject,
@@ -17,7 +16,7 @@ export default class ObjectSourceTestSuiteGenerator extends TestSuiteGenerator {
     // Necessary for use with jasmine as `this` is kinda reserved for jasmine
     // binding `this` to something else will most likely break tests
     var self = this;
-    beforeEach(function () {
+    beforeEach(function() {
       this.source = self.firstSourceObject;
       this.vFromScript = window.__html__[self.htmlResourcePath];
       document.body.innerHTML = this.vFromScript;

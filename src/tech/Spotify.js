@@ -18,11 +18,11 @@ const Tech = videojs.getComponent('Tech');
  */
 
 class Spotify extends Externals {
-  constructor (options, ready) {
+  constructor(options, ready) {
     super(options, ready);
   }
 
-  createEl () {
+  createEl() {
     let source = null;
     if ('string' === typeof this.options_.source) {
       source = this.options_.source;
@@ -46,31 +46,31 @@ class Spotify extends Externals {
     return el_;
   }
 
-  addScriptTag () {
+  addScriptTag() {
     this.initTech();
   }
 
-  isApiReady () {
+  isApiReady() {
     return true;
   }
 
 
-  parseSrc (src) {
+  parseSrc(src) {
     return src;
   }
 
-  setupTriggers () {
+  setupTriggers() {
     //SPOTIFY don't have embed api
   }
 
-  ended () {
+  ended() {
     return false;
   }
 
-  play () {
+  play() {
   }
 
-  pause () {
+  pause() {
   }
 
   /**
@@ -78,7 +78,7 @@ class Spotify extends Externals {
    *
    * @method enterFullScreen
    */
-  enterFullScreen () {
+  enterFullScreen() {
   }
 
   /**
@@ -86,10 +86,10 @@ class Spotify extends Externals {
    *
    * @method exitFullScreen
    */
-  exitFullScreen () {
+  exitFullScreen() {
   }
 
-  src (src) {
+  src(src) {
     if (typeof src !== 'undefined') {
       this.el_.src(src);
     }
@@ -106,7 +106,7 @@ Spotify.prototype.options_ = {
 
 /* Spotify Support Testing -------------------------------------------------------- */
 
-Spotify.isSupported = function () {
+Spotify.isSupported = function() {
   return true;
 };
 
@@ -127,7 +127,7 @@ Spotify.nativeSourceHandler = {};
  * @param  {String} type    The mimetype to check
  * @return {String}         'probably', 'maybe', or '' (empty string)
  */
-Spotify.nativeSourceHandler.canPlayType = function (source) {
+Spotify.nativeSourceHandler.canPlayType = function(source) {
   return (source.indexOf('spotify') !== -1);
 };
 
@@ -137,7 +137,7 @@ Spotify.nativeSourceHandler.canPlayType = function (source) {
  * @param  {Object} source  The source object
  * @return {String}         'probably', 'maybe', or '' (empty string)
  */
-Spotify.nativeSourceHandler.canHandleSource = function (source) {
+Spotify.nativeSourceHandler.canHandleSource = function(source) {
 
   // If a type was provided we should rely on that
   if (source.type) {
@@ -149,7 +149,7 @@ Spotify.nativeSourceHandler.canHandleSource = function (source) {
   return '';
 };
 
-Spotify.nativeSourceHandler.handleSource = function (source, tech) {
+Spotify.nativeSourceHandler.handleSource = function(source, tech) {
   tech.src(source.src);
 };
 
@@ -157,7 +157,7 @@ Spotify.nativeSourceHandler.handleSource = function (source, tech) {
  * Clean up the source handler when disposing the player or switching sources..
  * (no cleanup is needed when supporting the format natively)
  */
-Spotify.nativeSourceHandler.dispose = function () {
+Spotify.nativeSourceHandler.dispose = function() {
 };
 
 

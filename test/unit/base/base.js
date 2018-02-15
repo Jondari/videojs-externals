@@ -1,9 +1,7 @@
-import {BaseTestConfiguration} from './BaseTestConfiguration'
-
-var spyOnAllClassFunctions = function (o) {
+var spyOnAllClassFunctions = function(o) {
   return Object.keys(o.prototype).filter((item) => {
     return o.prototype[item] instanceof Function;
-  }).forEach(function (funcName) {
+  }).forEach(function(funcName) {
     return spyOn(o.prototype, funcName).and.callThrough();
   });
 };
@@ -25,16 +23,16 @@ export class MainTestFactory {
 
   generate() {
     var self = this;
-    describe(`videojs-externals ${this.techName} tech`, function () {
+    describe(`videojs-externals ${this.techName} tech`, function() {
 
 
-      beforeEach(function () {
+      beforeEach(function() {
         this.plugin = videojs.getComponent(self.techName);
         this.pluginPrototype = this.plugin.prototype;
         spyOnAllClassFunctions(this.plugin);
         this.videoTagId = 'myStuff';
       });
-      afterEach(function (done) {
+      afterEach(function(done) {
         setTimeout(() => {
           var player = videojs.players[this.videoTagId];
           if (player) {
@@ -47,7 +45,7 @@ export class MainTestFactory {
       });
 
 
-      self.testSuiteFactories.forEach(function (factory) {
+      self.testSuiteFactories.forEach(function(factory) {
         factory.generate()
       })
     })

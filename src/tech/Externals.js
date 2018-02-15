@@ -163,7 +163,7 @@ class Externals extends Tech {
     var js = d.createElement('script');
     js.async = true;
     js.type = 'text/javascript';
-    js.onload = js.onreadystatechange = function () {
+    js.onload = js.onreadystatechange = function() {
       var rs = this.readyState;
       if (!r && (!rs || /loaded|complete/.test(rs))) {
         r = true;
@@ -271,7 +271,7 @@ class Externals extends Tech {
   }
 
   setPoster(poster) {
-    if(poster === undefined || poster === ''){
+    if (poster === undefined || poster === '') {
       poster = Externals._generateFallbackPoster();
     }
     this.poster_ = poster;
