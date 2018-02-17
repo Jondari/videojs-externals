@@ -1,0 +1,65 @@
+version: 2
+jobs:
+  test-firefox-node-6:
+    docker:
+      - image: circleci/node:6-browsers
+        environment:
+          BROWSERS: FirefoxHeadless
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm test
+  test-firefox-node-8:
+    docker:
+      - image: circleci/node:8-browsers
+        environment:
+          BROWSERS: FirefoxHeadless
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm test
+  test-firefox-node-latest:
+    docker:
+      - image: circleci/node:latest-browsers
+        environment:
+          BROWSERS: FirefoxHeadless
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm test
+
+  # Chrome tests
+  test-chrome-node-6:
+    docker:
+      - image: circleci/node:6-browsers
+        environment:
+          BROWSERS: Chrome
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm test
+  test-chrome-node-8:
+    docker:
+      - image: circleci/node:8-browsers
+        environment:
+          BROWSERS: Chrome
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm test
+  test-chrome-node-latest:
+    docker:
+      - image: circleci/node:latest-browsers
+        environment:
+          BROWSERS: Chrome
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm test
+
+workflows:
+  test:
+  jobs:
+    - test-firefox-node-6
+    - test-firefox-node-8
+    - test-firefox-node-latest
