@@ -70,3 +70,6 @@ workflows:
       - test-firefox-node-6
       - test-firefox-node-8
       - test-firefox-node-latest
+      - test-chrome-node-6
+      - test-chrome-node-8
+      - test-chrome-node-latest
