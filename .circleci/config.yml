@@ -5,6 +5,7 @@ jobs:
       - image: circleci/node:6-browsers
         environment:
           BROWSERS: FirefoxHeadless
+          EX_SPECS: dailymotion
     steps:
       - checkout
       - run: npm install
@@ -14,6 +15,7 @@ jobs:
       - image: circleci/node:8-browsers
         environment:
           BROWSERS: FirefoxHeadless
+          EX_SPECS: dailymotion
     steps:
       - checkout
       - run: npm install
@@ -23,6 +25,7 @@ jobs:
       - image: circleci/node:latest-browsers
         environment:
           BROWSERS: FirefoxHeadless
+          EX_SPECS: dailymotion
     steps:
       - checkout
       - run: npm install
@@ -34,6 +37,7 @@ jobs:
       - image: circleci/node:6-browsers
         environment:
           BROWSERS: Chrome
+          EX_SPECS: dailymotion
     steps:
       - checkout
       - run: npm install
@@ -43,6 +47,7 @@ jobs:
       - image: circleci/node:8-browsers
         environment:
           BROWSERS: Chrome
+          EX_SPECS: dailymotion
     steps:
       - checkout
       - run: npm install
@@ -52,6 +57,7 @@ jobs:
       - image: circleci/node:latest-browsers
         environment:
           BROWSERS: Chrome
+          EX_SPECS: dailymotion
     steps:
       - checkout
       - run: npm install
