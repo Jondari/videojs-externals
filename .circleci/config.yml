@@ -58,6 +58,7 @@ jobs:
       - run: npm test
 
 workflows:
+  version: 2
   test:
     jobs:
       - test-firefox-node-6
