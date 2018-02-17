@@ -59,7 +59,7 @@ jobs:
 
 workflows:
   test:
-  jobs:
-    - test-firefox-node-6
-    - test-firefox-node-8
-    - test-firefox-node-latest
+    jobs:
+      - test-firefox-node-6
+      - test-firefox-node-8
+      - test-firefox-node-latest
