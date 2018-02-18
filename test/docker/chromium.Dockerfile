@@ -42,14 +42,17 @@ RUN bash -lc "source ~/.profile && tail ~/.profile && nvm install "$NODE_VERISON
 RUN bash -lc "source ~/.profile && npm install -g grunt-cli"
 
 #=========
-# Firefox
+# Chrome/Chromium
 #=========
 USER root
-RUN apt-get -qqy install gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly
-RUN apt-get -qqy --no-install-recommends install firefox
-ARG FIREFOX_VERSION=latest
-COPY firefox-installer.bash /tmp/
-RUN bash /tmp/firefox-installer.bash $FIREFOX_VERSION
+RUN apt-get install -qy python-software-properties
+# Add repos
+RUN echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | tee /etc/apt/sources.list.d/google-chrome.list
+# Add apt-keys for checking the packages
+RUN wget -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+RUN apt-get update -qq
+# Install the browsers
+RUN apt-get install -qy chromium-browser google-chrome-stable
 
 # TODO move this to firefox-local.Dockerfile
 #RUN git clone https://github.com/LoveIsGrief/videojs-externals.git
