@@ -10,7 +10,7 @@ jobs:
       - checkout
       - run:
           shell: /bin/bash --login -eo pipefail
-          command: source npm install
+          command: npm install
       - run:
           shell: /bin/bash --login -eo pipefail
           command: grunt test
