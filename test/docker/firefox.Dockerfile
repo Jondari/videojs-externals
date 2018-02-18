@@ -1,5 +1,7 @@
 FROM ubuntu:16.04
 
+LABEL maintainer="LoveIsGrief"
+
 USER root
 
 RUN apt-get update -qqy
@@ -24,7 +26,6 @@ RUN echo "$USER ALL = (ALL) NOPASSWD: ALL" >> /etc/sudoers.d/${USER}
 USER $USER
 
 WORKDIR /home/$USER
-RUN git clone https://github.com/LoveIsGrief/videojs-externals.git
 
 RUN mkdir .ssh
 COPY id_rsa .ssh/
@@ -38,6 +39,8 @@ RUN wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.s
 RUN bash -lc "source ~/.profile && nvm install "$NODE_VERISON
 RUN bash -lc "source ~/.profile && npm install -g grunt-cli"
 
-WORKDIR /home/${USER}/videojs-externals
-RUN bash -lc 'source ~/.profile && nvm current && npm install'
+# TODO move this to firefox-local.Dockerfile
+#RUN git clone https://github.com/LoveIsGrief/videojs-externals.git
+#WORKDIR /home/${USER}/videojs-externals
+#RUN bash -lc 'source ~/.profile && nvm current && npm install'
 
