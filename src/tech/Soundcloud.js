@@ -75,14 +75,16 @@ class Soundcloud extends Externals {
         break;
 
       case SC.Widget.Events.FINISH:
-        this.updatePause();
-        this.trigger('ended');
+        this.updatePause().then(() => {
+          this.trigger('ended');
+        })
         break;
 
       case SC.Widget.Events.PLAY:
-        this.updatePause();
-        this.trigger('play');
-        this.trigger('waiting');
+        this.updatePause().then(() => {
+          this.trigger('play');
+          this.trigger('waiting');
+        });
         break;
 
       case SC.Widget.Events.PLAY_PROGRESS:
@@ -93,8 +95,9 @@ class Soundcloud extends Externals {
         break;
 
       case SC.Widget.Events.PAUSE:
-        this.updatePause();
-        this.trigger('pause');
+        this.updatePause().then(() => {
+          this.trigger('pause');
+        })
         break;
 
       case SC.Widget.Events.SEEK:
@@ -171,9 +174,12 @@ class Soundcloud extends Externals {
   }
 
   updatePause() {
-    this.widgetPlayer.isPaused((paused) => {
-      this.paused_ = paused;
-    });
+    return new Promise((accept) => {
+      this.widgetPlayer.isPaused((paused) => {
+        this.paused_ = paused;
+        accept()
+      });
+    })
   }
 
   updateDuration() {
