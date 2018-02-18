@@ -2,15 +2,18 @@ version: 2
 jobs:
   test-firefox-node-6:
     docker:
-      - image: circleci/node:6-browsers
+      - image: bisentenialwrug/videojs-externals:latest
         environment:
           BROWSERS: FirefoxHeadless
           EX_SPECS: dailymotion
     steps:
       - checkout
-      - run: sudo bash test/docker/firefox-installer.bash latest
-      - run: npm install
-      - run: npm test
+      - run:
+          shell: /bin/bash --login -eo pipefail
+          command: source npm install
+      - run:
+          shell: /bin/bash --login -eo pipefail
+          command: grunt test
   test-firefox-node-8:
     docker:
       - image: circleci/node:8-browsers
