@@ -10,9 +10,9 @@ case $FIREFOX_VERSION in
     FIREFOX_DOWNLOAD_URL="https://download.mozilla.org/?product=firefox-nightly-latest-ssl&os=linux64&lang=en-US"
     ;;
   "latest")
-    # FIREFOX_DOWNLOAD_URL="https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US"
-    echo "Already installed the latest version"
-    exit 0
+     FIREFOX_DOWNLOAD_URL="https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US"
+#    echo "Already installed the latest version"
+#    exit 0
     ;;
   *)
     FIREFOX_DOWNLOAD_URL="https://download-installer.cdn.mozilla.net/pub/firefox/releases/$FIREFOX_VERSION/linux-x86_64/en-US/firefox-$FIREFOX_VERSION.tar.bz2"
