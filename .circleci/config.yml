@@ -8,7 +8,7 @@ jobs:
           EX_SPECS: dailymotion
     steps:
       - checkout
-      - run: bash test/docker/firefox-installer.bash latest
+      - run: sudo bash test/docker/firefox-installer.bash latest
       - run: npm install
       - run: npm test
   test-firefox-node-8:
