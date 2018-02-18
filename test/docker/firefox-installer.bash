@@ -19,11 +19,11 @@ case $FIREFOX_VERSION in
     ;;
 esac
 
-rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+#rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 wget --no-check-certificate --no-verbose -O /tmp/firefox.tar.bz2 $FIREFOX_DOWNLOAD_URL
 
 echo "Cleaning installed official firefox version"
-apt-get -y purge firefox
+apt-get -y remove firefox
 
 echo "Cleaning installed custom firefox version"
 rm -rf /opt/firefox
