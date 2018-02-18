@@ -8,6 +8,7 @@ jobs:
           EX_SPECS: dailymotion
     steps:
       - checkout
+      - run: bash test/docker/firefox-installer.bash latest
       - run: npm install
       - run: npm test
   test-firefox-node-8:
@@ -68,8 +69,8 @@ workflows:
   test:
     jobs:
       - test-firefox-node-6
-      - test-firefox-node-8
-      - test-firefox-node-latest
-      - test-chrome-node-6
-      - test-chrome-node-8
-      - test-chrome-node-latest
+#      - test-firefox-node-8
+#      - test-firefox-node-latest
+#      - test-chrome-node-6
+#      - test-chrome-node-8
+#      - test-chrome-node-latest
