@@ -45,8 +45,8 @@ RUN bash -lc "source ~/.profile && npm install -g grunt-cli"
 # Firefox
 #=========
 USER root
-RUN apt-get -qqy install ubuntu-restricted-addons pulseaudio libpulse0
 RUN apt-get -qqy --no-install-recommends install firefox
+RUN apt-get -qqy install ubuntu-restricted-addons pulseaudio libpulse0
 ARG FIREFOX_VERSION=latest
 COPY firefox-installer.bash /tmp/
 RUN bash /tmp/firefox-installer.bash $FIREFOX_VERSION
