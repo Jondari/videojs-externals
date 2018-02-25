@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM circleci/node:latest-browsers
 
 LABEL maintainer="LoveIsGrief"
 
@@ -40,25 +40,5 @@ RUN wget -O nvm_v0.33.8.sh https://raw.githubusercontent.com/creationix/nvm/v0.3
 RUN bash nvm_v0.33.8.sh
 RUN bash -lc "source ~/.profile && tail ~/.profile && nvm install "$NODE_VERISON
 RUN bash -lc "source ~/.profile && npm install -g grunt-cli"
-
-#=========
-# Chrome/Chromium
-#=========
-USER root
-RUN apt-get install -qy python-software-properties
-# Add repos
-RUN echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | tee /etc/apt/sources.list.d/google-chrome.list
-# Add apt-keys for checking the packages
-RUN wget -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-RUN apt-get update -qq
-# Install the browsers
-RUN apt-get install -qy chromium-browser google-chrome-stable
-
-# TODO move this to firefox-local.Dockerfile
-#RUN git clone https://github.com/LoveIsGrief/videojs-externals.git
-#WORKDIR /home/${USER}/videojs-externals
-#RUN bash -lc 'source ~/.profile && nvm current && npm install'
-
-USER $USER
 
 CMD ["/bin/bash", "-l"]
