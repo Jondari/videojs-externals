@@ -11,6 +11,8 @@ jobs:
       - run:
           shell: /bin/bash --login -eo pipefail
           command: npm install
+      - run: pulseaudio --start --daemonize --fail
+      - run: pactl load-module module-null-sink
       - run:
           shell: /bin/bash --login -eo pipefail
           command: grunt test
@@ -31,6 +33,8 @@ jobs:
       - run:
           shell: /bin/bash --login -eo pipefail
           command: npm install
+      - run: pulseaudio --start --daemonize --fail
+      - run: pactl load-module module-null-sink
       - run:
           shell: /bin/bash --login -eo pipefail
           command: grunt test
