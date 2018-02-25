@@ -16,14 +16,21 @@ jobs:
           command: grunt test
   test-firefox-node-8:
     docker:
-      - image: circleci/node:8-browsers
+      - image: bisentenialwrug/videojs-externals:latest
         environment:
           BROWSERS: FirefoxHeadless
           EX_SPECS: dailymotion
     steps:
       - checkout
-      - run: npm install
-      - run: npm test
+      - run:
+          shell: /bin/bash --login -eo pipefail
+          command: nvm install 8 && nvm alias default 8
+      - run:
+          shell: /bin/bash --login -eo pipefail
+          command: npm install
+      - run:
+          shell: /bin/bash --login -eo pipefail
+          command: grunt test
   test-firefox-node-latest:
     docker:
       - image: circleci/node:latest-browsers
@@ -72,7 +79,7 @@ workflows:
   test:
     jobs:
       - test-firefox-node-6
-#      - test-firefox-node-8
+      - test-firefox-node-8
 #      - test-firefox-node-latest
 #      - test-chrome-node-6
 #      - test-chrome-node-8
