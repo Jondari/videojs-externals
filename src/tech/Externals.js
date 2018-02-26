@@ -458,8 +458,9 @@ Externals.prototype['featuresFullscreenResize'] = false;
 /*
  * Set the tech's timeupdate event support status
  * (this disables the manual timeupdate events of the Tech)
+ * Techs should normally update the time themselves.
  */
-Externals.prototype['featuresTimeupdateEvents'] = false;
+Externals.prototype['featuresTimeupdateEvents'] = true;
 
 /*
  * Set the tech's progress event support status
