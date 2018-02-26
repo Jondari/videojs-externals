@@ -303,6 +303,12 @@ class Youtube extends Externals {
   }
 }
 
+/**
+ * Let videojs handle triggering the timeupdates since youtube doesn't
+ * @type {boolean}
+ */
+Youtube.prototype['featuresTimeupdateEvents'] = false;
+
 Youtube.prototype.options_ = {
   api: '//www.youtube.com/iframe_api',
   visibility: 'visible'
