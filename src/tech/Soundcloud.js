@@ -91,7 +91,7 @@ class Soundcloud extends Externals {
         this.currentTime_ = ((this.duration_ * 1000) * event.relativePosition) / 1000;
         this.trigger('canplay');
         this.trigger('playing');
-        //this.trigger('timeupdate');
+        this.trigger('timeupdate');
         break;
 
       case SC.Widget.Events.PAUSE:
