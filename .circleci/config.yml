@@ -7,6 +7,8 @@ jobs:
           BROWSERS: MyFirefoxHeadless
           EX_SPECS: dailymotion
     steps:
+      - run: sudo apt-get -qqy update
+      - run: sudo apt-get -qqy install ubuntu-restricted-addons pulseaudio libpulse0
       - checkout
       - run:
           shell: /bin/bash --login -eo pipefail
@@ -86,8 +88,8 @@ workflows:
   test:
     jobs:
       - test-firefox-node-6
-      - test-firefox-node-8
+#      - test-firefox-node-8
 #      - test-firefox-node-latest
-      - test-chrome-node-6
+#      - test-chrome-node-6
 #      - test-chrome-node-8
 #      - test-chrome-node-latest
