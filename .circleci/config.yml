@@ -5,7 +5,7 @@ jobs:
       - image: bisentenialwrug/videojs-externals:latest
         environment:
           BROWSERS: MyFirefoxHeadless
-          EX_SPECS: dailymotion
+          EX_SPECS: dailymotion:mixcloud
     steps:
       - run: sudo apt-get -qqy update
       - run: sudo apt-get -qqy install ubuntu-restricted-addons pulseaudio libpulse0
