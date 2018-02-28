@@ -22,6 +22,8 @@ jobs:
           BROWSERS: MyFirefoxHeadless
           EX_SPECS: dailymotion:mixcloud
     steps:
+      - run: sudo apt-get -qqy update
+      - run: sudo apt-get -qqy install ubuntu-restricted-addons pulseaudio libpulse0
       - checkout
       - run:
           shell: /bin/bash --login -eo pipefail
@@ -44,10 +46,12 @@ jobs:
           BROWSERS: MyFirefoxHeadless
           EX_SPECS: dailymotion:mixcloud
     steps:
+      - run: sudo apt-get -qqy update
+      - run: sudo apt-get -qqy install ubuntu-restricted-addons pulseaudio libpulse0
       - checkout
       - run:
           shell: /bin/bash --login -eo pipefail
-          command: nvm install latest && nvm alias default latest
+          command: nvm install stable && nvm alias default stable
       - run:
           shell: /bin/bash --login -eo pipefail
           command: npm install -g grunt-cli
