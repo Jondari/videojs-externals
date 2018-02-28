@@ -23,7 +23,7 @@ jobs:
       - image: bisentenialwrug/videojs-externals:latest
         environment:
           BROWSERS: MyFirefoxHeadless
-          EX_SPECS: dailymotion
+          EX_SPECS: dailymotion:mixcloud
     steps:
       - checkout
       - run:
@@ -45,7 +45,7 @@ jobs:
       - image: circleci/node:latest-browsers
         environment:
           BROWSERS: MyFirefoxHeadless
-          EX_SPECS: dailymotion
+          EX_SPECS: dailymotion:mixcloud
     steps:
       - checkout
       - run: npm install
@@ -67,7 +67,7 @@ jobs:
       - image: circleci/node:8-browsers
         environment:
           BROWSERS: Chrome
-          EX_SPECS: dailymotion
+          EX_SPECS: dailymotion:mixcloud
     steps:
       - checkout
       - run: npm install
@@ -77,7 +77,7 @@ jobs:
       - image: circleci/node:latest-browsers
         environment:
           BROWSERS: Chrome
-          EX_SPECS: dailymotion
+          EX_SPECS: dailymotion:mixcloud
     steps:
       - checkout
       - run: npm install
@@ -88,8 +88,8 @@ workflows:
   test:
     jobs:
       - test-firefox-node-6
-#      - test-firefox-node-8
-#      - test-firefox-node-latest
-#      - test-chrome-node-6
-#      - test-chrome-node-8
-#      - test-chrome-node-latest
+      - test-firefox-node-8
+      - test-firefox-node-latest
+      - test-chrome-node-6
+      - test-chrome-node-8
+      - test-chrome-node-latest
