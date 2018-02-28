@@ -3,9 +3,6 @@ jobs:
   test-firefox-node-6:
     docker:
       - image: bisentenialwrug/videojs-externals:latest
-        environment:
-          BROWSERS: MyFirefoxHeadless
-          EX_SPECS: dailymotion:mixcloud
     steps:
       - run: sudo apt-get -qqy update
       - run: sudo apt-get -qqy install ubuntu-restricted-addons pulseaudio libpulse0
@@ -17,7 +14,7 @@ jobs:
       - run: pactl load-module module-null-sink
       - run:
           shell: /bin/bash --login -eo pipefail
-          command: grunt test
+          command: BROWSERS=MyFirefoxHeadless EX_SPECS=dailymotion:mixcloud grunt test
   test-firefox-node-8:
     docker:
       - image: bisentenialwrug/videojs-externals:latest
@@ -39,17 +36,29 @@ jobs:
       - run: pactl load-module module-null-sink
       - run:
           shell: /bin/bash --login -eo pipefail
-          command: grunt test
+          command: BROWSERS=MyFirefoxHeadless EX_SPECS=dailymotion:mixcloud grunt test
   test-firefox-node-latest:
     docker:
-      - image: circleci/node:latest-browsers
+      - image: bisentenialwrug/videojs-externals:latest
         environment:
           BROWSERS: MyFirefoxHeadless
           EX_SPECS: dailymotion:mixcloud
     steps:
       - checkout
-      - run: npm install
-      - run: npm test
+      - run:
+          shell: /bin/bash --login -eo pipefail
+          command: nvm install latest && nvm alias default latest
+      - run:
+          shell: /bin/bash --login -eo pipefail
+          command: npm install -g grunt-cli
+      - run:
+          shell: /bin/bash --login -eo pipefail
+          command: npm install
+      - run: pulseaudio --start --daemonize --fail
+      - run: pactl load-module module-null-sink
+      - run:
+          shell: /bin/bash --login -eo pipefail
+          command: BROWSERS=MyFirefoxHeadless EX_SPECS=dailymotion:mixcloud grunt test
 
   # Chrome tests
   test-chrome-node-6:
